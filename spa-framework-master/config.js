@@ -9,6 +9,6 @@ module.exports = {
         db: 'protodb'
     },
     express: {
-        port: 3000
+        port: 6000
     }
 };

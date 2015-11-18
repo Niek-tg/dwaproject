@@ -41,10 +41,10 @@ app.use(function (err, req, res, next) {
 
 function startExpress(connection) {
     app.databaseConn = connection;
-    app.listen(config.express.port);
+//    app.listen(config.express.port);
     console.log('Listening on port ' + config.express.port);
-    http.createServer(app).listen(PORT, function () {
-        console.log('Server started at port: ' + PORT);
+    http.createServer(app).listen(config.express.port, function () {
+        console.log('Server started at port: ' + config.express.port);
 
     });
 
