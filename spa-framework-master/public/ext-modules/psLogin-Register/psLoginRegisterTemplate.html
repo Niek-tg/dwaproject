@@ -1,0 +1,61 @@
+
+
+<div class="row loginForm center" ng-show="toggleLoginType">
+    <h1>LOGIN</h1>
+    <div class="col-xs-6 form">
+        <form name="loginForm" method="get">
+            <div class="form-group center"><label for="email">Email</label> <input type="text" name="email"
+                                                                                  id="email"
+                                                                                  ng-model="credentials.email"
+                                                                                  required="required"
+                                                                                  class="form-control"/></div>
+            <div class="form-group center"><label for="password">Password</label> <input type="text" name="password"
+                                                                                  id="password"
+                                                                                  ng-model="credentials.password"
+                                                                                  required="required"
+                                                                                  class="form-control"/></div>
+            <button type="submit"
+                    ng-class=" {'btn-default' : !loginForm.$valid, 'btn-success' : loginForm.$valid}"
+                    ng-click="login()"
+                    class="btn login">Login
+            </button>
+
+            <button type="button"
+                    ng-click="switchType()"
+                    class="btn login">go to register
+            </button>
+
+            <span ng-show="loginError && !loginForm.$valid" class="label label-danger error">
+                Username or password unknown please try again. </span>
+        </form>
+    </div>
+</div>
+
+<div class="row registerForm center" ng-show="toggleRegisterType">
+    <h1>Register</h1>
+    <div class="col-xs-6 form">
+        <form name="registerForm" method="post">
+            <div class="form-group center"><label for="email">Email</label> <input type="text" name="email"
+                                                                                         id="regUsername"
+                                                                                         ng-model="credentials.email"
+                                                                                         required="required"
+                                                                                         class="form-control"/></div>
+            <div class="form-group center"><label for="password">Password</label> <input type="text" name="password"
+                                                                                         id="regPassword"
+                                                                                         ng-model="credentials.password"
+                                                                                         required="required"
+                                                                                         class="form-control"/></div>
+            <button type="submit""
+                    ng-class=" {'btn-default' : !registerForm.$valid, 'btn-success' : registerForm.$valid}"
+                    ng-click="register()"
+                    class="btn login">Register
+            </button>
+            <button type="button"
+                    ng-click="switchType()"
+                    class="btn login">go to login
+            </button>
+            <span ng-show="registerError && !registerForm.$valid" class="label label-danger error">
+                Error, user not created! </span>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html ng-app="app">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>SPA-framework</title>
+
+    <script src="https://cdn.firebase.com/js/client/2.3.1/firebase.js"></script>
+
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+    <link href="Content/bootstrap-3.3.5-dist/bootstrap-3.3.5-dist/css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="Content/font-awesome-4.4.0/css/font-awesome.min.css" rel="stylesheet"/>
+    <link href="../app/app.css" rel="stylesheet"/>
+    <link href="ext-modules/psFramework/psFramework.css" rel="stylesheet"/>
+    <link href="ext-modules/psLogin-Register/login.css" rel="stylesheet"/>
+    <link href="ext-modules/psMenu/menu.css" rel="stylesheet"/>
+
+    <script src="Scripts/jquery-1.11.3.js"></script>
+    <script src="Scripts/angular.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.5/angular-route.min.js"></script>
+
+    <script src="ext-modules/psMenu/psMenuModule.js"></script>
+    <script src="ext-modules/psMenu/psMenuController.js"></script>
+    <script src="ext-modules/psMenu/psMenuDirective.js"></script>
+
+    <script src="ext-modules/psDashboard/psDashboardModule.js"></script>
+
+    <script src="ext-modules/psFramework/psFrameworkModule.js"></script>
+    <script src="ext-modules/psFramework/psFrameworkController.js"></script>
+    <script src="ext-modules/psFramework/psFrameworkDirective.js"></script>
+    <script src="ext-modules/psFramework/PsframeworkService.js"></script>
+
+    <script src="ext-modules/psLogin-Register/psLoginRegisterModule.js"></script>
+    <script src="ext-modules/psLogin-Register/psLoginRegisterDirective.js"></script>
+    <script src="ext-modules/psLogin-Register/PsLoginService.js"></script>
+    <script src="ext-modules/psLogin-Register/PsRegisterService.js"></script>
+    <script src="ext-modules/psLogin-Register/psLoginRegisterController.js"></script>
+
+    <script src="../app/appModule.js"></script >
+
+</head>
+<body class="container-fluid">
+
+<div data-ng-view></div>
+
+        <ps-framework>
+
+            <ps-menu>
+                <ps-menu-item label="Dashboard"></ps-menu-item>
+                <ps-menu-item label="Locations"></ps-menu-item>
+                <ps-menu-item label="Raft Guides"></ps-menu-item>
+            </ps-menu>
+
+
+        </ps-framework>
+
+</body>
+</html>

@@ -1,0 +1,32 @@
+<div class="ps-title-bar">
+    <div class="row">
+        <div class="ps-logo-area col-sm-6">
+            <img class="ps-icon" ng-src="{{iconFile}}">
+
+            <div class="ps-title-area">
+                <p class="ps-logo-title">{{ title }}</p>
+
+                <p class="ps-logo-subtitle">{{subtitle}}</p>
+            </div>
+        </div>
+        <div class="ps-right-side-controls col-sm-6">
+            <div>
+                <p>asd</p>
+                <!--<button class="btn btn-primary" ng-click="getRequest()">get</button>-->
+                <button class="btn btn-succes" ng-click="createNewUser()">post</button>
+                <button class="btn btn-warning" ng-click="updateUser()">update</button>
+                <button class="btn btn-warning" ng-click="createNewUserWithPush()">Push</button>
+                <button class="btn btn-warning" ng-click="deleteRequest()">delete</button>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        {{cursor._responses}}
+
+        <h1>lijst met users</h1>
+        {{lijst[0].r}}
+        <ul ng-repeat="user in lijst">
+            <li>name: {{user.name}} age: {{user.age}}</li>
+        </ul>
+    </div>
+</div>
