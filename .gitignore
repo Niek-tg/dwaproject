@@ -130,7 +130,7 @@ crashlytics-build.properties
 *.swp
 
 # Skip config.js because of passwords and other sensitive stuff
-config.js
+#config.js
 
 pid
 providers.json
