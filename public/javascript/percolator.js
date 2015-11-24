@@ -2,8 +2,6 @@
  * Created by tjeuj_000 on 24-11-2015.
  */
 
-
-
 var connection = new WebSocket("ws://localhost:3000");
 
 window.onload = function () {
