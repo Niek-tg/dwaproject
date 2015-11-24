@@ -1,30 +1,30 @@
 {
-  "ID": 1,
-  "mmID": 1,
+  "id": 1,
+  "mmid": 5331,
   "version": 1,
   "memoryModel": {
     "stack": [
       {
-        "ID": 1,
+        "id": 1,
         "name": "Global",
         "order": 1,
         "vars": [
           {
-            "ID": 2,
+            "id": 2,
             "name": "Family",
             "value": null,
             "undefined": false,
             "reference": 6
           },
           {
-            "ID": 3,
+            "id": 3,
             "name": "nullVar",
             "value": null,
             "undefined": false,
             "reference": null
           },
           {
-            "ID": 4,
+            "id": 4,
             "name": "undefinedVar",
             "value": null,
             "undefined": true,
@@ -33,26 +33,26 @@
         ],
         "funcs": [
           {
-            "ID": 5,
+            "id": 5,
             "name": "Person",
             "reference": 16
           }
         ]
       },
       {
-        "ID": 32,
+        "id": 32,
         "name": "setAge",
         "order": 2,
         "vars": [
           {
-            "ID": 33,
+            "id": 33,
             "name": "age",
             "value": "25",
             "undefined": false,
             "reference": null
           },
           {
-            "ID": 34,
+            "id": 34,
             "name": "this",
             "value": null,
             "undefined": null,
@@ -65,28 +65,28 @@
 
     "heap": [
       {
-        "ID": 6,
+        "id": 6,
         "name": null,
         "order": 1,
         "vars": [
           {
-            "ID": 7,
+            "id": 7,
             "name": "0",
             "value": null,
             "undefined": false,
             "reference": 8
           },
           {
-            "ID": 7,
+            "id": 7,
             "name": "1",
             "value": null,
             "undefined": false,
             "reference": 23
           },
           {
-            "ID": 7,
+            "id": 7,
             "name": "2",
-            "value": "unique ID",
+            "value": "unique id",
             "undefined": false,
             "reference": 27
           }
@@ -94,180 +94,180 @@
         "funcs": null
       },
       {
-        "ID": 8,
+        "id": 8,
         "name": null,
         "order": 2,
         "vars": [
           {
-            "ID": 9,
+            "id": 9,
             "name": "Name",
-            "value": "Harry", // STRING OF INTEGER
-            "undefined": false, // ENKEL BIJ JAVASCRIPT, UNDEFINED OM TE BEPALEN OF DEZE UNDEFINED IS OF NIET
-            "reference": null // REFERENTIE NAAR ID OBJECT
+            "value": "Harry",
+            "undefined": false,
+            "reference": null
           },
           {
-            "ID": 10,
+            "id": 10,
             "name": "age",
-            "value": "96", // STRING OF INTEGER
-            "undefined": false, // ENKEL BIJ JAVASCRIPT, UNDEFINED OM TE BEPALEN OF DEZE UNDEFINED IS OF NIET
-            "reference": null // REFERENTIE NAAR ID OBJECT
+            "value": "96",
+            "undefined": false,
+            "reference": null
           },
           {
-            "ID": 11,
+            "id": 11,
             "name": "__proto__",
-            "value": "[Object]", // STRING OF INTEGER
-            "undefined": false, // ENKEL BIJ JAVASCRIPT, UNDEFINED OM TE BEPALEN OF DEZE UNDEFINED IS OF NIET
-            "reference": null // REFERENTIE NAAR ID OBJECT
+            "value": "[Object]",
+            "undefined": false,
+            "reference": null
           }
         ],
         "funcs": null
       },
       {
-        "ID": 12,
+        "id": 12,
         "name": null,
-        "order": 3, // VOLGORDE IN DE HEAP
+        "order": 3,
         "vars": [
           {
-            "ID": 13,
+            "id": 13,
             "name": "__proto__",
-            "value": "[Function]",// STRING OF INTEGER
-            "undefined": false, // ENKEL BIJ JAVASCRIPT, UNDEFINED OM TE BEPALEN OF DEZE UNDEFINED IS OF NIET
-            "reference": null // REFERENTIE NAAR ID OBJECT
+            "value": "[Function]",
+            "undefined": false,
+            "reference": null
           }
         ],
         "funcs": null
       },
       {
-        "ID": 14,
+        "id": 14,
         "name": null,
-        "order": 3, // VOLGORDE IN DE HEAP
+        "order": 3,
         "vars": [
           {
-            "ID": 15,
+            "id": 15,
             "name": "__proto__",
-            "value": "[Function]", // STRING OF INTEGER
-            "undefined": false,  // ENKEL BIJ JAVASCRIPT, UNDEFINED OM TE BEPALEN OF DEZE UNDEFINED IS OF NIET
-            "reference": null // REFERENTIE NAAR ID OBJECT
+            "value": "[Function]",
+            "undefined": false,
+            "reference": null
           }
         ],
         "funcs": null
       },
       {
-        "ID": 16,
+        "id": 16,
         "name": null,
-        "order": 3, // VOLGORDE IN DE HEAP
+        "order": 3,
         "vars": [
           {
-            "ID": 17,
+            "id": 17,
             "name": "Name",
-            "value": null, // STRING OF INTEGER
-            "undefined": true, // ENKEL BIJ JAVASCRIPT, UNDEFINED OM TE BEPALEN OF DEZE UNDEFINED IS OF NIET
-            "reference": null // REFERENTIE NAAR ID OBJECT
+            "value": null,
+            "undefined": true,
+            "reference": null
           },
           {
-            "ID": 18,
+            "id": 18,
             "name": "Age",
-            "value": null, // STRING OF INTEGER
-            "undefined": true, // ENKEL BIJ JAVASCRIPT, UNDEFINED OM TE BEPALEN OF DEZE UNDEFINED IS OF NIET
-            "reference": null // REFERENTIE NAAR ID OBJECT
+            "value": null,
+            "undefined": true,
+            "reference": null
           },
           {
-            "ID": 19,
+            "id": 19,
             "name": "__proto__",
-            "value": "[Function]", // STRING OF INTEGER
-            "undefined": false, // ENKEL BIJ JAVASCRIPT, UNDEFINED OM TE BEPALEN OF DEZE UNDEFINED IS OF NIET
-            "reference": null // REFERENTIE NAAR ID OBJECT
+            "value": "[Function]",
+            "undefined": false,
+            "reference": null
           },
           {
-            "ID": 20,
+            "id": 20,
             "name": "prototype",
-            "value": null, // STRING OF INTEGER
-            "undefined": false, // ENKEL BIJ JAVASCRIPT, UNDEFINED OM TE BEPALEN OF DEZE UNDEFINED IS OF NIET
-            "reference": 31 // REFERENTIE NAAR ID OBJECT
+            "value": null,
+            "undefined": false,
+            "reference": 31
           }
         ],
         "funcs": [
           {
-            "ID": 21,
+            "id": 21,
             "name": "setName",
-            "reference": 12 // REFERENTIE NAAR ID OBJECT
+            "reference": 12
           },
           {
-            "ID": 22,
+            "id": 22,
             "name": "setAge",
-            "reference": 14 // REFERENTIE NAAR ID OBJECT
+            "reference": 14
           }
         ]
       },
       {
-        "ID": 23,
+        "id": 23,
         "name": null,
-        "order": 4, // VOLGORDE IN DE HEAP
+        "order": 4,
         "vars": [
           {
-            "ID": 24,
+            "id": 24,
             "name": "Name",
-            "value": "Jane", // STRING OF INTEGER
-            "undefined": false, // ENKEL BIJ JAVASCRIPT, UNDEFINED OM TE BEPALEN OF DEZE UNDEFINED IS OF NIET
-            "reference": null // REFERENTIE NAAR ID OBJECT
+            "value": "Jane",
+            "undefined": false,
+            "reference": null
           },
           {
-            "ID": 25,
+            "id": 25,
             "name": "Age",
-            "value": "50", // STRING OF INTEGER
-            "undefined": false, // ENKEL BIJ JAVASCRIPT, UNDEFINED OM TE BEPALEN OF DEZE UNDEFINED IS OF NIET
-            "reference": null // REFERENTIE NAAR ID OBJECT
+            "value": "50",
+            "undefined": false,
+            "reference": null
           },
           {
-            "ID": 26,
+            "id": 26,
             "name": "__proto__",
-            "value": null, // STRING OF INTEGER
-            "undefined": false, // ENKEL BIJ JAVASCRIPT, UNDEFINED OM TE BEPALEN OF DEZE UNDEFINED IS OF NIET
-            "reference": 31 // REFERENTIE NAAR ID OBJECT
+            "value": null,
+            "undefined": false,
+            "reference": 31
           }
         ],
         "funcs": null
       },
       {
-        "ID": 27,
+        "id": 27,
         "name": null,
-        "order": 6, // VOLGORDE IN DE HEAP
+        "order": 6,
         "vars": [
           {
-            "ID": 28,
+            "id": 28,
             "name": "Name",
-            "value": "Shaun", // STRING OF INTEGER
-            "undefined": false, // ENKEL BIJ JAVASCRIPT, UNDEFINED OM TE BEPALEN OF DEZE UNDEFINED IS OF NIET
-            "reference": null // REFERENTIE NAAR ID OBJECT
+            "value": "Shaun",
+            "undefined": false,
+            "reference": null
           },
           {
-            "ID": 29,
+            "id": 29,
             "name": "Age",
-            "value": null, // STRING OF INTEGER
-            "undefined": true, // ENKEL BIJ JAVASCRIPT, UNDEFINED OM TE BEPALEN OF DEZE UNDEFINED IS OF NIET
-            "reference": null // REFERENTIE NAAR ID OBJECT
+            "value": null,
+            "undefined": true,
+            "reference": null
           },
           {
-            "ID": 30,
+            "id": 30,
             "name": "__proto__",
-            "value": null, // STRING OF INTEGER
-            "undefined": false, // ENKEL BIJ JAVASCRIPT, UNDEFINED OM TE BEPALEN OF DEZE UNDEFINED IS OF NIET
-            "reference": 31 // REFERENTIE NAAR ID OBJECT
+            "value": null,
+            "undefined": false,
+            "reference": 31
           }
         ],
         "funcs": null
       },
       {
-        "ID": 31,
+        "id": 31,
         "name": null,
-        "order": 7, // VOLGORDE IN DE HEAP
+        "order": 7,
         "vars": [
           {
-            "ID": 32,
+            "id": 32,
             "name": "__proto__",
-            "value": "[Object]", // STRING OF INTEGER
-            "undefined": false, // ENKEL BIJ JAVASCRIPT, UNDEFINED OM TE BEPALEN OF DEZE UNDEFINED IS OF NIET
-            "reference": null // REFERENTIE NAAR ID OBJECT
+            "value": "[Object]",
+            "undefined": false,
+            "reference": null
           }
         ],
         "funcs": null

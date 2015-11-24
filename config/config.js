@@ -3,7 +3,8 @@ module.exports = {
         host: 'localhost',
         port: 28015,
         authKey: '',
-        databases: ["history", "modelInfo"]
+        database: "percolator",
+        tables: ["history", "modelInfo"]
     },
     express: {
         port: 3000
