@@ -2,53 +2,88 @@
 
 var r     = require("rethinkdb");
 var async = require('async');
+var fs = require('fs');
 
 var config = require('./../config/config.js');
 
 //async.waterfall module for async functions
-    async.waterfall([
-        function connect(callback) {
-                r.connect(config.rethinkdb , callback);
-        },
-        function removeAllDatabases(connection, callback){
-                var nrdatabases = config.rethinkdb.databases.length;
-                var count = 0;
-                config.rethinkdb.databases.forEach(function(db){
-                    r.dbDrop(db).run(connection, function(err) {
+var connection = null;
+
+    r.connect(config.rethinkdb).then(function(conn){
+        connection = conn;
+        return r.dbList().run(connection)
+    }).then(function(databases){
+
+        var nrdatabases = databases.length -1;
+        var count = 0;
+        if(nrdatabases > 0)
+        return new Promise(function(resolve, reject){
+            databases.forEach(function(db){
+                if(db != "rethinkdb"){    //some weird database, used by rethink.
+                    r.dbDrop(db).run(connection, function(err){
+                        if (err) reject(err);
                         count++;
-                        if(count >= nrdatabases)callback(err, connection);
+                        if(count >= nrdatabases)resolve("hoi");
                     });
-                })
-        },
-        function createAllDatabases(connection, callback) {
-                //Create the database if needed.
-                config.rethinkdb.databases.forEach(function(db){
-                    r.db(db).run(connection, function(err) {
-                        if (err) throw err;
-                    })
-                }).run(connection, function(err) {
-                    callback(err, connection);
-                });
+                }
+            });
+        })
 
 
-            },
-        function createTable(connection, callback) {
-                //Create the table if needed.
-                    r.tableList().contains('users').do(function(containsTable) {
-                            return r.branch(
-                                    containsTable,
-                                    {created: 0},
-                                    r.tableCreate('users')
-                                );
-                        }).run(connection, function(err) {
-                            callback(err, connection);
-                        });
-            },
-
-        ], function(err, connection) {
-        if(err) {
-                console.error(err);
-                return;
-            }
-        startExpress(connection);
+    }).then(function(){
+        return new Promise(function(resolve, reject){
+            r.dbCreate(config.rethinkdb.database).run(connection, function(err) {
+                if (err) reject(err);
+                resolve();
+            });
         });
+
+    }).then(function(){
+
+        var nrdatabases = config.rethinkdb.tables.length;
+        var count = 0;
+
+        return new Promise(function(resolve, reject){
+            config.rethinkdb.tables.forEach(function(db){
+                r.db(config.rethinkdb.database)
+                    .tableCreate(db).run(connection, function(err){
+                        if (err) reject(err);
+                        count++;
+                        if(count >= nrdatabases)resolve();
+                    })
+            })
+        });
+
+    }).then(function(){
+        return new Promise(function(resolve, reject) {
+            fs.readFile("./server/data/modelInfo.json", 'utf8', function (err, data) {
+                if (err) reject(err);
+                resolve(JSON.parse(data));
+            })
+        })
+    }).then(function(seedData){
+        return new Promise(function(resolve, reject) {
+            r.db(config.rethinkdb.database).table("modelInfo").insert(seedData).run(connection, function(err){
+                if (err) reject(err);
+                resolve();
+            })
+        })
+    }).then(function(){
+        return new Promise(function(resolve, reject) {
+            fs.readFile("./server/data/history.json", 'utf8', function (err, data) {
+                if (err) reject(err);
+                resolve(JSON.parse(data));
+            })
+        })
+    }).then(function(seedData){
+        return new Promise(function(resolve, reject) {
+            r.db(config.rethinkdb.database).table("history").insert(seedData).run(connection, function(err){
+                if (err) reject(err);
+                resolve();
+            })
+        })
+    }).finally(function(){
+        console.log("database seeded");
+    }).error(function (err) {
+        throw new Error("Something went wrong! "+ err);
+    });
