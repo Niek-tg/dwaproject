@@ -1,0 +1,27 @@
+{
+  "name": "dwaproject",
+  "version": "1.0.0",
+  "description": "Percolator",
+  "main": "app.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "nodemon app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Niek-tg/dwaproject.git"
+  },
+  "author": "PercolatorGroep",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Niek-tg/dwaproject/issues"
+  },
+  "homepage": "https://github.com/Niek-tg/dwaproject#readme",
+  "dependencies": {
+    "body-parser": "^1.14.1",
+    "express": "^4.13.3",
+    "ws": "^0.8.0"
+  }
+}
