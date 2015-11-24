@@ -19,7 +19,7 @@ theExpressApp.use(bodyParser.json());
 var webSocketServer = new ws.Server({
     server: theHttpServer
 });
-Require
+
 webSocketServer.on('connection', function connection(websocket) {
     websocket.on('message', function incoming(msg) {
 
