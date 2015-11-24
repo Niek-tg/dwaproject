@@ -3,13 +3,14 @@ var ws = require('ws');
 var http = require('http');
 var path = require('path');
 var bodyParser = require('body-parser');
+var r          = require("rethinkdb");
 
 //Database, thinky, express connection settings
-var   config     = require('./config.js');
+var config     = require('./config.js');
 
 //Thinky is getting connected with RethinkDB
-var   thinky     = require('thinky')(config.thinky);
-var   type       = thinky.type;
+var thinky     = require('thinky')(config.thinky);
+var type       = thinky.type;
 
 var theExpressApp = express();
 var theHttpServer = http.createServer();
