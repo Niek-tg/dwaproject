@@ -20,8 +20,8 @@ window.onload = function () {
         var sel = document.getElementById('memoryModelsList');
         for (var i = 0; i < memoryModels.length; i++) {
             var opt = document.createElement('option');
-            opt.innerHTML = memoryModels[i];
-            opt.value = memoryModels[i];
+            opt.innerHTML = memoryModels[i].name;
+            opt.value = memoryModels[i].id;
             sel.appendChild(opt);
         }
     };
