@@ -2,23 +2,30 @@
  * Created by tjeuj_000 on 24-11-2015.
  */
 
-//var memoryModels = data.data;
-//var sel = document.getElementById('memoryModelsList');
-//for(var i = 0; i < memoryModels.length; i++) {
-//    var opt = document.createElement('option');
-//    opt.innerHTML = memoryModels[i];
-//    opt.value = memoryModels[i];
-//    sel.appendChild(opt);
-//}
+
 
 var connection = new WebSocket("ws://localhost:3000");
 
-window.onload=function() {
-console.log("LOADING ALL MEMORY MODELS");
+window.onload = function () {
+    console.log("LOADING ALL MEMORY MODELS");
     var xhttp = new XMLHttpRequest();
     xhttp.open("GET", '/api/MemoryModels', true);
-    xhttp.send();
+    xhttp.onload = function (e) {
+        var res = JSON.parse(xhttp.responseText);
+        console.log(xhttp.response);
+        console.log(res);
 
+        // SET MEMORY MODELS IN SELECTBOX
+        var memoryModels = res.data;
+        var sel = document.getElementById('memoryModelsList');
+        for (var i = 0; i < memoryModels.length; i++) {
+            var opt = document.createElement('option');
+            opt.innerHTML = memoryModels[i];
+            opt.value = memoryModels[i];
+            sel.appendChild(opt);
+        }
+    };
+    xhttp.send();
 };
 
 function chooseMemoryModel(id) {

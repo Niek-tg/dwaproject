@@ -34,7 +34,7 @@ webSocketServer.on('connection', function connection(websocket) {
 
 //Get a list of all memory models.
 theExpressApp.get('/api/MemoryModels', function (req, res) {
-    res.send('Route GET All MemoryModels');
+    res.send({msgType: "newData", data: ['Route GET All MemoryModels', 'memory model test']});
 });
 
 //Get a memory model with a given ID.
@@ -44,7 +44,7 @@ theExpressApp.get('/api/MemoryModels/:id', function (req, res) {
 
 //Get a memory model with a given ID.
 theExpressApp.post('/api/MemoryModels/', function (req, res) {
-    res.send({msgType: "newData", data: ['Route POST MemoryModel']});
+    res.send('Route POST MemoryModel');
 });
 
 
