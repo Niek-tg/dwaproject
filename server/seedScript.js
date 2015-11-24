@@ -56,7 +56,7 @@ var connection = null;
 
     }).then(function(){
         return new Promise(function(resolve, reject) {
-            fs.readFile("./server/data/modelInfo.json", 'utf8', function (err, data) {
+            fs.readFile(__dirname + "/data/modelInfo.json", 'utf8', function (err, data) {
                 if (err) reject(err);
                 resolve(JSON.parse(data));
             })
@@ -70,7 +70,7 @@ var connection = null;
         })
     }).then(function(){
         return new Promise(function(resolve, reject) {
-            fs.readFile("./server/data/history.json", 'utf8', function (err, data) {
+            fs.readFile(__dirname + "/data/history.json", 'utf8', function (err, data) {
                 if (err) reject(err);
                 resolve(JSON.parse(data));
             })
