@@ -4,7 +4,7 @@ var r     = require("rethinkdb");
 var async = require('async');
 var fs = require('fs');
 
-var config = require('./../config/config.js');
+var config = require(__dirname +'/../config.js');
 
 //async.waterfall module for async functions
 var connection = null;
