@@ -12,7 +12,6 @@ window.onload = function () {
     xhttp.open("GET", '/api/MemoryModels', true);
     xhttp.onload = function (e) {
         var res = JSON.parse(xhttp.responseText);
-        console.log(xhttp.response);
         console.log(res);
 
         // SET MEMORY MODELS IN SELECTBOX
