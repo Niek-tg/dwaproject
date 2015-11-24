@@ -19,6 +19,8 @@ var webSocketServer = new ws.Server({
     server: theHttpServer
 });
 
+theExpressApp.use(express.static(path.join(__dirname, 'public')));
+
 webSocketServer.on('connection', function connection(websocket) {
     websocket.on('message', function incoming(msg) {
 
@@ -32,12 +34,14 @@ webSocketServer.on('connection', function connection(websocket) {
 
 //Get a list of all memory models.
 theExpressApp.get('/api/MemoryModels', function (req, res) {
-    res.send('Route GET All MemoryModels');
+    var memoryModelsArray = [{name: 'Route GET All MemoryModels', id: "5ks523ks"},{name: 'memory model test', id:"8yr091lo"}];
+    res.send({msgType: "newData", data: memoryModelsArray});
 });
 
 //Get a memory model with a given ID.
 theExpressApp.get('/api/MemoryModels/:id', function (req, res) {
-    res.send('Route GET MemoryModel with ID');
+    var memoryModel = {};
+    res.send(memoryModel);
 });
 
 //Get a memory model with a given ID.
