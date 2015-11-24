@@ -3,11 +3,11 @@
  */
 module.exports = {
     rethinkdb: {
-        //host: 'server8.tezzt.nl',
         host: 'localhost',
         port: 28015,
         authKey: '',
-        db: 'percolatordb'
+        database: "percolatordb",
+        tables: ["history", "modelInfo"]
     },
     thinky:{
         //host: 'server8.tezzt.nl'
