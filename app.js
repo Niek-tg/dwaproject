@@ -19,6 +19,8 @@ var webSocketServer = new ws.Server({
     server: theHttpServer
 });
 
+theExpressApp.use(express.static(path.join(__dirname, 'public')));
+
 webSocketServer.on('connection', function connection(websocket) {
     websocket.on('message', function incoming(msg) {
 

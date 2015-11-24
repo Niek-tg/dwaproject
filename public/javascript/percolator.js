@@ -21,13 +21,11 @@ console.log("LOADING ALL MEMORY MODELS");
 
 };
 
-//function chooseMemoryModel($http, id) {
-//    $http.get('/api/MemoryModels/' + id)
-//        .success(function (data) {
-//            console.log(data);
-//        })
-//        .error(function (data, status) {
-//            alert(data);
-//            console.log("ERROR", status, data);
-//        });
-//}
+function chooseMemoryModel(id) {
+    console.log("GET SELECTED MEMORY MODEL");
+    var xhttp = new XMLHttpRequest();
+    xhttp.open("GET", '/api/MemoryModels/' + id, true);
+    xhttp.send();
+}
+
+
