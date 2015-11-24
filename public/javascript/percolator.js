@@ -28,10 +28,20 @@ window.onload = function () {
     xhttp.send();
 };
 
-function chooseMemoryModel(id) {
+function chooseMemoryModel() {
+    var id = document.getElementById('memoryModelsList').value;
     console.log("GET SELECTED MEMORY MODEL");
+    console.log(id);
     var xhttp = new XMLHttpRequest();
     xhttp.open("GET", '/api/MemoryModels/' + id, true);
+    xhttp.onload = function (e) {
+        var res = JSON.parse(xhttp.responseText);
+        console.log(res);
+
+        // SET MEMORY MODEL ON SCREEN
+        var memoryModel = res;
+    };
+
     xhttp.send();
 }
 

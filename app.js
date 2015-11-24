@@ -40,7 +40,8 @@ theExpressApp.get('/api/MemoryModels', function (req, res) {
 
 //Get a memory model with a given ID.
 theExpressApp.get('/api/MemoryModels/:id', function (req, res) {
-    res.send('Route GET MemoryModel with ID');
+    var memoryModel = {};
+    res.send(memoryModel);
 });
 
 //Get a memory model with a given ID.
