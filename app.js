@@ -41,7 +41,7 @@ theExpressApp.get('/api/MemoryModels/:id', function (req, res) {
 
 //Get a memory model with a given ID.
 theExpressApp.post('/api/MemoryModels/', function (req, res) {
-    res.send('Route POST MemoryModel');
+    res.send({msgType: "newData", data: ['Route POST MemoryModel']});
 });
 
 
