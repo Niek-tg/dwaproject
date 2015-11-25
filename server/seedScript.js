@@ -1,12 +1,15 @@
 "use strict";
 
 var r     = require("rethinkdb");
-var async = require('async');
 var fs = require('fs');
 
 var config = require(__dirname +'/../config.js');
 
-//async.waterfall module for async functions
+var thinky     = require('thinky')(config.thinky);
+
+var ModelInfo = require('./models/thinkyModels.js').ModelInfo;
+var History = require('./models/thinkyModels.js').History;
+
 var connection = null;
 
     r.connect(config.rethinkdb).then(function(conn){
@@ -63,10 +66,17 @@ var connection = null;
         })
     }).then(function(seedData){
         return new Promise(function(resolve, reject) {
-            r.db(config.rethinkdb.database).table("modelInfo").insert(seedData).run(connection, function(err){
-                if (err) reject(err);
-                resolve();
-            })
+            //r.db(config.rethinkdb.database).table("modelInfo").insert(seedData).run(connection, function(err){
+            //    if (err) reject(err);
+            //    resolve();
+            //});
+            var mi = new ModelInfo(seedData);
+            mi.save().then(function(result) {
+                resolve(result)
+            }).error(function(error) {
+                console.log(error);
+                reject(error);
+            });
         })
     }).then(function(){
         return new Promise(function(resolve, reject) {
@@ -77,10 +87,18 @@ var connection = null;
         })
     }).then(function(seedData){
         return new Promise(function(resolve, reject) {
-            r.db(config.rethinkdb.database).table("history").insert(seedData).run(connection, function(err){
-                if (err) reject(err);
-                resolve();
-            })
+            //r.db(config.rethinkdb.database).table("history").insert(seedData).run(connection, function(err){
+            //    if (err) reject(err);
+            //    resolve();
+            //})
+            var hi = new History(seedData);
+
+            hi.save().then(function(result) {
+                resolve(result)
+            }).error(function(error) {
+                console.log(error);
+                reject(error);
+            });
         })
     }).finally(function(){
         console.log("database seeded");

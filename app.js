@@ -33,6 +33,7 @@ webSocketServer.on('connection', function connection(websocket) {
 
 });
 
+/*          ROUTES      */
 //Get a list of all memory models.
 theExpressApp.get('/api/MemoryModels', function (req, res) {
     var memoryModelsArray = [{name: 'Route GET All MemoryModels', id: "5ks523ks"},{name: 'memory model test', id:"8yr091lo"}];
