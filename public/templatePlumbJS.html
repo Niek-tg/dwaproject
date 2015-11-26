@@ -33,9 +33,10 @@
 
         .frame {
             position: relative;
-            margin: 10px;
+            margin: 3%;
             height: 160px;
-            width: 300px;
+            max-width: 300px;
+            width: calc(94% - 20px);
             border: 10px solid gray;
         }
 
@@ -46,23 +47,27 @@
 
         .variable {
             position: relative;
-            left: 5%;
+            float:left;
+            width:96%;
+            padding: 0 2%;
             height: 30px;
-            width: 250px;
-            margin: 10px;
+            margin: 10px 0;
             /*border: 1px solid blue;*/
         }
 
         .variableLabel {
             float: left;
             margin: 5px;
+            width: 50%;
+            max-width: 200px;
         }
 
         .pointer {
-            position: absolute;
-            right: 0;
+            position: relative;
+            float:left;
+            right: 2%;
             height: 30px;
-            width: 30px;
+            min-width: 30px;
             border: 1px solid gray;
             text-align: center;
         }
@@ -150,13 +155,24 @@
                 anchor: "Center"
             }, common);
 
-            jsPlumb.draggable("frame1", {containment: "parent"});
-            jsPlumb.draggable("frame2", {containment: "parent"});
-            jsPlumb.draggable("frame3", {containment: "parent"});
-            jsPlumb.draggable("frame4", {containment: "parent"});
+//            $('.box').draggable({
+//                drag:function(){
+//                    jsPlumb.repaint($('.lBox , .rBox', $(this))); // or simply jsPlumb.repaintEverything();
+//                }
+//            });
 
+            $('.frame1').draggable({drag: function(){jsPlumb.repaintEverything();}}); //"frame1", {containment: "parent"},
+            var a = jsPlumb.draggable("frame2", {containment: "parent"});
+            jsPlumb.draggable("frame3", {containment: "parent"}, {drag: function(){jsPlumb.repaintEverything();}});
+            jsPlumb.draggable("frame4", {containment: "parent"}, {drag: function(){jsPlumb.repaintEverything();}});
+
+            a.bind("click", function(){jsPlumb.repaintEverything(); console.log('fired')});
         });
     });
+
+    $(window).resize(function(){
+        jsPlumb.repaintEverything();
+    })
 </script>
 
 </body>
