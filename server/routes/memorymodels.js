@@ -38,8 +38,8 @@ router.get('/:id', function (req, res) {
 
     if (mmid) {
         r.db('percolatordb').table('ModelInfo').eqJoin('id', r.db('percolatordb').table('History'), {index: 'mmid'})
-            .zip()// Table without left right properties.
-            .coerceTo('array') // Making a array instead of object
+            .zip()// merge the two fields into a single document.
+            .coerceTo('array') // making a array instead of object
             .run(connection, function (err, result) {
                 console.log(mmid);
                 if (err) return res.send("unexpected error:" + err);
