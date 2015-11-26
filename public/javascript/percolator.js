@@ -45,27 +45,10 @@ function chooseMemoryModel(id) {
 function drawMemoryModel(model){
 
     var diagramContainer = $('#diagramContainer');
+    diagramContainer.children().remove();
 
     var stack = diagramContainer.append("<div class='stack'></div>");
     var heap = diagramContainer.append("<div class='heap'></div>");
-
-
-    //model.heap.forEach(function(heapItem){
-    //
-    //    $('.heap').append(
-    //        "<div id='heap"+ heapItem.id +"' class='frame'> "+
-    //        "<div class='frameLabel'>"+ heapItem.name +"</div>" +
-    //        "</div>");
-    //
-    //    var heapFrame = $('#heap'+ heapItem.id);
-    //    heapItem.vars.forEach(function(variable){
-    //        heapFrame.append(
-    //            "<div class='variable'>" +
-    //            "<div class='variableLabel'>"+ variable.name +"</div>" +
-    //            "<div id='"+ variable.id + "' class='variableValue pointer'>"+ variable.value+"</div>" +
-    //            "</div>");
-    //    });
-    //});
 
     drawFrames("stack",model.stack);
     drawFrames("heap",model.heap);
@@ -76,22 +59,20 @@ function drawFrames(location, frame){
     frame.forEach(function(item){
 
         $('.'+location).append(
-            "<div id='"+location + item.id +"' class='frame'> "+
+            "<div id='"+ item.id +"' class='frame'> "+
             "<div class='frameLabel'>"+ item.name +"</div>" +
             "</div>");
 
-        if(item.vars) drawVars('#'+ location + item.id, item.vars);
-        if(item.funcs)drawFuncs('#'+ location + item.id, item.funcs);
+        if(item.vars) drawVars('#'+  item.id, item.vars);
+        if(item.funcs)drawFuncs('#'+ item.id, item.funcs);
 
     });
-    initPlumb();
-
-}
+    }
 
 function drawVars(location, vars){
-
     //console.log(location);
     vars.forEach(function(variable){
+        console.log(variable.id);
         //console.log(variable)
         var value = determineVar(variable);
         $(location).append(
@@ -103,10 +84,9 @@ function drawVars(location, vars){
 }
 function drawFuncs(location, funcs){
 
-    console.log(location);
-    funcs.forEach(function(variable){
-        console.log(variable)
 
+    funcs.forEach(function(variable){
+        console.log(variable.id);
         var value = determineVar(variable);
 
         $(location).append(
@@ -119,7 +99,6 @@ function drawFuncs(location, funcs){
 
 var relations = [];
 function determineVar(variable){
-    console.log(variable);
     if(variable.reference){
         relations.push({source: variable.id, target: variable.reference});
         return "[pointer]";
@@ -149,12 +128,21 @@ function initPlumb(){
         //    containment: "parent"
         //});
 
+        //jsPlumb.addEndpoint($(".frame"), common);
+        //jsPlumb.addEndpoint($(".pointer"), common);
+        relations.forEach(function(relation){
+            console.log(relation)
+            jsPlumb.connect({
+                    source: relation.source.toString(),
+                    target: relation.target.toString()
+                }, common);
+        });
         //jsPlumb.connect({
         //    source: "var1pointer",
         //    target: "var3pointer"
         //}, common);
 
-        jsPlumb.addEndpoint($(".pointer"), common);
+        //jsPlumb.addEndpoint($(".pointer"), common);
 
 
     });
