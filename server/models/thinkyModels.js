@@ -62,6 +62,6 @@ var History = thinky.createModel("History",{
 });
 
 module.exports = {
-    History : History,
-    ModelInfo : ModelInfo
+    ModelInfo : ModelInfo,
+    History : History
 };
