@@ -1,6 +1,3 @@
-/**
- * Created by dickpino on 24-11-15.
- */
 module.exports = {
     rethinkdb: {
         host: 'localhost',

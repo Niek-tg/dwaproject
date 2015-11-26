@@ -17,10 +17,11 @@ window.onload = function () {
         var sel = document.getElementById('memoryModelsList');
         for (var i = 0; i < memoryModels.length; i++) {
             var opt = document.createElement('option');
-            opt.innerHTML = memoryModels[i].name;
+            opt.innerHTML = memoryModels[i].id;
             opt.value = memoryModels[i].id;
             sel.appendChild(opt);
         }
+
     };
     xhttp.send();
 };

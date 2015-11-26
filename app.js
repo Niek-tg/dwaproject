@@ -4,6 +4,7 @@ var http = require('http');
 var path = require('path');
 var bodyParser = require('body-parser');
 var r          = require("rethinkdb");
+var memorymodelRoute = require('./server/routes/memorymodels.js')
 
 //Database, thinky, express connection settings
 var config     = require('./config.js');
@@ -21,6 +22,7 @@ var webSocketServer = new ws.Server({
 });
 
 theExpressApp.use(express.static(path.join(__dirname, 'public')));
+theExpressApp.use('/api/memorymodels', memorymodelRoute);
 
 webSocketServer.on('connection', function connection(websocket) {
     websocket.on('message', function incoming(msg) {
@@ -33,23 +35,23 @@ webSocketServer.on('connection', function connection(websocket) {
 
 });
 
-/*          ROUTES      */
-//Get a list of all memory models.
-theExpressApp.get('/api/MemoryModels', function (req, res) {
-    var memoryModelsArray = [{name: 'Route GET All MemoryModels', id: "5ks523ks"},{name: 'memory model test', id:"8yr091lo"}];
-    res.send({msgType: "newData", data: memoryModelsArray});
-});
-
-//Get a memory model with a given ID.
-theExpressApp.get('/api/MemoryModels/:id', function (req, res) {
-    var memoryModel = {};
-    res.send(memoryModel);
-});
-
-//Get a memory model with a given ID.
-theExpressApp.post('/api/MemoryModels/', function (req, res) {
-    res.send('Route POST MemoryModel');
-});
+///*          ROUTES      */
+////Get a list of all memory models.
+//theExpressApp.get('/api/MemoryModels', function (req, res) {
+//    var memoryModelsArray = [{name: 'Route GET All MemoryModels', id: "5ks523ks"},{name: 'memory model test', id:"8yr091lo"}];
+//    res.send({msgType: "newData", data: memoryModelsArray});
+//});
+//
+////Get a memory model with a given ID.
+//theExpressApp.get('/api/MemoryModels/:id', function (req, res) {
+//    var memoryModel = {};
+//    res.send(memoryModel);
+//});
+//
+////Get a memory model with a given ID.
+//theExpressApp.post('/api/MemoryModels/', function (req, res) {
+//    res.send('Route POST MemoryModel');
+//});
 
 
 //Function to set up HTTP server with settings from config.js
