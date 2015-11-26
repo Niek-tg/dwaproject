@@ -8,7 +8,10 @@ r.connect(config.rethinkdb).then(function (conn) {
     return r.dbList().run(connection)
 });
 
-//Get a list of all memory models.
+/**
+ * Get a list of all memory models.
+ */
+
 router.get('/', function (req, res) {
 
     r.db('percolatordb').table('ModelInfo').run(connection, function (err, result) {
@@ -34,17 +37,17 @@ router.get('/:id', function (req, res) {
             .zip()
             .coerceTo('array')
             .run(connection, function (err, result) {
-            console.log(mmid);
-            if (err) return res.send("unexpected error:" + err);
+                console.log(mmid);
+                if (err) return res.send("unexpected error:" + err);
 
-            if(result)
-                result.forEach(function(r){
-                    console.log(r);
-                    if (r.mmid === mmid) return res.send(r);
-                });
+                if (result)
+                    result.forEach(function (r) {
+                        console.log(r);
+                        if (r.mmid === mmid) return res.send(r);
+                    });
 
-            else return res.send("ID does not exist");
-        });
+                else return res.send("ID does not exist");
+            });
     } else res.send("not a valid id");
 });
 
