@@ -62,7 +62,7 @@
             max-width: 200px;
         }
 
-        .pointer {
+        .variableValue {
             position: relative;
             float: left;
             right: 2%;
@@ -83,15 +83,14 @@
             <div class="frameLabel">Global</div>
             <div class="variable">
                 <div class="variableLabel">Var1</div>
-                <div id="var1pointer" class="pointer"></div>
+                <div id="var1pointer" class="variableValue pointer"></div>
             </div>
             <div class="variable">
                 <div class="variableLabel">Var2</div>
-                <div id="var2pointer" class="pointer"></div>
+                <div id="var2pointer" class="variableValue pointer"></div>
             </div>
             <div class="variable">
                 <div class="variableLabel">Var5</div>
-
             </div>
         </div>
         <div id="frame1" class="frame">
@@ -106,15 +105,15 @@
             <div class="frameLabel">Ref</div>
             <div class="variable">
                 <div class="variableLabel">Var3</div>
-                <div id="var3pointer" class="pointer"></div>
+                <div id="var3pointer" class="variableValue pointer"></div>
             </div>
             <div class="variable">
                 <div class="variableLabel">Var4</div>
-                <div id="var4pointer" class="pointer"></div>
+                <div id="var4pointer" class="variableValue pointer"></div>
             </div>
             <div class="variable">
                 <div class="variableLabel">Var6</div>
-                <div id="var6pointer" class="pointer">12345676</div>
+                <div id="var6pointer" class="variableValue">12345676</div>
             </div>
         </div>
         <div id="frame4" class="frame">
@@ -141,21 +140,21 @@
                 isTarget: true
             };
 
-            jsPlumb.addEndpoint("var1pointer", {
-                anchor: "Center"
-            }, common);
-
-            jsPlumb.addEndpoint("var2pointer", {
-                anchor: "Center"
-            }, common);
-
-            jsPlumb.addEndpoint("var3pointer", {
-                anchor: "Center"
-            }, common);
-
-            jsPlumb.addEndpoint("var4pointer", {
-                anchor: "Center"
-            }, common);
+//            jsPlumb.addEndpoint("var1pointer", {
+//                anchor: "Center"
+//            }, common);
+//
+//            jsPlumb.addEndpoint("var2pointer", {
+//                anchor: "Center"
+//            }, common);
+//
+//            jsPlumb.addEndpoint("var3pointer", {
+//                anchor: "Center"
+//            }, common);
+//
+//            jsPlumb.addEndpoint("var4pointer", {
+//                anchor: "Center"
+//            }, common);
 
             $(".frame").draggable({
                 drag: function (e) {
@@ -163,7 +162,13 @@
                     jsPlumb.repaintEverything();
                 },
                 containment: "parent"
-            })
+            });
+
+            jsPlumb.addEndpoint($(".pointer"), {
+                anchor: "Center"
+            }, common);
+
+
         });
     });
     $(window).resize(function () {
