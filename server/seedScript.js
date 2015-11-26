@@ -88,6 +88,9 @@ function runSeed(cb){
                 reject(error);
             });
         })
+    }).then(function(){
+        // create indexes
+        History.ensureIndex("mmid");
     }).finally(function(){
         console.log("database seeded");
         cb();
