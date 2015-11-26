@@ -8,7 +8,7 @@
         #diagramContainer {
             padding: 0px;
             width: 100%;
-            height: 600px;
+            height: 100%;
             border: 1px solid gray;
             font-size: 20px;
             font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
@@ -28,14 +28,16 @@
             margin: 0px;
             width: 50%;
             height: 600px;
-            border: 1px solid gray;
+            border: 1px solid blue;
         }
 
         .frame {
             position: relative;
-            margin: 10px;
+            display: table;
+            margin: 3%;
             height: 160px;
-            width: 300px;
+            max-width: 300px;
+            width: calc(94% - 20px);
             border: 10px solid gray;
         }
 
@@ -46,23 +48,27 @@
 
         .variable {
             position: relative;
-            left: 5%;
+            float: left;
+            width: 96%;
+            padding: 0 2%;
             height: 30px;
-            width: 250px;
-            margin: 10px;
+            margin: 10px 0;
             /*border: 1px solid blue;*/
         }
 
         .variableLabel {
             float: left;
             margin: 5px;
+            width: 50%;
+            max-width: 200px;
         }
 
-        .pointer {
-            position: absolute;
-            right: 0;
+        .variableValue {
+            position: relative;
+            float: left;
+            right: 2%;
             height: 30px;
-            width: 30px;
+            min-width: 30px;
             border: 1px solid gray;
             text-align: center;
         }
@@ -78,21 +84,21 @@
             <div class="frameLabel">Global</div>
             <div class="variable">
                 <div class="variableLabel">Var1</div>
-                <div id="var1pointer" class="pointer"></div>
+                <div id="var1pointer" class="variableValue pointer"></div>
             </div>
             <div class="variable">
                 <div class="variableLabel">Var2</div>
-                <div id="var2pointer" class="pointer"></div>
+                <div id="var2pointer" class="variableValue pointer"></div>
             </div>
             <div class="variable">
                 <div class="variableLabel">Var5</div>
-
             </div>
         </div>
         <div id="frame1" class="frame">
             <div class="frameLabel">Function1</div>
         </div>
-    </div><!--end stack-->
+    </div>
+    <!--end stack-->
 
     <div class="heap">
         <div class="frameLabel">Heap</div>
@@ -100,25 +106,26 @@
             <div class="frameLabel">Ref</div>
             <div class="variable">
                 <div class="variableLabel">Var3</div>
-                <div id="var3pointer" class="pointer"></div>
+                <div id="var3pointer" class="variableValue pointer"></div>
             </div>
             <div class="variable">
                 <div class="variableLabel">Var4</div>
-                <div id="var4pointer" class="pointer"></div>
+                <div id="var4pointer" class="variableValue pointer"></div>
             </div>
             <div class="variable">
                 <div class="variableLabel">Var6</div>
-                <div id="var6pointer" class="pointer">12345676</div>
+                <div id="var6pointer" class="variableValue">123456768566</div>
             </div>
         </div>
         <div id="frame4" class="frame">
             <div class="frameLabel">Function2</div>
         </div>
 
-    </div>  <!--end heap-->
+    </div>
+    <!--end heap-->
 
-</div> <!--end diagramcontainer-->
-
+</div>
+<!--end diagramcontainer-->
 
 
 <script>
@@ -127,36 +134,33 @@
             jsPlumb.Defaults.Container = $("#diagramContainer");
             var common = {
                 endpoint: "Dot",
-                paintStyle: {strokeStyle: "lightgray", lineWidth: 3},
-                endpointStyle: {fillStyle: "lightgray", outlineColor: "gray"},
-                overlays: [["Arrow", {width: 12, length: 12, location: 0.67}]],
+                anchor: ["Center", "Center"],
+//                paintStyle: {strokeStyle: "lightgray", lineWidth: 3},
+//                endpointStyle: {fillStyle: "lightgray", outlineColor: "gray"},
+                overlays: [["Arrow", {width: 40, length: 20}]],
                 isSource: true,
                 isTarget: true
             };
 
-            jsPlumb.addEndpoint("var1pointer", {
-                anchor: "Center"
+            $(".frame").draggable({
+                drag: function (e) {
+                    console.log("REPAINTING");
+                    jsPlumb.repaintEverything();
+                },
+                containment: "parent"
+            });
+
+            jsPlumb.connect({
+                source: "var1pointer",
+                target: "var3pointer"
             }, common);
 
-            jsPlumb.addEndpoint("var2pointer", {
-                anchor: "Center"
-            }, common);
-
-            jsPlumb.addEndpoint("var3pointer", {
-                anchor: "Center"
-            }, common);
-
-            jsPlumb.addEndpoint("var4pointer", {
-                anchor: "Center"
-            }, common);
-
-            jsPlumb.draggable("frame1", {containment: "parent"});
-            jsPlumb.draggable("frame2", {containment: "parent"});
-            jsPlumb.draggable("frame3", {containment: "parent"});
-            jsPlumb.draggable("frame4", {containment: "parent"});
-
+            jsPlumb.addEndpoint($(".pointer"), common);
         });
     });
+    $(window).resize(function () {
+        jsPlumb.repaintEverything();
+    })
 </script>
 
 </body>
