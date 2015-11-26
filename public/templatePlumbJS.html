@@ -8,7 +8,7 @@
         #diagramContainer {
             padding: 0px;
             width: 100%;
-            height: 600px;
+            height: 100%;
             border: 1px solid gray;
             font-size: 20px;
             font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
@@ -28,11 +28,12 @@
             margin: 0px;
             width: 50%;
             height: 600px;
-            border: 1px solid gray;
+            border: 1px solid blue;
         }
 
         .frame {
             position: relative;
+            display: table;
             margin: 3%;
             height: 160px;
             max-width: 300px;
@@ -113,7 +114,7 @@
             </div>
             <div class="variable">
                 <div class="variableLabel">Var6</div>
-                <div id="var6pointer" class="variableValue">12345676</div>
+                <div id="var6pointer" class="variableValue">123456768566</div>
             </div>
         </div>
         <div id="frame4" class="frame">
@@ -133,28 +134,13 @@
             jsPlumb.Defaults.Container = $("#diagramContainer");
             var common = {
                 endpoint: "Dot",
-                paintStyle: {strokeStyle: "lightgray", lineWidth: 3},
-                endpointStyle: {fillStyle: "lightgray", outlineColor: "gray"},
-                overlays: [["Arrow", {width: 12, length: 12, location: 0.67}]],
+                anchor: ["Center", "Center"],
+//                paintStyle: {strokeStyle: "lightgray", lineWidth: 3},
+//                endpointStyle: {fillStyle: "lightgray", outlineColor: "gray"},
+                overlays: [["Arrow", {width: 40, length: 20}]],
                 isSource: true,
                 isTarget: true
             };
-
-//            jsPlumb.addEndpoint("var1pointer", {
-//                anchor: "Center"
-//            }, common);
-//
-//            jsPlumb.addEndpoint("var2pointer", {
-//                anchor: "Center"
-//            }, common);
-//
-//            jsPlumb.addEndpoint("var3pointer", {
-//                anchor: "Center"
-//            }, common);
-//
-//            jsPlumb.addEndpoint("var4pointer", {
-//                anchor: "Center"
-//            }, common);
 
             $(".frame").draggable({
                 drag: function (e) {
@@ -164,11 +150,12 @@
                 containment: "parent"
             });
 
-            jsPlumb.addEndpoint($(".pointer"), {
-                anchor: "Center"
+            jsPlumb.connect({
+                source: "var1pointer",
+                target: "var3pointer"
             }, common);
 
-
+            jsPlumb.addEndpoint($(".pointer"), common);
         });
     });
     $(window).resize(function () {
