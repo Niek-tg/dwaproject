@@ -3,6 +3,10 @@ var r = require("rethinkdb");
 var config = require('./../../config.js');
 var router = express.Router();
 
+/**
+ * Getting connected to the database.
+ */
+
 r.connect(config.rethinkdb).then(function (conn) {
     connection = conn;
     return r.dbList().run(connection)
@@ -34,8 +38,8 @@ router.get('/:id', function (req, res) {
 
     if (mmid) {
         r.db('percolatordb').table('ModelInfo').eqJoin('id', r.db('percolatordb').table('History'), {index: 'mmid'})
-            .zip()
-            .coerceTo('array')
+            .zip()// Table without left right properties.
+            .coerceTo('array') // Making a array instead of object
             .run(connection, function (err, result) {
                 console.log(mmid);
                 if (err) return res.send("unexpected error:" + err);
