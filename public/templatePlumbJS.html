@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jsPlumb/1.4.1/jquery.jsPlumb-1.4.1-all-min.js"></script>
+    <style>
+        #diagramContainer {
+            padding: 0px;
+            width: 100%;
+            height: 600px;
+            border: 1px solid gray;
+            font-size: 20px;
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        }
+
+        .stack {
+            position: absolute;
+            margin: 0px;
+            width: 50%;
+            height: 600px;
+            border: 1px solid gray;
+        }
+
+        .heap {
+            position: absolute;
+            left: 50%;
+            margin: 0px;
+            width: 50%;
+            height: 600px;
+            border: 1px solid gray;
+        }
+
+        .frame {
+            position: relative;
+            margin: 10px;
+            height: 160px;
+            width: 300px;
+            border: 10px solid gray;
+        }
+
+        .frameLabel {
+            left: 50%;
+            text-align: center;
+        }
+
+        .variable {
+            position: relative;
+            left: 5%;
+            height: 30px;
+            width: 250px;
+            margin: 10px;
+            /*border: 1px solid blue;*/
+        }
+
+        .variableLabel {
+            float: left;
+            margin: 5px;
+        }
+
+        .pointer {
+            position: absolute;
+            right: 0;
+            height: 30px;
+            width: 30px;
+            border: 1px solid gray;
+            text-align: center;
+        }
+
+    </style>
+</head>
+<body>
+
+<div id="diagramContainer">
+    <div class="stack">
+        <div class="frameLabel">Stack</div>
+        <div id="frame2" class="frame">
+            <div class="frameLabel">Global</div>
+            <div class="variable">
+                <div class="variableLabel">Var1</div>
+                <div id="var1pointer" class="pointer"></div>
+            </div>
+            <div class="variable">
+                <div class="variableLabel">Var2</div>
+                <div id="var2pointer" class="pointer"></div>
+            </div>
+            <div class="variable">
+                <div class="variableLabel">Var5</div>
+
+            </div>
+        </div>
+        <div id="frame1" class="frame">
+            <div class="frameLabel">Function1</div>
+        </div>
+    </div><!--end stack-->
+
+    <div class="heap">
+        <div class="frameLabel">Heap</div>
+        <div id="frame3" class="frame">
+            <div class="frameLabel">Ref</div>
+            <div class="variable">
+                <div class="variableLabel">Var3</div>
+                <div id="var3pointer" class="pointer"></div>
+            </div>
+            <div class="variable">
+                <div class="variableLabel">Var4</div>
+                <div id="var4pointer" class="pointer"></div>
+            </div>
+            <div class="variable">
+                <div class="variableLabel">Var6</div>
+                <div id="var6pointer" class="pointer">12345676</div>
+            </div>
+        </div>
+        <div id="frame4" class="frame">
+            <div class="frameLabel">Function2</div>
+        </div>
+
+    </div>  <!--end heap-->
+
+</div> <!--end diagramcontainer-->
+
+
+
+<script>
+    $(document).ready(function () {
+        jsPlumb.ready(function () {
+            jsPlumb.Defaults.Container = $("#diagramContainer");
+            var common = {
+                endpoint: "Dot",
+                paintStyle: {strokeStyle: "lightgray", lineWidth: 3},
+                endpointStyle: {fillStyle: "lightgray", outlineColor: "gray"},
+                overlays: [["Arrow", {width: 12, length: 12, location: 0.67}]],
+                isSource: true,
+                isTarget: true
+            };
+
+            jsPlumb.addEndpoint("var1pointer", {
+                anchor: "Center"
+            }, common);
+
+            jsPlumb.addEndpoint("var2pointer", {
+                anchor: "Center"
+            }, common);
+
+            jsPlumb.addEndpoint("var3pointer", {
+                anchor: "Center"
+            }, common);
+
+            jsPlumb.addEndpoint("var4pointer", {
+                anchor: "Center"
+            }, common);
+
+            jsPlumb.draggable("frame1", {containment: "parent"});
+            jsPlumb.draggable("frame2", {containment: "parent"});
+            jsPlumb.draggable("frame3", {containment: "parent"});
+            jsPlumb.draggable("frame4", {containment: "parent"});
+
+        });
+    });
+</script>
+
+</body>
+</html>
