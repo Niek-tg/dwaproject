@@ -47,8 +47,8 @@
 
         .variable {
             position: relative;
-            float:left;
-            width:96%;
+            float: left;
+            width: 96%;
             padding: 0 2%;
             height: 30px;
             margin: 10px 0;
@@ -64,7 +64,7 @@
 
         .pointer {
             position: relative;
-            float:left;
+            float: left;
             right: 2%;
             height: 30px;
             min-width: 30px;
@@ -97,7 +97,8 @@
         <div id="frame1" class="frame">
             <div class="frameLabel">Function1</div>
         </div>
-    </div><!--end stack-->
+    </div>
+    <!--end stack-->
 
     <div class="heap">
         <div class="frameLabel">Heap</div>
@@ -120,10 +121,11 @@
             <div class="frameLabel">Function2</div>
         </div>
 
-    </div>  <!--end heap-->
+    </div>
+    <!--end heap-->
 
-</div> <!--end diagramcontainer-->
-
+</div>
+<!--end diagramcontainer-->
 
 
 <script>
@@ -155,22 +157,16 @@
                 anchor: "Center"
             }, common);
 
-//            $('.box').draggable({
-//                drag:function(){
-//                    jsPlumb.repaint($('.lBox , .rBox', $(this))); // or simply jsPlumb.repaintEverything();
-//                }
-//            });
-
-            $('.frame1').draggable({drag: function(){jsPlumb.repaintEverything();}}); //"frame1", {containment: "parent"},
-            var a = jsPlumb.draggable("frame2", {containment: "parent"});
-            jsPlumb.draggable("frame3", {containment: "parent"}, {drag: function(){jsPlumb.repaintEverything();}});
-            jsPlumb.draggable("frame4", {containment: "parent"}, {drag: function(){jsPlumb.repaintEverything();}});
-
-            a.bind("click", function(){jsPlumb.repaintEverything(); console.log('fired')});
+            $(".frame").draggable({
+                drag: function (e) {
+                    console.log("REPAINTING");
+                    jsPlumb.repaintEverything();
+                },
+                containment: "parent"
+            })
         });
     });
-
-    $(window).resize(function(){
+    $(window).resize(function () {
         jsPlumb.repaintEverything();
     })
 </script>
