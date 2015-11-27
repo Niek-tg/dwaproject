@@ -18,59 +18,41 @@ r.connect(config.rethinkdb).then(function (conn) {
 
 router.get('/', function (req, res) {
 
-    r.db('percolatordb').table('ModelInfo').run(connection, function (err, result) {
-        var listOfMemoryModels = result._responses[0].r;
-        if (err) return res.send("ModelInfo cannot be returned: " + err);
+    r.db('percolatordb').table('ModelInfo').eqJoin('id', r.db('percolatordb').table('History'), {index: 'mmid'})
+        .zip()// merge the two fields into a single document.
+        .coerceTo('array') // making a array instead of object
+        .run(connection, function (err, result) {
+            console.log("RESULT OF GET ALL");
+            console.log(result);
+            //var resultsArray = [];
 
-        if (result) return res.send({
-            msgType: "newData",
-            data: listOfMemoryModels
+            //result.forEach(function(r){
+            //   if(resultsArray.length === 0){
+            //       resultsArray.push(r);
+            //    }
+            //    else{
+            //       var i =0;
+            //       resultsArray.forEach(function(result){
+            //           if (r.mmid === result.mmid){
+            //               resultsArray[i] = result;
+            //           }
+            //           i++;
+            //       })
+            //   }
+            //    console.log("RESULTARRAY");
+            //    console.log(resultsArray);
+            //});
+
+            if (result) return res.send({
+                msgType: "newData",
+                data: result
+            });
         });
-    });
 });
 
 /**
  * Get a memory model with a given ID.
  */
-
-//router.get('/:id/:version?', function (req, res) {
-//
-//    var mmid = parseInt(req.params.id);
-//    var version =  parseInt(req.params.version);
-//
-//    if (mmid) {
-//        r.db('percolatordb').table('ModelInfo').eqJoin('id', r.db('percolatordb').table('History'), {index: 'mmid'})
-//            .zip()// Table without left right properties.
-//            .coerceTo('array') // Making a array instead of object
-//            .run(connection, function (err, result) {
-//                console.log(mmid);
-//                if (err) return res.send("unexpected error:" + err);
-//
-//                if (result)
-//                    result.forEach(function (r) {
-//                        console.log(r);
-//                        if (r.mmid === mmid) {
-//                            if (version === "NaN"){
-//                                var lastModel = r.memoryModel[r.memoryModel.length-1];
-//                                //var modelDetails = {
-//                                //    owner: r.owner,
-//                                //    version: r.version,
-//                                //    memoryModel: lastModel
-//                                //    };
-//                                r.memoryModel = [lastModel];
-//                                return res.send(r);
-//                            }
-//                            else{
-//
-//                            }
-//                            //return res.send(r);
-//                        }
-//                    });
-//
-//                else return res.send("ID does not exist");
-//            });
-//    } else res.send("not a valid id");
-//});
 
 router.get('/:id/:version?', function (req, res) {
 
@@ -88,20 +70,26 @@ router.get('/:id/:version?', function (req, res) {
                 var resultsArray = [];
                 if (result) {
                     result.forEach(function (r) {
-                        if (r.mmid === mmid)
+                        console.log(mmid);
+                        console.log(r.mmid);
+                        if (r.mmid == mmid)
                             resultsArray.push(r);
                     });
-
+                    console.log(resultsArray);
                     if (!version) {
+                        console.log("in de !version");
                         var highestVersion = {version: 0};
                         resultsArray.forEach(function (v) {
+                            console.log("IK KOM bijna ERIN");
+                            console.log(v.version);
                             if (v.version > highestVersion.version) {
+                                console.log("IK KOM ERIN");
                                 highestVersion = v;
                             }
                         });
                         res.send(highestVersion);
                     }
-                    else{
+                    else {
 
                         resultsArray.forEach(function (v) {
                             if (v.version === version) {

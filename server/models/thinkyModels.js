@@ -11,9 +11,9 @@ var ModelInfo = thinky.createModel("ModelInfo", {
 
 var History = thinky.createModel("History", {
 
-    history: [{
         id: type.number(),
         mmid: type.number(),
+        modelName: type.string(),
         version: type.number(),
         memoryModel: {
             stack: [{
@@ -61,8 +61,6 @@ var History = thinky.createModel("History", {
                 }
             ]
         }
-
-    }]
 });
 
 module.exports = {

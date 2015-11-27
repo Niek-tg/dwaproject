@@ -103,6 +103,7 @@ function runSeed(cb){
     }).then(function(){
         // create indexes
         History.ensureIndex("mmid");
+        History.ensureIndex("version");
     }).finally(function(){
         console.log("database seeded");
         cb();

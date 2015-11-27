@@ -4,6 +4,9 @@
 
 var connection = new WebSocket("ws://localhost:3000");
 
+/**
+ * Get a list of all memory models.
+ */
 window.onload = function () {
     console.log("LOADING ALL MEMORY MODELS");
     var xhttp = new XMLHttpRequest();
@@ -16,23 +19,27 @@ window.onload = function () {
         var memoryModels = res.data;
         var sel = document.getElementById('memoryModelsList');
         for (var i = 0; i < memoryModels.length; i++) {
-            $(sel).append("<li><a onclick='chooseMemoryModel(this)'  href='#'>"+ memoryModels[i].id +"</a></li>")
+            $(sel).append("<li><a onclick='chooseMemoryModel(this)' data-value='"+ memoryModels[i].mmid +"' href='#'>"+ memoryModels[i].modelName +"</a></li>")
         }
 
     };
     xhttp.send();
 };
 
+
+/**
+ * Get a memory model with a given ID.
+ */
 var currentMemoryModel;
 function chooseMemoryModel(id) {
-    id = id.innerHTML;
+    id = $(id).attr('data-value');
     console.log(id);
     var xhttp = new XMLHttpRequest();
     xhttp.open("GET", '/api/MemoryModels/' + id, true);
     xhttp.onload = function (e) {
-        console.log(e);
         var res = JSON.parse(xhttp.responseText);
         currentMemoryModel = res.memoryModel;
+
         drawMemoryModel(res.memoryModel);
 
         console.log(res);
@@ -44,6 +51,10 @@ function chooseMemoryModel(id) {
     xhttp.send();
 }
 
+
+/**
+ * Draws the memory model.
+ */
 function drawMemoryModel(model){
 
     var diagramContainer = $('#diagramContainer');
@@ -56,6 +67,10 @@ function drawMemoryModel(model){
     drawFrames("heap",model.heap);
 }
 
+
+/**
+ * Draws the frames of the memory model.
+ */
 function drawFrames(location, frame){
 
     frame.forEach(function(item){
@@ -71,11 +86,14 @@ function drawFrames(location, frame){
     });
     }
 
+/**
+ * Draws the variables of the memory model.
+ */
 function drawVars(location, vars){
-    //console.log(location);
+
     vars.forEach(function(variable){
         console.log(variable.id);
-        //console.log(variable)
+
         var value = determineVar(variable);
         $(location).append(
             "<div class='variable'>" +
@@ -84,11 +102,14 @@ function drawVars(location, vars){
             "</div>");
     });
 }
+
+/**
+ * Draws the functions of the memory model.
+ */
 function drawFuncs(location, funcs){
 
 
     funcs.forEach(function(variable){
-        console.log(variable.id);
         var value = determineVar(variable);
 
         $(location).append(
@@ -99,6 +120,10 @@ function drawFuncs(location, funcs){
     });
 }
 
+
+/**
+ * Looks of the variable is a pointer or a variable
+ */
 var relations = [];
 function determineVar(variable){
     if(variable.reference){
@@ -110,6 +135,9 @@ function determineVar(variable){
     else return "null"
 }
 
+/**
+ * Puts jsPlumb into the application
+ */
 function initPlumb(){
     jsPlumb.ready(function () {
         jsPlumb.Defaults.Container = $("#diagramContainer");
