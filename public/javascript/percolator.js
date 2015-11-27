@@ -25,7 +25,8 @@ window.onload = function () {
 
 var currentMemoryModel;
 function chooseMemoryModel(id) {
-    var id = id.innerHTML;
+    id = id.innerHTML;
+    console.log(id);
     var xhttp = new XMLHttpRequest();
     xhttp.open("GET", '/api/MemoryModels/' + id, true);
     xhttp.onload = function (e) {

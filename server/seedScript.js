@@ -65,11 +65,17 @@ function runSeed(cb){
         })
     }).then(function(seedData){
         return new Promise(function(resolve, reject) {
-            new ModelInfo(seedData).save().then(function(result) {
-                resolve(result)
-            }).error(function(error) {
-                console.log(error);
-                reject(error);
+
+            var aantal = seedData.length;
+            var curDone = 0;
+            seedData.forEach(function(seed){
+                new ModelInfo(seed).save().then(function(result) {
+                    curDone++
+                    if(curDone == aantal) resolve(result);
+                }).error(function(error) {
+                    console.log(error);
+                    reject(error);
+                });
             });
         })
     }).then(function(){
@@ -81,11 +87,17 @@ function runSeed(cb){
         })
     }).then(function(seedData){
         return new Promise(function(resolve, reject) {
-            new History(seedData).save().then(function(result) {
-                resolve(result)
-            }).error(function(error) {
-                console.log(error);
-                reject(error);
+
+            var aantal = seedData.length;
+            var curDone = 0;
+            seedData.forEach(function(seed){
+                new History(seed).save().then(function(result) {
+                    curDone++;
+                    if(curDone == aantal) resolve(result);
+                }).error(function(error) {
+                    console.log(error);
+                    reject(error);
+                });
             });
         })
     }).then(function(){
