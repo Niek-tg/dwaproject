@@ -32,9 +32,10 @@ router.get('/', function (req, res) {
  * Get a memory model with a given ID.
  */
 
-router.get('/:id', function (req, res) {
+router.get('/:id/:version?', function (req, res) {
 
     var mmid = parseInt(req.params.id);
+    var version = parseInt(req.params.version);
 
     if (mmid) {
         r.db('percolatordb').table('ModelInfo').eqJoin('id', r.db('percolatordb').table('History'), {index: 'mmid'})
@@ -42,12 +43,30 @@ router.get('/:id', function (req, res) {
             .coerceTo('array') // making a array instead of object
             .run(connection, function (err, result) {
                 console.log(mmid);
+                console.log("RESULT");
+                console.log(result);
+                console.log("END");
                 if (err) return res.send("unexpected error:" + err);
 
                 if (result)
                     result.forEach(function (r) {
                         console.log(r);
-                        if (r.mmid === mmid) return res.send(r);
+                        if (r.mmid === mmid) {
+                            if (version === "NaN"){
+                                var lastModel = r.memoryModel[r.memoryModel.length-1];
+                                //var modelDetails = {
+                                //    owner: r.owner,
+                                //    version: r.version,
+                                //    memoryModel: lastModel
+                                //    };
+                                r.memoryModel = [lastModel];
+                                return res.send(r);
+                            }
+                            else{
+
+                            }
+                            //return res.send(r);
+                        }
                     });
 
                 else return res.send("ID does not exist");

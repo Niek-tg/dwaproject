@@ -23,6 +23,7 @@ window.onload = function () {
     xhttp.send();
 };
 
+var currentMemoryModel;
 function chooseMemoryModel(id) {
     var id = id.innerHTML;
     var xhttp = new XMLHttpRequest();
@@ -30,7 +31,7 @@ function chooseMemoryModel(id) {
     xhttp.onload = function (e) {
         console.log(e);
         var res = JSON.parse(xhttp.responseText);
-
+        currentMemoryModel = res.memoryModel;
         drawMemoryModel(res.memoryModel);
 
         console.log(res);
@@ -101,7 +102,7 @@ var relations = [];
 function determineVar(variable){
     if(variable.reference){
         relations.push({source: variable.id, target: variable.reference});
-        return "[pointer]";
+        return "";
     }
     else if(variable.undefined) return "undefined";
     else if(variable.value) return variable.value;
@@ -113,25 +114,38 @@ function initPlumb(){
         jsPlumb.Defaults.Container = $("#diagramContainer");
 
         var common = {
-            endpoint: "Dot",
-            anchor: ["Center", "Center"],
+            endpoint: "Blank",
+            anchor: ["Left", "Right"],
             overlays: [["Arrow", {width: 40, length: 20}]],
             isSource: true,
             isTarget: true
         };
 
-        //$(".frame").draggable({
-        //    drag: function (e) {
-        //        console.log("REPAINTING");
-        //        jsPlumb.repaintEverything();
-        //    },
-        //    containment: "parent"
-        //});
+        //function referenceStyle (variable) {
+        //    if (variable === "pointer"){
+        //
+        //    }
+        //
+        //        endpoint: "Dot",
+        //        anchor: ["Left", "Right"],
+        //        overlays: [["Arrow", {width: 40, length: 20}]],
+        //        isSource: true,
+        //        isTarget: true
+        //}
+
+
+        $(".frame").draggable({
+            drag: function (e) {
+                console.log("REPAINTING");
+                jsPlumb.repaintEverything();
+            },
+            containment: "parent"
+        });
 
         //jsPlumb.addEndpoint($(".frame"), common);
         //jsPlumb.addEndpoint($(".pointer"), common);
         relations.forEach(function(relation){
-            console.log(relation)
+            console.log(relation);
             jsPlumb.connect({
                     source: relation.source.toString(),
                     target: relation.target.toString()
