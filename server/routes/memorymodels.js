@@ -22,30 +22,31 @@ router.get('/', function (req, res) {
         .zip()// merge the two fields into a single document.
         .coerceTo('array') // making a array instead of object
         .run(connection, function (err, result) {
-            console.log("RESULT OF GET ALL");
-            console.log(result);
-            //var resultsArray = [];
+            var resultsArray = [];
+            var i = 0;
 
-            //result.forEach(function(r){
-            //   if(resultsArray.length === 0){
-            //       resultsArray.push(r);
-            //    }
-            //    else{
-            //       var i =0;
-            //       resultsArray.forEach(function(result){
-            //           if (r.mmid === result.mmid){
-            //               resultsArray[i] = result;
-            //           }
-            //           i++;
-            //       })
-            //   }
-            //    console.log("RESULTARRAY");
-            //    console.log(resultsArray);
-            //});
+/**
+ * Shows only the latest version of a memory model.
+ */
+            result.forEach(function (r) {
+                var inList = false;
+                resultsArray.forEach(function (result) {
+                    if (r.mmid === result.mmid) {
+                        inList = true;
+                        if (r.version > result.version) {
+                            resultsArray[i] = result;
+                        }
+                    }
+                    i++;
+                });
+                if (inList === false) {
+                    resultsArray.push(r);
+                }
+            });
 
             if (result) return res.send({
                 msgType: "newData",
-                data: result
+                data: resultsArray
             });
         });
 });
@@ -70,20 +71,13 @@ router.get('/:id/:version?', function (req, res) {
                 var resultsArray = [];
                 if (result) {
                     result.forEach(function (r) {
-                        console.log(mmid);
-                        console.log(r.mmid);
                         if (r.mmid == mmid)
                             resultsArray.push(r);
                     });
-                    console.log(resultsArray);
                     if (!version) {
-                        console.log("in de !version");
                         var highestVersion = {version: 0};
                         resultsArray.forEach(function (v) {
-                            console.log("IK KOM bijna ERIN");
-                            console.log(v.version);
                             if (v.version > highestVersion.version) {
-                                console.log("IK KOM ERIN");
                                 highestVersion = v;
                             }
                         });

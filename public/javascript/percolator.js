@@ -40,12 +40,11 @@ function chooseMemoryModel(id) {
         var res = JSON.parse(xhttp.responseText);
         currentMemoryModel = res.memoryModel;
 
-        drawMemoryModel(res.memoryModel);
-
         console.log(res);
 
         // SET MEMORY MODEL ON SCREEN
         var memoryModel = res;
+        drawMemoryModel(res.memoryModel);
     };
 
     xhttp.send();
@@ -118,6 +117,7 @@ function drawFuncs(location, funcs){
             "<div id='"+ variable.id + "' class='variableValue pointer'>"+ value+"</div>" +
             "</div>");
     });
+    initPlumb();
 }
 
 
