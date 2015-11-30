@@ -83,11 +83,12 @@ router.get('/:id/:version?', function (req, res) {
             .zip() // merge the two fields into a single document.
             .orderBy(r.desc('version'))
             .filter(function(row){
-                if(version) return row("mmid").eq(mmid) && row("version").eq(version);
+                if(version)return ( row("mmid").eq(mmid).and(row("version").eq(version)));
                 else return row("mmid").eq(mmid);
             })
             .coerceTo('array') // making a array instead of object
             .run(connection, function (err, result) {
+                console.log(result);
                 if (err)
                     return res.send("unexpected error: " + err);
 
