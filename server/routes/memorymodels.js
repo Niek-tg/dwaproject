@@ -37,13 +37,10 @@ router.get('/', function (req, res) {
                 return res.send({message: "No memory models were found!"});
 
             var resultsArray = [];
-            var i = 0;
 
-            /**
-             * Shows only the latest version of a memory model.
-             */
             result.forEach(function (r) {
                 var inList = false;
+                var i = 0;
                 resultsArray.forEach(function (result) {
                     if (r.mmid === result.mmid) {
                         inList = true;
@@ -75,7 +72,10 @@ router.get('/', function (req, res) {
 router.get('/:id/:version?', function (req, res) {
 
     var mmid = req.params.id;
-    var version = (req.params.version) ? req.params.version : null;
+    var version = (req.params.version) ? parseInt(req.params.version) : null;
+
+    console.log(mmid)
+    console.log(version)
 
     if (mmid) {
         r.db('percolatordb')
