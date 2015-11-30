@@ -18,20 +18,18 @@
             font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
         }
 
-        .stack {
+        .Stack {
             position: absolute;
             margin: 0px;
             width: 50%;
-            height: 600px;
             border: 1px solid gray;
         }
 
-        .heap {
+        .Heap {
             position: absolute;
             left: 50%;
             margin: 0px;
             width: 50%;
-            height: 600px;
             border: 1px solid gray;
         }
 
@@ -40,7 +38,7 @@
             display: table;
             margin: 3%;
             height: 160px;
-            max-width: 300px;
+            max-width: 900px;
             width: calc(94% - 20px);
             border: 10px solid gray;
         }
@@ -76,12 +74,16 @@
             border: 1px solid gray;
             text-align: center;
         }
+        #undoButton{
+            display: none;
+        }
     </style>
 </head>
 <body>
 <div id="memoryModelWrapper">
     <button onclick="initPlumb()"> plumb it</button>
     <ul id="memoryModelsList"></ul>
+    <button id="undoButton" onclick="chooseMemoryModel('id',true)"> Undo</button>
 
     <div id="diagramContainer">
 

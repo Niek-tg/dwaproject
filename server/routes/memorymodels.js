@@ -32,9 +32,33 @@ router.get('/', function (req, res) {
             if (!result)
                 return res.send({message: "No memory models were found!"});
 
-            return res.send(result);
+            var resultsArray = [];
+            var i = 0;
+
+            /**
+             * Shows only the latest version of a memory model.
+             */
+            result.forEach(function (r) {
+                var inList = false;
+                resultsArray.forEach(function (result) {
+                    if (r.mmid === result.mmid) {
+                        inList = true;
+                        if (r.version > result.version) {
+                            resultsArray[i] = r;
+                        }
+                    }
+                    else inList = false;
+                    i++;
+                });
+                if (inList === false) {
+                    resultsArray.push(r);
+                }
+            });
+            return res.send(resultsArray);
         });
 });
+
+
 
 
 /**
@@ -59,11 +83,12 @@ router.get('/:id/:version?', function (req, res) {
             .zip() // merge the two fields into a single document.
             .orderBy(r.desc('version'))
             .filter(function(row){
-                if(version) return row("mmid").eq(mmid) && row("version").eq(version);
+                if(version)return ( row("mmid").eq(mmid).and(row("version").eq(version)));
                 else return row("mmid").eq(mmid);
             })
             .coerceTo('array') // making a array instead of object
             .run(connection, function (err, result) {
+                console.log(result);
                 if (err)
                     return res.send("unexpected error: " + err);
 

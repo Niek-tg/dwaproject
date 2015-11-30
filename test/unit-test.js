@@ -31,12 +31,27 @@ describe('API memorymodels unit test', function(){
                 });
     });
 
-    it('database has x memmorymodels', function(done){
+    it('Retrieve multiple versions of a memory model', function(done){
+        //Get version 1 of memory model 5331
         api
+            .get('/api/MemoryModels/5331/1')
             .get('/api/memorymodels')
             .set('Accept', 'application/json')
             .end(function(err, res){
                 if (err) return done(err);
+               console.log("GET on version 1 succeeded.");
+
+                //Get version 2 of memory model 5331
+                api
+                    .get('/api/memoryModels/5331/2')
+                    .set('Accept', 'application/json')
+                    .end(function(err2,res2){
+                       if(err2) return done(err2);
+
+                        console.log("GET on version 2 succeeded.")
+                    });
+
+
                 done();
             });
     });
