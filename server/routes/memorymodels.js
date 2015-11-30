@@ -5,8 +5,9 @@ var router = express.Router();
 
 /**
  * Getting connected to the database.
+ *
+ * @returns {String|Array} List of all the databases which are in the RethinkDB server
  */
-
 r.connect(config.rethinkdb).then(function (conn) {
     connection = conn;
     return r.dbList().run(connection)
@@ -15,6 +16,8 @@ r.connect(config.rethinkdb).then(function (conn) {
 
 /**
  * Get a list of all memory models.
+ *
+ * @returns {Object|Array} Returns a list of the latest versions of all the available memory models
  */
 router.get('/', function (req, res) {
     r.db('percolatordb')
@@ -40,8 +43,8 @@ router.get('/', function (req, res) {
 /**
  * Get a memory model with a given ID.
  *
- * @param :id the ID used to identify the specified memory model
- * @param :version? Optional parameter to get a specified version of the memory model
+ * @param {String} :id the ID used to identify the specified memory model
+ * @param {Number} :version? Optional parameter to get a specified version of the memory model
  */
 
 router.get('/:id/:version?', function (req, res) {
