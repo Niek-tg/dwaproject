@@ -8,6 +8,7 @@ var router = express.Router();
  *
  * @returns {String|Array} List of all the databases which are in the RethinkDB server
  */
+
 r.connect(config.rethinkdb).then(function (conn) {
     connection = conn;
     return r.dbList().run(connection)
@@ -38,25 +39,31 @@ router.get('/', function (req, res) {
             var resultsArray = [];
             var i = 0;
 
+            /**
+             * Shows only the latest version of a memory model.
+             */
             result.forEach(function (r) {
                 var inList = false;
                 resultsArray.forEach(function (result) {
                     if (r.mmid === result.mmid) {
                         inList = true;
                         if (r.version > result.version) {
-                            resultsArray[i] = result;
+                            resultsArray[i] = r;
                         }
                     }
+                    else inList = false;
                     i++;
                 });
                 if (inList === false) {
                     resultsArray.push(r);
                 }
             });
-            console.log(result);
             return res.send(resultsArray);
         });
 });
+
+
+
 
 /**
  * Get a memory model with a given ID.
