@@ -562,7 +562,7 @@
       "stack": [
         {
           "id": 1,
-          "name": "Pieter",
+          "name": "Geheugenmodel versie 1",
           "order": 1,
           "vars": [
             {
@@ -839,7 +839,7 @@
       "stack": [
         {
           "id": 1,
-          "name": "Pieter",
+          "name": "Geheugenmodel versie 2",
           "order": 1,
           "vars": [
             {
@@ -1116,7 +1116,7 @@
       "stack": [
         {
           "id": 1,
-          "name": "Pieter",
+          "name": "Geheugenmodel versie 3",
           "order": 1,
           "vars": [
             {

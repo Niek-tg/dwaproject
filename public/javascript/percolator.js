@@ -39,7 +39,10 @@ function chooseMemoryModel(id, prevVersion) {
         if (currentMemoryModel.version > 1) {
             version = currentMemoryModel.version - 1;
             currentMemoryModel.version += -1;
-        } else version = 1;
+        } else {
+            version = 1;
+            alert("There is not an older version");
+        }
     } else {
         var currentVersion = parseInt($(id).attr('data-version'));
         id = $(id).attr('data-value');
