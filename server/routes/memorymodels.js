@@ -32,30 +32,32 @@ router.get('/', function (req, res) {
             if (!result)
                 return res.send({message: "No memory models were found!"});
 
-            return res.send(result);
+            var resultsArray = [];
+            var i = 0;
+
+            /**
+             * Shows only the latest version of a memory model.
+             */
+            result.forEach(function (r) {
+                var inList = false;
+                resultsArray.forEach(function (result) {
+                    if (r.mmid === result.mmid) {
+                        inList = true;
+                        if (r.version > result.version) {
+                            resultsArray[i] = result;
+                        }
+                    }
+                    i++;
+                });
+                if (inList === false) {
+                    resultsArray.push(r);
+                }
+            });
+
+            return res.send(resultsArray);
         });
 });
-//var resultsArray = [];
-//var i = 0;
-//
-///**
-// * Shows only the latest version of a memory model.
-// */
-//result.forEach(function (r) {
-//    var inList = false;
-//    resultsArray.forEach(function (result) {
-//        if (r.mmid === result.mmid) {
-//            inList = true;
-//            if (r.version > result.version) {
-//                resultsArray[i] = result;
-//            }
-//        }
-//        i++;
-//    });
-//    if (inList === false) {
-//        resultsArray.push(r);
-//    }
-//});
+
 
 
 

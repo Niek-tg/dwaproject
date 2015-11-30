@@ -74,12 +74,16 @@
             border: 1px solid gray;
             text-align: center;
         }
+        #undoButton{
+            display: none;
+        }
     </style>
 </head>
 <body>
 <div id="memoryModelWrapper">
     <button onclick="initPlumb()"> plumb it</button>
     <ul id="memoryModelsList"></ul>
+    <button id="undoButton" onclick="chooseMemoryModel('id',true)"> Undo</button>
 
     <div id="diagramContainer">
 

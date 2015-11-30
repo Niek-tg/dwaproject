@@ -13,13 +13,12 @@ window.onload = function () {
     xhttp.open("GET", '/api/MemoryModels', true);
     xhttp.onload = function (e) {
         var res = JSON.parse(xhttp.responseText);
-        console.log(res);
 
         // SET MEMORY MODELS IN SELECTBOX
         var memoryModels = res;
         var sel = document.getElementById('memoryModelsList');
         for (var i = 0; i < memoryModels.length; i++) {
-            $(sel).append("<li><a onclick='chooseMemoryModel(this)' data-value='" + memoryModels[i].mmid + "' href='#'>" + memoryModels[i].modelName + "</a></li>")
+            $(sel).append("<li><a onclick='chooseMemoryModel(this, false)' data-value='" + memoryModels[i].mmid + "' data-version='" + memoryModels[i].version + "'  href='#'>" + memoryModels[i].modelName + "</a></li>")
         }
 
     };
@@ -28,25 +27,32 @@ window.onload = function () {
 
 
 /**
- * Get a memory model with a given ID.
+ * Get a memory model with a given ID. And get previous versions of these.
  */
-var currentMemoryModel;
-function chooseMemoryModel(id) {
-    id = $(id).attr('data-value');
-    console.log(id);
+var currentMemoryModel = {};
+function chooseMemoryModel(id, prevVersion) {
+    $("#undoButton").css("display", "block");
+    var version = null;
+    if (prevVersion === true) {
+        id = currentMemoryModel.id;
+        if (currentMemoryModel.version > 1) {
+            version = currentMemoryModel.version - 1;
+            currentMemoryModel.version += -1;
+        } else version = 1;
+    }else {
+        var currentVersion = parseInt($(id).attr('data-version'));
+        id = $(id).attr('data-value');
+        currentMemoryModel.id = id;
+        currentMemoryModel.version = currentVersion;
+    }
     var xhttp = new XMLHttpRequest();
-    xhttp.open("GET", '/api/MemoryModels/' + id, true);
+    xhttp.open("GET", '/api/MemoryModels/' + id + '/' + version, true);
     xhttp.onload = function (e) {
         var res = JSON.parse(xhttp.responseText);
-        currentMemoryModel = res.memoryModel;
-
-        console.log(res);
-
+        currentMemoryModel.memoryModel = res.memoryModel;
         // SET MEMORY MODEL ON SCREEN
-        var memoryModel = res;
         drawMemoryModel(res.memoryModel);
     };
-
     xhttp.send();
 }
 
@@ -72,7 +78,7 @@ function drawMemoryModel(model) {
  */
 function drawFrames(location, frame) {
     $('.' + location).append(
-    "<div class='frameLabel'>" + location + "</div>"
+        "<div class='frameLabel'>" + location + "</div>"
     );
 
     frame.forEach(function (item) {
@@ -94,7 +100,7 @@ function drawFrames(location, frame) {
 function drawVars(location, vars) {
 
     vars.forEach(function (variable) {
-        console.log(variable.id);
+        //console.log(variable.id);
 
         var value = determineVar(variable);
         $(location).append(
@@ -167,7 +173,7 @@ function initPlumb() {
 
         $(".frame").draggable({
             drag: function (e) {
-                console.log("REPAINTING");
+                //console.log("REPAINTING");
                 jsPlumb.repaintEverything();
             },
             containment: "parent"
@@ -176,7 +182,7 @@ function initPlumb() {
         //jsPlumb.addEndpoint($(".frame"), common);
         //jsPlumb.addEndpoint($(".pointer"), common);
         relations.forEach(function (relation) {
-            console.log(relation);
+            //console.log(relation);
             jsPlumb.connect({
                 source: relation.source.toString(),
                 target: relation.target.toString()
