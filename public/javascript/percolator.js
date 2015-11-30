@@ -59,7 +59,9 @@ function chooseMemoryModel(id, prevVersion) {
         var res = JSON.parse(xhttp.responseText);
         currentMemoryModel.memoryModel = res.memoryModel;
         // SET MEMORY MODEL ON SCREEN
-        drawMemoryModel(res.memoryModel);
+        drawMemoryModel(res.memoryModel).then(function(){
+            initPlumb();
+        });
     };
     xhttp.send();
 }
@@ -70,14 +72,23 @@ function chooseMemoryModel(id, prevVersion) {
  */
 function drawMemoryModel(model) {
 
-    var diagramContainer = $('#diagramContainer');
-    diagramContainer.children().remove();
+    return new Promise(function(resolve, reject){
+        var diagramContainer = $('#diagramContainer');
+        diagramContainer.children().remove();
 
-    var stack = diagramContainer.append("<div class='Stack'></div>");
-    var heap = diagramContainer.append("<div class='Heap'></div>");
+        diagramContainer.append("<div class='Stack'></div>");
+        diagramContainer.append("<div class='Heap'></div>");
 
-    drawFrames("Stack", model.stack);
-    drawFrames("Heap", model.heap);
+        var promises = [];
+
+        promises.push(drawFrames("Stack", model.stack));
+        promises.push(drawFrames("Heap", model.heap));
+
+        Promise.all(promises).then(function(){
+            resolve();
+        });
+    })
+
 }
 
 
@@ -85,20 +96,23 @@ function drawMemoryModel(model) {
  * Draws the frames of the memory model.
  */
 function drawFrames(location, frame) {
-    $('.' + location).append(
-        "<div class='frameLabel'>" + location + "</div>"
-    );
-
-    frame.forEach(function (item) {
-
+    return new Promise(function(resolve, reject) {
         $('.' + location).append(
-            "<div id='" + item.id + "' class='frame'> " +
-            "<div class='frameLabel'>" + item.name + "</div>" +
-            "</div>");
+            "<div class='frameLabel'>" + location + "</div>"
+        );
 
-        if (item.vars) drawVars('#' + item.id, item.vars);
-        if (item.funcs)drawFuncs('#' + item.id, item.funcs);
+        frame.forEach(function (item) {
 
+            $('.' + location).append(
+                "<div id='" + item.id + "' class='frame'> " +
+                "<div class='frameLabel'>" + item.name + "</div>" +
+                "</div>");
+
+            if (item.vars) drawVars('#' + item.id, item.vars);
+            if (item.funcs)drawFuncs('#' + item.id, item.funcs);
+
+        });
+        resolve();
     });
 }
 
