@@ -552,5 +552,559 @@
         }
       ]
     }
+  },
+  {
+    "id": 3,
+    "mmid": 3456,
+    "modelName": "Geheugenmodel van pietertje",
+    "version": 1,
+    "memoryModel": {
+      "stack": [
+        {
+          "id": 1,
+          "name": "Pieter",
+          "order": 1,
+          "vars": [
+            {
+              "id": 2,
+              "name": "Pieters familie",
+              "value": null,
+              "undefined": false,
+              "reference": 7
+            },
+            {
+              "id": 3,
+              "name": "nullVar",
+              "value": null,
+              "undefined": false,
+              "reference": null
+            },
+            {
+              "id": 4,
+              "name": "undefinedVar",
+              "value": null,
+              "undefined": true,
+              "reference": null
+            }
+          ],
+          "funcs": [
+            {
+              "id": 5,
+              "name": "Person",
+              "reference": 16
+            }
+          ]
+        },
+        {
+          "id": 32,
+          "name": "setAge",
+          "order": 2,
+          "vars": [
+            {
+              "id": 33,
+              "name": "age",
+              "value": "25",
+              "undefined": false,
+              "reference": null
+            },
+            {
+              "id": 34,
+              "name": "this",
+              "value": null,
+              "undefined": null,
+              "reference": 27
+            }
+          ],
+          "funcs": null
+        }
+      ],
+      "heap": [
+        {
+          "id": 6,
+          "name": null,
+          "order": 1,
+          "vars": [
+            {
+              "id": 7,
+              "name": "0",
+              "value": null,
+              "undefined": false,
+              "reference": 8
+            },
+            {
+              "id": 200,
+              "name": "1",
+              "value": null,
+              "undefined": false,
+              "reference": 23
+            },
+            {
+              "id": 120,
+              "name": "2",
+              "value": "unique id",
+              "undefined": false,
+              "reference": 27
+            }
+          ],
+          "funcs": null
+        },
+        {
+          "id": 8,
+          "name": null,
+          "order": 2,
+          "vars": [
+            {
+              "id": 9,
+              "name": "Name",
+              "value": "Harry",
+              "undefined": false,
+              "reference": null
+            },
+            {
+              "id": 10,
+              "name": "age",
+              "value": "96",
+              "undefined": false,
+              "reference": null
+            },
+            {
+              "id": 11,
+              "name": "__proto__",
+              "value": "[Object]",
+              "undefined": false,
+              "reference": null
+            }
+          ],
+          "funcs": null
+        },
+        {
+          "id": 12,
+          "name": null,
+          "order": 3,
+          "vars": [
+            {
+              "id": 13,
+              "name": "__proto__",
+              "value": "[Function]",
+              "undefined": false,
+              "reference": null
+            }
+          ],
+          "funcs": null
+        },
+        {
+          "id": 14,
+          "name": null,
+          "order": 3,
+          "vars": [
+            {
+              "id": 15,
+              "name": "__proto__",
+              "value": "[Function]",
+              "undefined": false,
+              "reference": null
+            }
+          ],
+          "funcs": null
+        },
+        {
+          "id": 16,
+          "name": null,
+          "order": 3,
+          "vars": [
+            {
+              "id": 17,
+              "name": "Name",
+              "value": null,
+              "undefined": true,
+              "reference": null
+            },
+            {
+              "id": 18,
+              "name": "Age",
+              "value": null,
+              "undefined": true,
+              "reference": null
+            },
+            {
+              "id": 19,
+              "name": "__proto__",
+              "value": "[Function]",
+              "undefined": false,
+              "reference": null
+            },
+            {
+              "id": 20,
+              "name": "prototype",
+              "value": null,
+              "undefined": false,
+              "reference": 31
+            }
+          ],
+          "funcs": [
+            {
+              "id": 21,
+              "name": "setName",
+              "reference": 12
+            },
+            {
+              "id": 22,
+              "name": "setAge",
+              "reference": 14
+            }
+          ]
+        },
+        {
+          "id": 23,
+          "name": null,
+          "order": 4,
+          "vars": [
+            {
+              "id": 24,
+              "name": "Name",
+              "value": "Jane",
+              "undefined": false,
+              "reference": null
+            },
+            {
+              "id": 25,
+              "name": "Age",
+              "value": "50",
+              "undefined": false,
+              "reference": null
+            },
+            {
+              "id": 26,
+              "name": "__proto__",
+              "value": null,
+              "undefined": false,
+              "reference": 31
+            }
+          ],
+          "funcs": null
+        },
+        {
+          "id": 27,
+          "name": null,
+          "order": 6,
+          "vars": [
+            {
+              "id": 28,
+              "name": "Name",
+              "value": "Shaun",
+              "undefined": false,
+              "reference": null
+            },
+            {
+              "id": 29,
+              "name": "Age",
+              "value": null,
+              "undefined": true,
+              "reference": null
+            },
+            {
+              "id": 30,
+              "name": "__proto__",
+              "value": null,
+              "undefined": false,
+              "reference": 31
+            }
+          ],
+          "funcs": null
+        },
+        {
+          "id": 31,
+          "name": null,
+          "order": 7,
+          "vars": [
+            {
+              "id": 32,
+              "name": "__proto__",
+              "value": "[Object]",
+              "undefined": false,
+              "reference": null
+            }
+          ],
+          "funcs": null
+        }
+      ]
+    }
+  },
+  {
+    "id": 4,
+    "mmid": 3456,
+    "modelName": "Het tweede geheugenmodel van pietertje",
+    "version": 2,
+    "memoryModel": {
+      "stack": [
+        {
+          "id": 1,
+          "name": "Pieter",
+          "order": 1,
+          "vars": [
+            {
+              "id": 2,
+              "name": "Pieters familie",
+              "value": null,
+              "undefined": false,
+              "reference": 7
+            },
+            {
+              "id": 3,
+              "name": "nullVar",
+              "value": null,
+              "undefined": false,
+              "reference": null
+            },
+            {
+              "id": 4,
+              "name": "undefinedVar",
+              "value": null,
+              "undefined": true,
+              "reference": null
+            }
+          ],
+          "funcs": [
+            {
+              "id": 5,
+              "name": "Person",
+              "reference": 16
+            }
+          ]
+        },
+        {
+          "id": 32,
+          "name": "setAge",
+          "order": 2,
+          "vars": [
+            {
+              "id": 33,
+              "name": "age",
+              "value": "25",
+              "undefined": false,
+              "reference": null
+            },
+            {
+              "id": 34,
+              "name": "this",
+              "value": null,
+              "undefined": null,
+              "reference": 27
+            }
+          ],
+          "funcs": null
+        }
+      ],
+      "heap": [
+        {
+          "id": 6,
+          "name": null,
+          "order": 1,
+          "vars": [
+            {
+              "id": 7,
+              "name": "0",
+              "value": null,
+              "undefined": false,
+              "reference": 8
+            },
+            {
+              "id": 200,
+              "name": "1",
+              "value": null,
+              "undefined": false,
+              "reference": 23
+            },
+            {
+              "id": 120,
+              "name": "2",
+              "value": "unique id",
+              "undefined": false,
+              "reference": 27
+            }
+          ],
+          "funcs": null
+        },
+        {
+          "id": 8,
+          "name": null,
+          "order": 2,
+          "vars": [
+            {
+              "id": 9,
+              "name": "Name",
+              "value": "Harry",
+              "undefined": false,
+              "reference": null
+            },
+            {
+              "id": 10,
+              "name": "age",
+              "value": "96",
+              "undefined": false,
+              "reference": null
+            },
+            {
+              "id": 11,
+              "name": "__proto__",
+              "value": "[Object]",
+              "undefined": false,
+              "reference": null
+            }
+          ],
+          "funcs": null
+        },
+        {
+          "id": 12,
+          "name": null,
+          "order": 3,
+          "vars": [
+            {
+              "id": 13,
+              "name": "__proto__",
+              "value": "[Function]",
+              "undefined": false,
+              "reference": null
+            }
+          ],
+          "funcs": null
+        },
+        {
+          "id": 14,
+          "name": null,
+          "order": 3,
+          "vars": [
+            {
+              "id": 15,
+              "name": "__proto__",
+              "value": "[Function]",
+              "undefined": false,
+              "reference": null
+            }
+          ],
+          "funcs": null
+        },
+        {
+          "id": 16,
+          "name": null,
+          "order": 3,
+          "vars": [
+            {
+              "id": 17,
+              "name": "Name",
+              "value": null,
+              "undefined": true,
+              "reference": null
+            },
+            {
+              "id": 18,
+              "name": "Age",
+              "value": null,
+              "undefined": true,
+              "reference": null
+            },
+            {
+              "id": 19,
+              "name": "__proto__",
+              "value": "[Function]",
+              "undefined": false,
+              "reference": null
+            },
+            {
+              "id": 20,
+              "name": "prototype",
+              "value": null,
+              "undefined": false,
+              "reference": 31
+            }
+          ],
+          "funcs": [
+            {
+              "id": 21,
+              "name": "setName",
+              "reference": 12
+            },
+            {
+              "id": 22,
+              "name": "setAge",
+              "reference": 14
+            }
+          ]
+        },
+        {
+          "id": 23,
+          "name": null,
+          "order": 4,
+          "vars": [
+            {
+              "id": 24,
+              "name": "Name",
+              "value": "Jane",
+              "undefined": false,
+              "reference": null
+            },
+            {
+              "id": 25,
+              "name": "Age",
+              "value": "50",
+              "undefined": false,
+              "reference": null
+            },
+            {
+              "id": 26,
+              "name": "__proto__",
+              "value": null,
+              "undefined": false,
+              "reference": 31
+            }
+          ],
+          "funcs": null
+        },
+        {
+          "id": 27,
+          "name": null,
+          "order": 6,
+          "vars": [
+            {
+              "id": 28,
+              "name": "Name",
+              "value": "Shaun",
+              "undefined": false,
+              "reference": null
+            },
+            {
+              "id": 29,
+              "name": "Age",
+              "value": null,
+              "undefined": true,
+              "reference": null
+            },
+            {
+              "id": 30,
+              "name": "__proto__",
+              "value": null,
+              "undefined": false,
+              "reference": 31
+            }
+          ],
+          "funcs": null
+        },
+        {
+          "id": 31,
+          "name": null,
+          "order": 7,
+          "vars": [
+            {
+              "id": 32,
+              "name": "__proto__",
+              "value": "[Object]",
+              "undefined": false,
+              "reference": null
+            }
+          ],
+          "funcs": null
+        }
+      ]
+    }
   }
 ]

@@ -13,13 +13,12 @@ window.onload = function () {
     xhttp.open("GET", '/api/MemoryModels', true);
     xhttp.onload = function (e) {
         var res = JSON.parse(xhttp.responseText);
-        console.log(res);
 
         // SET MEMORY MODELS IN SELECTBOX
-        var memoryModels = res.data;
+        var memoryModels = res;
         var sel = document.getElementById('memoryModelsList');
         for (var i = 0; i < memoryModels.length; i++) {
-            $(sel).append("<li><a onclick='chooseMemoryModel(this)' data-value='"+ memoryModels[i].mmid +"' href='#'>"+ memoryModels[i].modelName +"</a></li>")
+            $(sel).append("<li><a onclick='chooseMemoryModel(this, false)' data-value='" + memoryModels[i].mmid + "' data-version='" + memoryModels[i].version + "'  href='#'>" + memoryModels[i].modelName + "</a></li>")
         }
 
     };
@@ -28,26 +27,32 @@ window.onload = function () {
 
 
 /**
- * Get a memory model with a given ID.
+ * Get a memory model with a given ID. And get previous versions of these.
  */
-var currentMemoryModel;
-function chooseMemoryModel(id) {
-    id = $(id).attr('data-value');
-    console.log(id);
+var currentMemoryModel = {};
+function chooseMemoryModel(id, prevVersion) {
+    $("#undoButton").css("display", "block");
+    var version = null;
+    if (prevVersion === true) {
+        id = currentMemoryModel.id;
+        if (currentMemoryModel.version > 1) {
+            version = currentMemoryModel.version - 1;
+            currentMemoryModel.version += -1;
+        } else version = 1;
+    }else {
+        var currentVersion = parseInt($(id).attr('data-version'));
+        id = $(id).attr('data-value');
+        currentMemoryModel.id = id;
+        currentMemoryModel.version = currentVersion;
+    }
     var xhttp = new XMLHttpRequest();
-    xhttp.open("GET", '/api/MemoryModels/' + id, true);
+    xhttp.open("GET", '/api/MemoryModels/' + id + '/' + version, true);
     xhttp.onload = function (e) {
         var res = JSON.parse(xhttp.responseText);
-        currentMemoryModel = res.memoryModel;
-
-        drawMemoryModel(res.memoryModel);
-
-        console.log(res);
-
+        currentMemoryModel.memoryModel = res.memoryModel;
         // SET MEMORY MODEL ON SCREEN
-        var memoryModel = res;
+        drawMemoryModel(res.memoryModel);
     };
-
     xhttp.send();
 }
 
@@ -55,50 +60,53 @@ function chooseMemoryModel(id) {
 /**
  * Draws the memory model.
  */
-function drawMemoryModel(model){
+function drawMemoryModel(model) {
 
     var diagramContainer = $('#diagramContainer');
     diagramContainer.children().remove();
 
-    var stack = diagramContainer.append("<div class='stack'></div>");
-    var heap = diagramContainer.append("<div class='heap'></div>");
+    var stack = diagramContainer.append("<div class='Stack'></div>");
+    var heap = diagramContainer.append("<div class='Heap'></div>");
 
-    drawFrames("stack",model.stack);
-    drawFrames("heap",model.heap);
+    drawFrames("Stack", model.stack);
+    drawFrames("Heap", model.heap);
 }
 
 
 /**
  * Draws the frames of the memory model.
  */
-function drawFrames(location, frame){
+function drawFrames(location, frame) {
+    $('.' + location).append(
+        "<div class='frameLabel'>" + location + "</div>"
+    );
 
-    frame.forEach(function(item){
+    frame.forEach(function (item) {
 
-        $('.'+location).append(
-            "<div id='"+ item.id +"' class='frame'> "+
-            "<div class='frameLabel'>"+ item.name +"</div>" +
+        $('.' + location).append(
+            "<div id='" + item.id + "' class='frame'> " +
+            "<div class='frameLabel'>" + item.name + "</div>" +
             "</div>");
 
-        if(item.vars) drawVars('#'+  item.id, item.vars);
-        if(item.funcs)drawFuncs('#'+ item.id, item.funcs);
+        if (item.vars) drawVars('#' + item.id, item.vars);
+        if (item.funcs)drawFuncs('#' + item.id, item.funcs);
 
     });
-    }
+}
 
 /**
  * Draws the variables of the memory model.
  */
-function drawVars(location, vars){
+function drawVars(location, vars) {
 
-    vars.forEach(function(variable){
-        console.log(variable.id);
+    vars.forEach(function (variable) {
+        //console.log(variable.id);
 
         var value = determineVar(variable);
         $(location).append(
             "<div class='variable'>" +
-            "<div class='variableLabel'>"+ variable.name +"</div>" +
-            "<div id='"+ variable.id + "' class='variableValue'>"+ value +"</div>" +
+            "<div class='variableLabel'>" + variable.name + "</div>" +
+            "<div id='" + variable.id + "' class='variableValue'>" + value + "</div>" +
             "</div>");
     });
 }
@@ -106,16 +114,16 @@ function drawVars(location, vars){
 /**
  * Draws the functions of the memory model.
  */
-function drawFuncs(location, funcs){
+function drawFuncs(location, funcs) {
 
 
-    funcs.forEach(function(variable){
+    funcs.forEach(function (variable) {
         var value = determineVar(variable);
 
         $(location).append(
             "<div class='variable'>" +
-            "<div class='variableLabel'>"+ variable.name +"</div>" +
-            "<div id='"+ variable.id + "' class='variableValue pointer'>"+ value+"</div>" +
+            "<div class='variableLabel'>" + variable.name + "</div>" +
+            "<div id='" + variable.id + "' class='variableValue pointer'>" + value + "</div>" +
             "</div>");
     });
 }
@@ -125,20 +133,20 @@ function drawFuncs(location, funcs){
  * Looks of the variable is a pointer or a variable
  */
 var relations = [];
-function determineVar(variable){
-    if(variable.reference){
+function determineVar(variable) {
+    if (variable.reference) {
         relations.push({source: variable.id, target: variable.reference});
         return "";
     }
-    else if(variable.undefined) return "undefined";
-    else if(variable.value) return variable.value;
+    else if (variable.undefined) return "undefined";
+    else if (variable.value) return variable.value;
     else return "null"
 }
 
 /**
  * Puts jsPlumb into the application
  */
-function initPlumb(){
+function initPlumb() {
     jsPlumb.ready(function () {
         jsPlumb.Defaults.Container = $("#diagramContainer");
 
@@ -165,7 +173,7 @@ function initPlumb(){
 
         $(".frame").draggable({
             drag: function (e) {
-                console.log("REPAINTING");
+                //console.log("REPAINTING");
                 jsPlumb.repaintEverything();
             },
             containment: "parent"
@@ -173,12 +181,12 @@ function initPlumb(){
 
         //jsPlumb.addEndpoint($(".frame"), common);
         //jsPlumb.addEndpoint($(".pointer"), common);
-        relations.forEach(function(relation){
-            console.log(relation);
+        relations.forEach(function (relation) {
+            //console.log(relation);
             jsPlumb.connect({
-                    source: relation.source.toString(),
-                    target: relation.target.toString()
-                }, common);
+                source: relation.source.toString(),
+                target: relation.target.toString()
+            }, common);
         });
         //jsPlumb.connect({
         //    source: "var1pointer",
