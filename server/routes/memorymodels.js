@@ -38,9 +38,6 @@ router.get('/', function (req, res) {
             var resultsArray = [];
             var i = 0;
 
-            /**
-             * Shows only the latest version of a memory model.
-             */
             result.forEach(function (r) {
                 var inList = false;
                 resultsArray.forEach(function (result) {
@@ -56,13 +53,10 @@ router.get('/', function (req, res) {
                     resultsArray.push(r);
                 }
             });
-
+            console.log(result);
             return res.send(resultsArray);
         });
 });
-
-
-
 
 /**
  * Get a memory model with a given ID.
@@ -73,8 +67,8 @@ router.get('/', function (req, res) {
 
 router.get('/:id/:version?', function (req, res) {
 
-    var mmid = parseInt(req.params.id);
-    var version = (req.params.version) ? parseInt(req.params.version) : null;
+    var mmid = req.params.id;
+    var version = (req.params.version) ? req.params.version : null;
 
     if (mmid) {
         r.db('percolatordb')
