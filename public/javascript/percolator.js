@@ -16,7 +16,7 @@ window.onload = function () {
         console.log(res);
 
         // SET MEMORY MODELS IN SELECTBOX
-        var memoryModels = res.data;
+        var memoryModels = res;
         var sel = document.getElementById('memoryModelsList');
         for (var i = 0; i < memoryModels.length; i++) {
             $(sel).append("<li><a onclick='chooseMemoryModel(this)' data-value='" + memoryModels[i].mmid + "' href='#'>" + memoryModels[i].modelName + "</a></li>")

@@ -12,47 +12,58 @@ r.connect(config.rethinkdb).then(function (conn) {
     return r.dbList().run(connection)
 });
 
+
 /**
  * Get a list of all memory models.
  */
-
 router.get('/', function (req, res) {
-
-    r.db('percolatordb').table('ModelInfo').eqJoin('id', r.db('percolatordb').table('History'), {index: 'mmid'})
-        .zip()// merge the two fields into a single document.
+    r.db('percolatordb')
+        .table('ModelInfo')
+        .eqJoin('id',
+                r.db('percolatordb')
+                .table('History'),
+                {index: 'mmid'})
+        .zip() // merge the two fields into a single document.
         .coerceTo('array') // making a array instead of object
         .run(connection, function (err, result) {
-            var resultsArray = [];
-            var i = 0;
+            if(err)
+                return res.send({message: "something went wrong!"});
 
-/**
- * Shows only the latest version of a memory model.
- */
-            result.forEach(function (r) {
-                var inList = false;
-                resultsArray.forEach(function (result) {
-                    if (r.mmid === result.mmid) {
-                        inList = true;
-                        if (r.version > result.version) {
-                            resultsArray[i] = result;
-                        }
-                    }
-                    i++;
-                });
-                if (inList === false) {
-                    resultsArray.push(r);
-                }
-            });
+            if (!result)
+                return res.send({message: "No memory models were found!"});
 
-            if (result) return res.send({
-                msgType: "newData",
-                data: resultsArray
-            });
+            return res.send(result);
         });
 });
+//var resultsArray = [];
+//var i = 0;
+//
+///**
+// * Shows only the latest version of a memory model.
+// */
+//result.forEach(function (r) {
+//    var inList = false;
+//    resultsArray.forEach(function (result) {
+//        if (r.mmid === result.mmid) {
+//            inList = true;
+//            if (r.version > result.version) {
+//                resultsArray[i] = result;
+//            }
+//        }
+//        i++;
+//    });
+//    if (inList === false) {
+//        resultsArray.push(r);
+//    }
+//});
+
+
 
 /**
  * Get a memory model with a given ID.
+ *
+ * @param :id the ID used to identify the specified memory model
+ * @param :version? Optional parameter to get a specified version of the memory model
  */
 
 router.get('/:id/:version?', function (req, res) {
@@ -61,42 +72,29 @@ router.get('/:id/:version?', function (req, res) {
     var version = (req.params.version) ? parseInt(req.params.version) : null;
 
     if (mmid) {
-        r.db('percolatordb').table('ModelInfo').eqJoin('id', r.db('percolatordb').table('History'), {index: 'mmid'})
-            .zip()// merge the two fields into a single document.
+        r.db('percolatordb')
+            .table('ModelInfo')
+            .eqJoin('id',
+                    r.db('percolatordb')
+                    .table('History'),
+                    {index: 'mmid'})
+            .zip() // merge the two fields into a single document.
+            .orderBy(r.desc('version'))
+            .filter(function(row){
+                if(version) return row("mmid").eq(mmid) && row("version").eq(version);
+                else return row("mmid").eq(mmid);
+            })
             .coerceTo('array') // making a array instead of object
             .run(connection, function (err, result) {
+                if (err)
+                    return res.send("unexpected error: " + err);
 
-                if (err) return res.send("unexpected error:" + err);
+                if (result[0])
+                    return res.send(result[0]);
 
-                var resultsArray = [];
-                if (result) {
-                    result.forEach(function (r) {
-                        if (r.mmid == mmid)
-                            resultsArray.push(r);
-                    });
-                    if (!version) {
-                        var highestVersion = {version: 0};
-                        resultsArray.forEach(function (v) {
-                            if (v.version > highestVersion.version) {
-                                highestVersion = v;
-                            }
-                        });
-                        res.send(highestVersion);
-                    }
-                    else {
-
-                        resultsArray.forEach(function (v) {
-                            if (v.version === version) {
-                                res.send(v);
-                            }
-                        });
-                    }
-
-
-                }
-                else return res.send("ID does not exist");
+                return res.send("ID or version does not exist");
             });
-    } else res.send("not a valid id");
+    } else return res.send("not a valid id");
 });
 
 
