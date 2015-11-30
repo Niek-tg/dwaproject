@@ -32,13 +32,26 @@ describe('API memorymodels unit test', function(){
                 });
     });
 
-    it('database has x memmorymodels', function(done){
+    it('Retrieve multiple versions of a memory model', function(done){
+        //Get version 1 of memory model 5331
         api
-            .get('/api/MemoryModels')
+            .get('/api/MemoryModels/5331/1')
             .set('Accept', 'application/json')
             .end(function(err, res){
                 if (err) return done(err);
-                console.log(res.body);
+               console.log("GET on version 1 succeeded.");
+
+                //Get version 2 of memory model 5331
+                api
+                    .get('/api/memoryModels/5331/2')
+                    .set('Accept', 'application/json')
+                    .end(function(err2,res2){
+                       if(err2) return done(err2);
+
+                        console.log("GET on version 2 succeeded.")
+                    });
+
+
                 done();
             });
     });
@@ -53,16 +66,8 @@ describe('API memorymodels unit test', function(){
                 if (err) return done(err);
                 res.body.should.be.a('object');
                 res.should.be.json;
-                //res.body.data.id.should.equal('5331');
-                //].name.should.equal('Bat');
 
-                //res.body.data.should.be.a('array');
-
-                //res.body.should.have.property('data');
-                //res.body.data.id.should.equal(5331);
-                //res.body.should.have.property('id');
-                //res.body.should.have.property('msgType');
-                console.log(res.body);
+                //console.log(res.body);
                 done();
             });
     });
