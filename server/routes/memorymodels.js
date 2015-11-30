@@ -44,16 +44,16 @@ router.get('/', function (req, res) {
                     if (r.mmid === result.mmid) {
                         inList = true;
                         if (r.version > result.version) {
-                            resultsArray[i] = result;
+                            resultsArray[i] = r;
                         }
                     }
+                    else inList = false;
                     i++;
                 });
                 if (inList === false) {
                     resultsArray.push(r);
                 }
             });
-
             return res.send(resultsArray);
         });
 });
