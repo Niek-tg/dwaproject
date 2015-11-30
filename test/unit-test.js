@@ -18,12 +18,11 @@ var api = supertest(app);
 
 
 
-
 describe('API memorymodels unit test', function(){
 
     it('Route connection established', function(done){
         api
-                .get('/api/MemoryModels')
+                .get('/api/memorymodels')
                 .set('Accept', 'application/json')
                 .expect(200)
                 .end(function(err, res){
@@ -34,35 +33,84 @@ describe('API memorymodels unit test', function(){
 
     it('database has x memmorymodels', function(done){
         api
-            .get('/api/MemoryModels')
+            .get('/api/memorymodels')
             .set('Accept', 'application/json')
             .end(function(err, res){
                 if (err) return done(err);
-                console.log(res.body);
                 done();
             });
     });
 
-
     it('database has memmorymodel 5331', function(done){
         api
-            .get('/api/MemoryModels/5331')
+            .get('/api/memorymodels/5331')
             .set('Accept', 'application/json')
             .expect(200)
             .end(function(err, res){
                 if (err) return done(err);
-                res.body.should.be.a('object');
                 res.should.be.json;
-                //res.body.data.id.should.equal('5331');
-                //].name.should.equal('Bat');
+                res.body.mmid.should.equal(5331);
+                done();
+            });
+    });
 
-                //res.body.data.should.be.a('array');
+    it('memmorymodel has propertys\'s', function(done){
+        api
+            .get('/api/memorymodels/5331')
+            .set('Accept', 'application/json')
+            .expect(200)
+            .end(function(err, res){
+                if (err) return done(err);
+                res.should.be.json;
 
-                //res.body.should.have.property('data');
-                //res.body.data.id.should.equal(5331);
-                //res.body.should.have.property('id');
-                //res.body.should.have.property('msgType');
-                console.log(res.body);
+                expect(res.body).to.have.property('id');
+                expect(res.body).to.have.property('language');
+                expect(res.body).to.have.property('memoryModel');
+                expect(res.body).to.have.property('mmid');
+                expect(res.body).to.have.property('modelName');
+                expect(res.body).to.have.property('owner');
+                expect(res.body).to.have.property('version');
+
+                done();
+            });
+    });
+});
+
+describe('API memorymodels ERROS handling', function() {
+
+    it('API does not exict !', function (done) {
+        api
+            .get('/zapii/')
+            .set('Accept', 'application/json')
+            .expect(200)
+            .end(function (err, res) {
+                if (err) return done(err);
+                done();
+            });
+    });
+
+    it('ID Version or does not exist', function (done) {
+        api
+            .get('/api/memorymodels/1/99999')
+            .set('Accept', 'application/json')
+            .expect(200)
+            .end(function (err, res) {
+                if (err) return done(err);
+                res.text.should.equal('ID or version does not exist');
+                console.log(res.text);
+                done();
+            });
+    });
+
+    it('Not a valid id', function (done) {
+        api
+            .get('/api/memorymodels/w/10')
+            .set('Accept', 'application/json')
+            .expect(200)
+            .end(function (err, res) {
+                if (err) return done(err);
+                res.text.should.equal('not a valid id');
+                console.log(res.text);
                 done();
             });
     });
