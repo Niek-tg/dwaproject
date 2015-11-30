@@ -31,15 +31,16 @@ window.onload = function () {
  */
 var currentMemoryModel = {};
 function chooseMemoryModel(id, prevVersion) {
+    console.log("GETTING SPECIFIC MEMORY MODEL");
     $("#undoButton").css("display", "block");
     var version = null;
-    if (prevVersion === true) {
+    if (prevVersion) {
         id = currentMemoryModel.id;
         if (currentMemoryModel.version > 1) {
             version = currentMemoryModel.version - 1;
             currentMemoryModel.version += -1;
         } else version = 1;
-    }else {
+    } else {
         var currentVersion = parseInt($(id).attr('data-version'));
         id = $(id).attr('data-value');
         currentMemoryModel.id = id;
