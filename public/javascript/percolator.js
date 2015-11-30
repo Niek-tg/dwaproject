@@ -19,7 +19,7 @@ window.onload = function () {
         var memoryModels = res.data;
         var sel = document.getElementById('memoryModelsList');
         for (var i = 0; i < memoryModels.length; i++) {
-            $(sel).append("<li><a onclick='chooseMemoryModel(this)' data-value='"+ memoryModels[i].mmid +"' href='#'>"+ memoryModels[i].modelName +"</a></li>")
+            $(sel).append("<li><a onclick='chooseMemoryModel(this)' data-value='" + memoryModels[i].mmid + "' href='#'>" + memoryModels[i].modelName + "</a></li>")
         }
 
     };
@@ -54,50 +54,53 @@ function chooseMemoryModel(id) {
 /**
  * Draws the memory model.
  */
-function drawMemoryModel(model){
+function drawMemoryModel(model) {
 
     var diagramContainer = $('#diagramContainer');
     diagramContainer.children().remove();
 
-    var stack = diagramContainer.append("<div class='stack'></div>");
-    var heap = diagramContainer.append("<div class='heap'></div>");
+    var stack = diagramContainer.append("<div class='Stack'></div>");
+    var heap = diagramContainer.append("<div class='Heap'></div>");
 
-    drawFrames("stack",model.stack);
-    drawFrames("heap",model.heap);
+    drawFrames("Stack", model.stack);
+    drawFrames("Heap", model.heap);
 }
 
 
 /**
  * Draws the frames of the memory model.
  */
-function drawFrames(location, frame){
+function drawFrames(location, frame) {
+    $('.' + location).append(
+    "<div class='frameLabel'>" + location + "</div>"
+    );
 
-    frame.forEach(function(item){
+    frame.forEach(function (item) {
 
-        $('.'+location).append(
-            "<div id='"+ item.id +"' class='frame'> "+
-            "<div class='frameLabel'>"+ item.name +"</div>" +
+        $('.' + location).append(
+            "<div id='" + item.id + "' class='frame'> " +
+            "<div class='frameLabel'>" + item.name + "</div>" +
             "</div>");
 
-        if(item.vars) drawVars('#'+  item.id, item.vars);
-        if(item.funcs)drawFuncs('#'+ item.id, item.funcs);
+        if (item.vars) drawVars('#' + item.id, item.vars);
+        if (item.funcs)drawFuncs('#' + item.id, item.funcs);
 
     });
-    }
+}
 
 /**
  * Draws the variables of the memory model.
  */
-function drawVars(location, vars){
+function drawVars(location, vars) {
 
-    vars.forEach(function(variable){
+    vars.forEach(function (variable) {
         console.log(variable.id);
 
         var value = determineVar(variable);
         $(location).append(
             "<div class='variable'>" +
-            "<div class='variableLabel'>"+ variable.name +"</div>" +
-            "<div id='"+ variable.id + "' class='variableValue'>"+ value +"</div>" +
+            "<div class='variableLabel'>" + variable.name + "</div>" +
+            "<div id='" + variable.id + "' class='variableValue'>" + value + "</div>" +
             "</div>");
     });
 }
@@ -105,19 +108,18 @@ function drawVars(location, vars){
 /**
  * Draws the functions of the memory model.
  */
-function drawFuncs(location, funcs){
+function drawFuncs(location, funcs) {
 
 
-    funcs.forEach(function(variable){
+    funcs.forEach(function (variable) {
         var value = determineVar(variable);
 
         $(location).append(
             "<div class='variable'>" +
-            "<div class='variableLabel'>"+ variable.name +"</div>" +
-            "<div id='"+ variable.id + "' class='variableValue pointer'>"+ value+"</div>" +
+            "<div class='variableLabel'>" + variable.name + "</div>" +
+            "<div id='" + variable.id + "' class='variableValue pointer'>" + value + "</div>" +
             "</div>");
     });
-    initPlumb();
 }
 
 
@@ -125,20 +127,20 @@ function drawFuncs(location, funcs){
  * Looks of the variable is a pointer or a variable
  */
 var relations = [];
-function determineVar(variable){
-    if(variable.reference){
+function determineVar(variable) {
+    if (variable.reference) {
         relations.push({source: variable.id, target: variable.reference});
         return "";
     }
-    else if(variable.undefined) return "undefined";
-    else if(variable.value) return variable.value;
+    else if (variable.undefined) return "undefined";
+    else if (variable.value) return variable.value;
     else return "null"
 }
 
 /**
  * Puts jsPlumb into the application
  */
-function initPlumb(){
+function initPlumb() {
     jsPlumb.ready(function () {
         jsPlumb.Defaults.Container = $("#diagramContainer");
 
@@ -173,12 +175,12 @@ function initPlumb(){
 
         //jsPlumb.addEndpoint($(".frame"), common);
         //jsPlumb.addEndpoint($(".pointer"), common);
-        relations.forEach(function(relation){
+        relations.forEach(function (relation) {
             console.log(relation);
             jsPlumb.connect({
-                    source: relation.source.toString(),
-                    target: relation.target.toString()
-                }, common);
+                source: relation.source.toString(),
+                target: relation.target.toString()
+            }, common);
         });
         //jsPlumb.connect({
         //    source: "var1pointer",
