@@ -24,6 +24,7 @@
     "body-parser": "^1.14.1",
     "chai": "^3.4.1",
     "express": "^4.13.3",
+    "jsdoc": "^3.4.0",
     "mocha": "^2.3.4",
     "rethinkdb": "^2.2.0",
     "selenium": "^2.20.0",

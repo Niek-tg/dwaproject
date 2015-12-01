@@ -5,8 +5,6 @@ var fs = require('fs');
 
 var config = require(__dirname +'/../config.js');
 
-var thinky     = require('thinky')(config.thinky);
-
 var ModelInfo = require('./models/thinkyModels.js').ModelInfo;
 var History = require('./models/thinkyModels.js').History;
 
