@@ -16,8 +16,6 @@ var api = supertest(app);
 *  -
 * */
 
-
-
 describe('API memorymodels unit test', function(){
 
     it('Route connection established', function(done){
@@ -25,7 +23,7 @@ describe('API memorymodels unit test', function(){
                 .get('/api/memorymodels')
                 .set('Accept', 'application/json')
                 .expect(200)
-                .end(function(err, res){
+                .end(function(err){
                 if (err) return done(err);
                     done();
                 });
@@ -34,10 +32,9 @@ describe('API memorymodels unit test', function(){
     it('Retrieve multiple versions of a memory model', function(done){
         //Get version 1 of memory model 5331
         api
-            .get('/api/MemoryModels/5331/1')
-            .get('/api/memorymodels')
+            .get('/api/memorymodels/5331/1')
             .set('Accept', 'application/json')
-            .end(function(err, res){
+            .end(function(err){
                 if (err) return done(err);
                console.log("GET on version 1 succeeded.");
 
@@ -45,13 +42,10 @@ describe('API memorymodels unit test', function(){
                 api
                     .get('/api/memoryModels/5331/2')
                     .set('Accept', 'application/json')
-                    .end(function(err2,res2){
+                    .end(function(err2){
                        if(err2) return done(err2);
-
                         console.log("GET on version 2 succeeded.")
                     });
-
-
                 done();
             });
     });
@@ -93,18 +87,18 @@ describe('API memorymodels unit test', function(){
 
 describe('API memorymodels ERROS handling', function() {
 
-    it('API does not exict !', function (done) {
+    it('API does not exict!', function (done) {
         api
             .get('/zapii/')
             .set('Accept', 'application/json')
-            .expect(200)
-            .end(function (err, res) {
+            .expect(404)
+            .end(function (err) {
                 if (err) return done(err);
                 done();
             });
     });
 
-    it('ID Version or does not exist', function (done) {
+    it('ID or Version does not exist', function (done) {
         api
             .get('/api/memorymodels/1/99999')
             .set('Accept', 'application/json')
@@ -112,7 +106,6 @@ describe('API memorymodels ERROS handling', function() {
             .end(function (err, res) {
                 if (err) return done(err);
                 res.text.should.equal('ID or version does not exist');
-                console.log(res.text);
                 done();
             });
     });
@@ -125,11 +118,25 @@ describe('API memorymodels ERROS handling', function() {
             .end(function (err, res) {
                 if (err) return done(err);
                 res.text.should.equal('not a valid id');
-                console.log(res.text);
                 done();
             });
     });
 });
 
+
+describe('API memorymodels POST', function() {
+
+    it('Route POST MemoryModel', function (done) {
+        api
+            .post('/api/memorymodels/')
+            .set('Accept', 'application/json')
+            .expect(200)
+            .end(function (err, res) {
+                if (err) return done(err);
+                res.text.should.equal('Route POST MemoryModel');
+                done();
+            });
+    });
+});
 
 
