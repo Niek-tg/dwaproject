@@ -6,97 +6,55 @@
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/jsPlumb/1.4.1/jquery.jsPlumb-1.4.1-all-min.js"></script>
+    <script src="./javascript/bootstrap.js"></script>
+
     <script src="javascript/percolator.js"></script>
-    <link  href="css/svg.css" type="text/css" >
-    <style>
-        #diagramContainer {
-            padding: 0px;
-            width: 100%;
-            height: 100%;
-            border: 1px solid gray;
-            font-size: 20px;
-            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-        }
+    <link  href="css/svg.css" rel="stylesheet" type="text/css" >
+    <link href="./css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="./css/bootstrap-theme.min.css" rel="stylesheet"/>
 
-        .Stack {
-            position: absolute;
-            margin: 0px;
-            width: 50%;
-            border: 1px solid gray;
-        }
-
-        .Heap {
-            position: absolute;
-            left: 50%;
-            margin: 0px;
-            width: 50%;
-            border: 1px solid gray;
-        }
-
-        .frame {
-            position: relative;
-            display: table;
-            margin: 3%;
-            height: 160px;
-            max-width: 900px;
-            width: calc(94% - 20px);
-            border: 10px solid gray;
-        }
-
-        .frameLabel {
-            left: 50%;
-            text-align: center;
-        }
-
-        .variable {
-            position: relative;
-            float: left;
-            width: 96%;
-            padding: 0 2%;
-            height: 30px;
-            margin: 10px 0;
-            /*border: 1px solid blue;*/
-        }
-
-        .variableLabel {
-            float: left;
-            margin: 5px;
-            width: 50%;
-            max-width: 200px;
-        }
-
-        .variableValue {
-            position: relative;
-            float: left;
-            right: 2%;
-            height: 30px;
-            min-width: 30px;
-            border: 1px solid gray;
-            text-align: center;
-        }
-        #undoButton{
-            display: none;
-        }
-    </style>
 </head>
 <body>
-<div id="memoryModelWrapper">
-    <ul id="memoryModelsList"></ul>
+<div id="memoryModelWrapper" class="col-md-12 col-sm-12 container-fluid">
+    <!--Header-->
+    <div id="header" class="col-md-12 col-sm-12">
+        <!--Percolator Logo-->
+        <div id="logo" class="col-md-3 col-sm-3" >
+            <img src="./images/lg_percolator.png" class="img-responsive" alt="Responsive image">
+        </div>
+        <!--Header Title: Owner & name of Memorymodel-->
+        <div id="headerTitle" class="col-md-9 col-sm-9">
+            <h5>Dickie Curtis</h5>
+            <h5>Opdracht 1A</h5>
+        </div>
+        <div class="col-md-12">
+            <button class="btn-primary" id="undoButton" onclick="chooseMemoryModel('id', true)"> Undo</button>
+        </div>
+    </div>
+    <!--List of all memorymodels-->
+    <div id="allMemoryModels" class="col-md-3 col-sm-3">
+      <ul id="memoryModelsList"></ul>
+    </div>
+    <!-- Memorymodel-->
+    <div id="memoryModel" class="col-md-6 col-sm-6">
+        <div id="diagramContainer">
 
-    <button id="undoButton" onclick="chooseMemoryModel('id',true)"> Undo</button>
-
-    <div id="diagramContainer">
-
+            <div class="clr"></div>
+        </div>
+    </div>
+    <!--Memorymodel versions-->
+    <div id="memoryModelVersions" class="col-md-2 col-sm-2">
+        <h5>Memorymodel Versions</h5>
     </div>
 
+    <script>
+        $(window).resize(function () {
+            jsPlumb.repaintEverything();
+        })
+    </script>
 </div>
 
 
-<script>
-    $(window).resize(function () {
-        jsPlumb.repaintEverything();
-    })
-</script>
 
 </body>
 </html>
