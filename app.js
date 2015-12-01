@@ -15,12 +15,14 @@ if(RUNSEED){
     seedScript.runSeed(startWebservers); // startWebservers as callback, when done
 } else startWebservers();
 
+var theHttpServer;
 
 //Function to set up HTTP server with settings from config.js
+
 function startWebservers(){
 
     var theExpressApp = express();
-    var theHttpServer = http.createServer();
+    theHttpServer = http.createServer();
     theExpressApp.use(bodyParser.json());
 
     var webSocketServer = new ws.Server({
@@ -44,3 +46,5 @@ function startWebservers(){
         console.log("The Server is lisening on port 3000.")
     });
 }
+
+module.exports = theHttpServer;
