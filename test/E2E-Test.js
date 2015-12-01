@@ -30,7 +30,7 @@ var expect = require('chai').expect;
 
 describe("E2E test get homepage", function(){
 
-    this.timeout(40000);
+    this.timeout(20000);
     var browser;
 
     before(function (done){
