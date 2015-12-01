@@ -20,7 +20,9 @@ window.onload = function () {
 
         for (var i = 0; i < memoryModels.length; i++) {
             //console.log(memoryModels[i])
-            $(sel).append("<li><a onclick='chooseMemoryModel(this, false)' data-value='" + memoryModels[i].mmid + "' data-version='" + memoryModels[i].version + "'  href='#'>" + memoryModels[i].modelName + "</a></li>")
+            $(sel).append("<li class='list-group-item'><a onclick='chooseMemoryModel(this, false)' data-value='" +
+                memoryModels[i].mmid + "' data-version='" + memoryModels[i].version + "'  href='#'>" +
+                memoryModels[i].modelName + "</a></li>")
         }
 
     };
@@ -31,40 +33,43 @@ window.onload = function () {
 /**
  * Get a memory model with a given ID. And get previous versions of these.
  */
-var currentMemoryModel = {};
+var currentMemoryModel;
 function chooseMemoryModel(id, prevVersion) {
     var xhttp = new XMLHttpRequest();
 
     console.log("GETTING SPECIFIC MEMORY MODEL");
+
     $("#undoButton").css("display", "block");
     var version = null;
     if (prevVersion) {
-        id = currentMemoryModel.id;
+        id = currentMemoryModel.mmid;
         if (currentMemoryModel.version > 1) {
             $.ajax({
                 url: '/api/MemoryModels/' + id + '/' + currentMemoryModel.version,
                 type: 'DELETE',
                 success: function(response) {
-                    version = currentMemoryModel.version - 1;
-                    currentMemoryModel.version += -1;
+                    console.log('DELETED LAST VERSION');
                 }
+
             });
+            version = currentMemoryModel.version - 1;
+            currentMemoryModel.version += -1;
 
         } else {
             version = 1;
             alert("There is not an older version");
         }
     } else {
-        var currentVersion = parseInt($(id).attr('data-version'));
         id = $(id).attr('data-value');
-        currentMemoryModel.id = id;
-        currentMemoryModel.version = currentVersion;
     }
 
     xhttp.open("GET", '/api/MemoryModels/' + id + '/' + version, true);
     xhttp.onload = function (e) {
         var res = JSON.parse(xhttp.responseText);
-        currentMemoryModel.memoryModel = res.memoryModel;
+        currentMemoryModel = res;
+        $("#owner").html(currentMemoryModel.owner);
+        $("#modelName").html(currentMemoryModel.modelName);
+        $("#version").html("Version: " + currentMemoryModel.version);
         // SET MEMORY MODEL ON SCREEN
         drawMemoryModel(res.memoryModel).then(function(){
             initPlumb();
