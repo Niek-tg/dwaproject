@@ -111,4 +111,15 @@ queries.subscribeToChanges = function(mmid, cb){
         });
 };
 
+queries.deleteLatestversion = function(mmid, version, cb){
+
+    r.db('percolatordb')
+        .table('History')
+        .filter(r.row('mmid').eq(mmid).and(r.row("version").eq(version)))
+        .delete()
+        .run(connection, function (err, result) {
+            cb(err, result);
+        });
+};
+
 module.exports = queries;

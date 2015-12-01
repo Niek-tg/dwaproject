@@ -95,19 +95,16 @@ router.post('/', function (req, res) {
 
 });
 
-
 router.delete('/:id/:version', function (req,res){
     var mmid = req.params.id;
     var version = parseInt(req.params.version);
 
-    r.db('percolatordb').table('History').filter(r.row('mmid').eq(mmid).and(r.row("version").eq(version))
-    ).delete().run(connection, function (err, result) {
-            if (err)
-                return res.send("unexpected error: " + err);
+    queries.deleteLatestversion(mmid, version, function (err, result) {
+        if (err)
+            return res.send("unexpected error: " + err);
 
-            return res.send("Delete request completed");
-        });
-
+        return res.send("Delete request completed");
+    });
 });
 
 module.exports = router;
