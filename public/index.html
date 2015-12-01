@@ -9,7 +9,8 @@
     <script src="./javascript/bootstrap.js"></script>
 
     <script src="javascript/percolator.js"></script>
-    <link  href="css/svg.css" rel="stylesheet" type="text/css" >
+    <link  href="css/svg.css" rel="stylesheet">
+    <link href="./css/custom.css" rel="stylesheet"/>
     <link href="./css/bootstrap.min.css" rel="stylesheet"/>
     <link href="./css/bootstrap-theme.min.css" rel="stylesheet"/>
 
@@ -24,19 +25,21 @@
         </div>
         <!--Header Title: Owner & name of Memorymodel-->
         <div id="headerTitle" class="col-md-9 col-sm-9">
-            <h5>Dickie Curtis</h5>
-            <h5>Opdracht 1A</h5>
+            <h5>Owner: Dickie Curtis</h5>
+            <h5>Memorymodel: Opdracht 1</h5>
+            <h5>Version: 3</h5>
         </div>
-        <div class="col-md-12">
-            <button class="btn-primary" id="undoButton" onclick="chooseMemoryModel('id', true)"> Undo</button>
+        <!--Undo button -->
+        <div class="col-md-offset-10 col-md-2 ">
+            <button class="btn btn-primary" id="undoButton" onclick="chooseMemoryModel('id', true)"> Undo action</button>
         </div>
     </div>
     <!--List of all memorymodels-->
     <div id="allMemoryModels" class="col-md-3 col-sm-3">
-      <ul id="memoryModelsList"></ul>
+      <ul class="list-group" id="memoryModelsList"></ul>
     </div>
     <!-- Memorymodel-->
-    <div id="memoryModel" class="col-md-6 col-sm-6">
+    <div id="memoryModel" class="col-md-7 col-sm-7">
         <div id="diagramContainer">
 
             <div class="clr"></div>
@@ -45,6 +48,7 @@
     <!--Memorymodel versions-->
     <div id="memoryModelVersions" class="col-md-2 col-sm-2">
         <h5>Memorymodel Versions</h5>
+        <ul class="list-group" id="memoryModelVersionList"></ul>
     </div>
 
     <script>

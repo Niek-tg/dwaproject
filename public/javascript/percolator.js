@@ -20,7 +20,9 @@ window.onload = function () {
 
         for (var i = 0; i < memoryModels.length; i++) {
             //console.log(memoryModels[i])
-            $(sel).append("<li><a onclick='chooseMemoryModel(this, false)' data-value='" + memoryModels[i].mmid + "' data-version='" + memoryModels[i].version + "'  href='#'>" + memoryModels[i].modelName + "</a></li>")
+            $(sel).append("<li class='list-group-item'><a onclick='chooseMemoryModel(this, false)' data-value='" +
+                memoryModels[i].mmid + "' data-version='" + memoryModels[i].version + "'  href='#'>" +
+                memoryModels[i].modelName + "</a></li>")
         }
 
     };
