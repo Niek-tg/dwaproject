@@ -1,27 +1,27 @@
 #diagramContainer {
+    margin: 0px;
     padding: 0px;
     width: 100%;
     height: 100%;
-    border: 1px solid gray;
     font-size: 20px;
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 
-.stack {
-    position: absolute;
+
+.Stack {
+    position: relative;
     margin: 0px;
-    width: 50%;
-    height: 600px;
+    width: calc(50% - 2px);
     border: 1px solid gray;
+    float: left;
 }
 
-.heap {
-    position: absolute;
-    left: 50%;
+.Heap {
+    position: relative;
+    float:left;
+    width: calc(50% - 2px);
     margin: 0px;
-    width: 50%;
-    height: 600px;
-    border: 1px solid blue;
+    border: 1px solid gray;
 }
 
 .frame {
@@ -29,7 +29,7 @@
     display: table;
     margin: 3%;
     height: 160px;
-    max-width: 300px;
+    max-width: 900px;
     width: calc(94% - 20px);
     border: 10px solid gray;
 }
@@ -64,4 +64,11 @@
     min-width: 30px;
     border: 1px solid gray;
     text-align: center;
+}
+#undoButton{
+    display: none;
+}
+
+.clr{
+    clear:both;
 }

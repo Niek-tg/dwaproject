@@ -18,8 +18,6 @@ window.onload = function () {
         var memoryModels = res;
         var sel = document.getElementById('memoryModelsList');
 
-        console.log(memoryModels);
-
         for (var i = 0; i < memoryModels.length; i++) {
             //console.log(memoryModels[i])
             $(sel).append("<li><a onclick='chooseMemoryModel(this, false)' data-value='" + memoryModels[i].mmid + "' data-version='" + memoryModels[i].version + "'  href='#'>" + memoryModels[i].modelName + "</a></li>")
@@ -35,14 +33,23 @@ window.onload = function () {
  */
 var currentMemoryModel = {};
 function chooseMemoryModel(id, prevVersion) {
+    var xhttp = new XMLHttpRequest();
+
     console.log("GETTING SPECIFIC MEMORY MODEL");
     $("#undoButton").css("display", "block");
     var version = null;
     if (prevVersion) {
         id = currentMemoryModel.id;
         if (currentMemoryModel.version > 1) {
-            version = currentMemoryModel.version - 1;
-            currentMemoryModel.version += -1;
+            $.ajax({
+                url: '/api/MemoryModels/' + id + '/' + currentMemoryModel.version,
+                type: 'DELETE',
+                success: function(response) {
+                    version = currentMemoryModel.version - 1;
+                    currentMemoryModel.version += -1;
+                }
+            });
+
         } else {
             version = 1;
             alert("There is not an older version");
@@ -53,7 +60,7 @@ function chooseMemoryModel(id, prevVersion) {
         currentMemoryModel.id = id;
         currentMemoryModel.version = currentVersion;
     }
-    var xhttp = new XMLHttpRequest();
+
     xhttp.open("GET", '/api/MemoryModels/' + id + '/' + version, true);
     xhttp.onload = function (e) {
         var res = JSON.parse(xhttp.responseText);

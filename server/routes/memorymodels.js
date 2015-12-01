@@ -52,6 +52,9 @@ router.get('/:id/:version?', function (req, res) {
     var mmid = req.params.id;
     var version = (req.params.version) ? parseInt(req.params.version) : null;
 
+    console.log(mmid);
+    console.log(version);
+
     if (mmid) {
         var cb = function (err, result) {
             console.log(result);
@@ -92,5 +95,19 @@ router.post('/', function (req, res) {
 
 });
 
+
+router.delete('/:id/:version', function (req,res){
+    var mmid = req.params.id;
+    var version = parseInt(req.params.version);
+
+    r.db('percolatordb').table('History').filter(r.row('mmid').eq(mmid).and(r.row("version").eq(version))
+    ).delete().run(connection, function (err, result) {
+            if (err)
+                return res.send("unexpected error: " + err);
+
+            return res.send("Delete request completed");
+        });
+
+});
 
 module.exports = router;
