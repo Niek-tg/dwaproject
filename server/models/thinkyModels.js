@@ -4,15 +4,15 @@ var thinky = require('thinky')(config.thinky);
 var type = thinky.type;
 
 var ModelInfo = thinky.createModel("ModelInfo", {
-    id: type.number(),
+    id: type.string(),
     language: type.string(),
     owner: type.string()
 });
 
 var History = thinky.createModel("History", {
 
-        id: type.number(),
-        mmid: type.number(),
+        id: type.string(),
+        mmid: type.string(),
         modelName: type.string(),
         version: type.number(),
         memoryModel: {
