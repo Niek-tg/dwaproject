@@ -4,7 +4,7 @@ var http = require('http');
 var path = require('path');
 var bodyParser = require('body-parser');
 var memorymodelRoute = require('./server/routes/memorymodels.js');
-var r = require('rethinkdb');
+var queries = require('./server/queries/queries.js');
 
 var config     = require('./config.js');
 
@@ -38,7 +38,14 @@ function startWebservers(){
             switch(message.msgType){
                 case "subscribeToChanges":
                     // TODO
-
+                    queries.subscribeToChanges(message.mmid, function(err, cursor) {
+                        cursor.each(
+                            function(err, row) {
+                                if (err) throw err;
+                                websocket.send(JSON.stringify(row))
+                            }
+                        );
+                    });
                 break;
                 default :
                     // TODO come up with a default action
