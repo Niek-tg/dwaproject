@@ -33,15 +33,18 @@ function startWebservers(){
     theExpressApp.use('/api/memorymodels', memorymodelRoute);
 
     webSocketServer.on('connection', function connection(websocket) {
-        websocket.on('message', function incoming(message) {
 
+        websocket.on('message', function incoming(message) {
+            message = JSON.parse(message);
             switch(message.msgType){
                 case "subscribeToChanges":
                     // TODO
-                    queries.subscribeToChanges(message.mmid, function(err, cursor) {
+                    queries.subscribeToChanges(message.data.mmid, function(err, cursor) {
+                        console.log(cursor);
                         cursor.each(
                             function(err, row) {
                                 if (err) throw err;
+                                console.log(row);
                                 websocket.send(JSON.stringify(row))
                             }
                         );

@@ -97,18 +97,15 @@ queries.createNewMemoryModel = function(cb){
     })
 };
 
-queries.subscribeToChanges = function(mmid, cb){
+queries.subscribeToChanges = function(id, cb){
     r.db('percolatordb')
-        .table('ModelInfo')
-        .eqJoin('id',
-        r.db('percolatordb')
-            .table('History'),
-        {index: 'mmid'})
-        .zip() // merge the two fields into a single document.
-        .coerceTo('array') // making a array instead of object
-        .run(connection, function (err, result) {
-            cb(err, result);
-        });
+        .table('History')
+        .get(id)
+        .changes()
+        .run(connection, function (err, cursor) {
+            console.log();
+            cb(err, cursor);
+        })
 };
 
 queries.deleteLatestversion = function(mmid, version, cb){

@@ -73,6 +73,8 @@ function chooseMemoryModel(id, prevVersion) {
         // SET MEMORY MODEL ON SCREEN
         drawMemoryModel(res.memoryModel).then(function(){
             initPlumb();
+            console.log(currentMemoryModel.id);
+            connection.send(JSON.stringify({msgType: "subscribeToChanges", data : {mmid: currentMemoryModel.id}}));
         });
     };
     xhttp.send();
@@ -176,6 +178,13 @@ function determineVar(variable) {
     else if (variable.value) return variable.value;
     else return "null"
 }
+
+
+connection.onmessage = function(message) {
+    message = JSON.parse(message);
+
+    console.log(message.data);
+};
 
 /**
  * Puts jsPlumb into the application
