@@ -4,8 +4,8 @@ var http = require('http');
 var path = require('path');
 var bodyParser = require('body-parser');
 var memorymodelRoute = require('./server/routes/memorymodels.js');
+var r = require('rethinkdb');
 
-//Database, thinky, express connection settings
 var config     = require('./config.js');
 
 const RUNSEED = (process.argv.slice(2) == 'seed');
@@ -33,7 +33,19 @@ function startWebservers(){
     theExpressApp.use('/api/memorymodels', memorymodelRoute);
 
     webSocketServer.on('connection', function connection(websocket) {
-        websocket.on('message', function incoming(msg) {
+        websocket.on('message', function incoming(message) {
+
+            switch(message.msgType){
+                case "subscribeToChanges":
+                    // TODO
+
+                break;
+                default :
+                    // TODO come up with a default action
+                break;
+            }
+
+
 
         });
 

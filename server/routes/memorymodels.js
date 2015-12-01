@@ -60,13 +60,13 @@ router.get('/', function (req, res) {
 });
 
 
-
-
 /**
  * Get a memory model with a given ID.
  *
- * @param {String} :id the ID used to identify the specified memory model
+ * @param {String} :id The ID used to identify the specified memory model
  * @param {Number} :version? Optional parameter to get a specified version of the memory model
+ *
+ * @return {String|Array} Errorstring or Object containing the memory model
  */
 
 router.get('/:id/:version?', function (req, res) {
@@ -74,8 +74,8 @@ router.get('/:id/:version?', function (req, res) {
     var mmid = req.params.id;
     var version = (req.params.version) ? parseInt(req.params.version) : null;
 
-   // console.log(mmid);
-    //console.log(version);
+    console.log(mmid);
+    console.log(version);
 
     if (mmid) {
         r.db('percolatordb')
@@ -92,7 +92,7 @@ router.get('/:id/:version?', function (req, res) {
             })
             .coerceTo('array') // making a array instead of object
             .run(connection, function (err, result) {
-               // console.log(result);
+                console.log(result);
                 if (err)
                     return res.send("unexpected error: " + err);
 
@@ -106,11 +106,48 @@ router.get('/:id/:version?', function (req, res) {
 
 
 /**
- * Post a memory model with a given ID.
+ *  Post a memory model with a given ID.
+ *
+ *  @return {String} Message containing the status whether it succeeded or not
  */
 
 router.post('/', function (req, res) {
-    res.send('Route POST MemoryModel');
+
+    //TODO extract variables from req body
+    var language = "Javascript";
+    var owner = "Dickie Curtis";
+    var modelName = "Dickie Curtis MemoryModel";
+
+    return new Promise(function(resolve, reject){
+        r.db('percolatordb')
+            .table('ModelInfo')
+            .insert({
+                language: language,
+                owner: owner
+            })
+            .run(connection, function (err, result) {
+                if (err) reject(err);
+                else resolve(result);
+            })
+    }).then(function(data){
+            return new Promise (function(resolve, reject){
+                r.db('percolatordb')
+                    .table('History')
+                    .insert({
+                        mmid: data.generated_keys[0],
+                        modelName: modelName,
+                        version: 0
+                    })
+                    .run(connection, function (err, result) {
+                        if (err) reject(err);
+                        else resolve(result);
+                    });
+            });
+    }).then(function(){
+        return res.send("memory model created");
+    }).catch(function(err){
+        return res.send("something went wrong" + err);
+    })
 });
 
 router.delete('/:id/:version', function (req,res){
