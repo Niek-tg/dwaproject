@@ -123,7 +123,9 @@ function setModelInfo(){
  * Determines and draws the list of versions available for the memory model
  */
 function getVersionList(){
-    $("#undoButton").css("display", "block");
+    if(currentMemoryModel.version === highestVersion) $("#undoButton").css("display", "block");
+    else $("#undoButton").css("display", "none");
+
     $("#labelVersionList").css("display", "block");
     var sel = document.getElementById('memoryModelVersionList');
     $(sel).empty();
