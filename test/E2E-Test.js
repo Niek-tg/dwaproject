@@ -40,26 +40,21 @@ describe("E2E test get homepage", function(){
             }
         });
         browser.init(done)
-    })
+    });
 
-    //it('should get homepage', function(done){
-    //  browser
-    //   .url('https://localhost:3000')
-    //    .setValue('#memoryModelWrapper', 'initPlumb')
-    //    .click('#memoryModelWrapper')
-    //    .initPlumb()
-    //    });
 
-    //
-    //it('should get homepage', function(done){
-    //    browser
-    //        .url('http://localhost/api')
-    //        .getText(".buzzard h3").then(function(result){
-    //            console.log("headline is: ", result);
-    //            expect(result).to.be.a("string");
-    //            done();
-    //        })
-    //})
+    it("Should read Jack", function(done) {
+        browser
+            .url("http://localhost:3000")
+            .element('#')
+            .click()
+            .getText("#headerTitle h5").then( function(result) {
+                console.log("Owner is: ", result);
+                expect(result).to.be.a("string");
+                done();
+            })
+    });
+
     after(function(done){
         browser.end(done);
     });
