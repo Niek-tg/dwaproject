@@ -91,7 +91,7 @@ function getVersionList(){
     $(sel).empty();
     for(var i = 1; i < highestVersion+1; i++) {
         $(sel).append("<li class='list-group-item'><a onclick='chooseMemoryModel(this , true, false)' data-value='" +
-            currentMemoryModel.mmid + "' data-version='" + i + "'  href='#'>" + i + "</a></li>")
+            currentMemoryModel.mmid + "' data-version='" + i + "'  href='#'>  Version: "+ i + "</a></li>")
 
     }
 }
