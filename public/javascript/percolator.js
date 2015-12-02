@@ -20,7 +20,7 @@ window.onload = function () {
 
         for (var i = 0; i < memoryModels.length; i++) {
             //console.log(memoryModels[i])
-            $(sel).append("<li class='list-group-item'><a onclick='chooseMemoryModel(this, false)' data-value='" +
+            $(sel).append("<li class='list-group-item'><a onclick='chooseMemoryModel(this, false, false)' data-value='" +
                 memoryModels[i].mmid + "' data-version='" + memoryModels[i].version + "'  href='#'>" +
                 memoryModels[i].modelName + "</a></li>")
         }
@@ -34,51 +34,90 @@ window.onload = function () {
  * Get a memory model with a given ID. And get previous versions of these.
  */
 var currentMemoryModel;
-function chooseMemoryModel(id, prevVersion) {
+var highestVersion;
+function chooseMemoryModel(id, prevVersion, undo) {
+    var version = null;
+    var firstTime = false;
     var xhttp = new XMLHttpRequest();
+
+
+    $("#undoButton").css("display", "block");
 
     console.log("GETTING SPECIFIC MEMORY MODEL");
 
-    $("#undoButton").css("display", "block");
-    var version = null;
+
     if (prevVersion) {
-        id = currentMemoryModel.mmid;
-        if (currentMemoryModel.version > 1) {
-            $.ajax({
-                url: '/api/MemoryModels/' + id + '/' + currentMemoryModel.version,
-                type: 'DELETE',
-                success: function(response) {
-                    console.log('DELETED LAST VERSION');
-                }
-
-            });
-            version = currentMemoryModel.version - 1;
-            currentMemoryModel.version += -1;
-
-        } else {
-            version = 1;
-            alert("There is not an older version");
+        if(undo) {
+            id = currentMemoryModel.mmid;
+            version = undoAction();
+        }
+        else{
+            version = $(id).attr('data-version');
+            id = currentMemoryModel.mmid;
+            console.log(" version= ", version);
         }
     } else {
         id = $(id).attr('data-value');
+        firstTime = true;
     }
 
     xhttp.open("GET", '/api/MemoryModels/' + id + '/' + version, true);
     xhttp.onload = function (e) {
         var res = JSON.parse(xhttp.responseText);
         currentMemoryModel = res;
-        $("#owner").html(currentMemoryModel.owner);
-        $("#modelName").html(currentMemoryModel.modelName);
-        $("#version").html("Version: " + currentMemoryModel.version);
+        console.log(firstTime);
+        if(firstTime) highestVersion = currentMemoryModel.version;
+
+        getVersionList();
+        setModelInfo();
+
         // SET MEMORY MODEL ON SCREEN
         drawMemoryModel(res.memoryModel).then(function(){
             initPlumb();
-            console.log(currentMemoryModel.id);
             connection.send(JSON.stringify({msgType: "subscribeToChanges", data : {mmid: currentMemoryModel.id}}));
         });
     };
     xhttp.send();
 }
+
+function setModelInfo(){
+    $("#owner").html(currentMemoryModel.owner);
+    $("#modelName").html(currentMemoryModel.modelName);
+    $("#version").html("Version: " + currentMemoryModel.version);
+}
+
+function getVersionList(){
+    var sel = document.getElementById('memoryModelVersionList');
+    $(sel).empty();
+    for(var i = 1; i < highestVersion+1; i++) {
+        $(sel).append("<li class='list-group-item'><a onclick='chooseMemoryModel(this , true, false)' data-value='" +
+            currentMemoryModel.mmid + "' data-version='" + i + "'  href='#'>  Version: "+ i + "</a></li>")
+
+    }
+}
+
+function undoAction(){
+    var version;
+    if (currentMemoryModel.version > 1) {
+        $.ajax({
+            url: '/api/MemoryModels/' + currentMemoryModel.mmid + '/' + currentMemoryModel.version,
+            type: 'DELETE',
+            success: function (response) {
+                console.log('DELETED LAST VERSION');
+            }
+
+        });
+        version = currentMemoryModel.version - 1;
+        currentMemoryModel.version -= 1;
+        highestVersion -= 1;
+        return version;
+    } else {
+        version = 1;
+        alert("There is not an older version");
+        return version;
+    }
+}
+
 
 
 /**
