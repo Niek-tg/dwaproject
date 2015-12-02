@@ -271,10 +271,14 @@ function determineVar(variable) {
 function updateMemoryModel(data){
     console.log(data);
     console.log("update memory model called " + data.data);
-    console.log(data.data.new_val.memoryModel);
-    drawMemoryModel(data.data.new_val.memoryModel).then(function(){
-        redrawPlumbing()
-    });
+
+    if(data.data.new_val){
+        console.log(data.data.new_val.memoryModel);
+        drawMemoryModel(data.data.new_val.memoryModel).then(function(){
+            redrawPlumbing()
+        });
+    }
+
 }
 
 
