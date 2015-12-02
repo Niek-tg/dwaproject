@@ -75,8 +75,6 @@ function chooseMemoryModel(id, prevVersion, undo) {
     var firstTime = false;
     var xhttp = new XMLHttpRequest();
 
-    $("#undoButton").css("display", "block");
-
     if (prevVersion) {
         if(undo) {
             id = currentMemoryModel.mmid;
@@ -125,6 +123,8 @@ function setModelInfo(){
  * Determines and draws the list of versions available for the memory model
  */
 function getVersionList(){
+    $("#undoButton").css("display", "block");
+    $("#labelVersionList").css("display", "block");
     var sel = document.getElementById('memoryModelVersionList');
     $(sel).empty();
     for(var i = 1; i < highestVersion+1; i++) {
