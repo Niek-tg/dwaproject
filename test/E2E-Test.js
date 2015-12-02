@@ -46,8 +46,13 @@ describe("E2E test get homepage", function(){
     it("Should read Jack", function(done) {
         browser
             .url("http://localhost:3000")
-            .element('#test')
+            .element('#')
             .click()
+            .getText("#headerTitle h5").then( function(result) {
+                console.log("Owner is: ", result);
+                expect(result).to.be.a("string");
+                done();
+            })
     });
 
     after(function(done){
