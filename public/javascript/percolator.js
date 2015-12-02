@@ -20,7 +20,7 @@ window.onload = function () {
 
         for (var i = 0; i < memoryModels.length; i++) {
             //console.log(memoryModels[i])
-            $(sel).append("<li class='list-group-item'><a onclick='chooseMemoryModel(this, false)' data-value='" +
+            $(sel).append("<li class='list-group-item'><a onclick='chooseMemoryModel(this, false, false)' data-value='" +
                 memoryModels[i].mmid + "' data-version='" + memoryModels[i].version + "'  href='#'>" +
                 memoryModels[i].modelName + "</a></li>")
         }
@@ -34,30 +34,38 @@ window.onload = function () {
  * Get a memory model with a given ID. And get previous versions of these.
  */
 var currentMemoryModel;
-function chooseMemoryModel(id, prevVersion) {
+function chooseMemoryModel(id, prevVersion, undo) {
     var xhttp = new XMLHttpRequest();
-
+    var sel = document.getElementById('memoryModelVersionList');
     console.log("GETTING SPECIFIC MEMORY MODEL");
+    console.log(currentMemoryModel);
 
     $("#undoButton").css("display", "block");
     var version = null;
     if (prevVersion) {
         id = currentMemoryModel.mmid;
-        if (currentMemoryModel.version > 1) {
-            $.ajax({
-                url: '/api/MemoryModels/' + id + '/' + currentMemoryModel.version,
-                type: 'DELETE',
-                success: function(response) {
-                    console.log('DELETED LAST VERSION');
-                }
+        console.log(id);
+        if(undo) {
+            if (currentMemoryModel.version > 1) {
+                $.ajax({
+                    url: '/api/MemoryModels/' + id + '/' + currentMemoryModel.version,
+                    type: 'DELETE',
+                    success: function (response) {
+                        console.log('DELETED LAST VERSION');
+                    }
 
-            });
-            version = currentMemoryModel.version - 1;
-            currentMemoryModel.version += -1;
+                });
+                version = currentMemoryModel.version - 1;
+                currentMemoryModel.version += -1;
 
-        } else {
-            version = 1;
-            alert("There is not an older version");
+            } else {
+                version = 1;
+                alert("There is not an older version");
+            }
+        }
+        else{
+            version = $(id).attr('data-version');
+            console.log(version);
         }
     } else {
         id = $(id).attr('data-value');
@@ -67,6 +75,11 @@ function chooseMemoryModel(id, prevVersion) {
     xhttp.onload = function (e) {
         var res = JSON.parse(xhttp.responseText);
         currentMemoryModel = res;
+        for(var i = 1; i < currentMemoryModel.version; i++) {
+            $(sel).append("<li class='list-group-item'><a onclick='chooseMemoryModel(10, true, false)' data-value='" +
+                currentMemoryModel.mmid + "' data-version='" + i + "'  href='#'>" + i + "</a></li>")
+
+        }
         $("#owner").html(currentMemoryModel.owner);
         $("#modelName").html(currentMemoryModel.modelName);
         $("#version").html("Version: " + currentMemoryModel.version);
