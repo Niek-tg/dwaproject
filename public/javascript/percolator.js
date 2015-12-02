@@ -108,7 +108,8 @@ function undoAction(){
 
         });
         version = currentMemoryModel.version - 1;
-        currentMemoryModel.version += -1;
+        currentMemoryModel.version -= 1;
+        highestVersion -= 1;
         return version;
     } else {
         version = 1;
