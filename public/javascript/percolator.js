@@ -181,10 +181,27 @@ function determineVar(variable) {
 
 
 connection.onmessage = function(message) {
-    message = JSON.parse(message);
+    console.log(message);
+    var data = JSON.parse(message.data);
+    console.log(data);
 
-    console.log(message.data);
+    switch(data.msgType){
+        case "newData":
+            updateMemoryModel(data);
+        break;
+    }
+
+
 };
+
+function updateMemoryModel(data){
+    console.log(data);
+    console.log("update memory model called " + data.data);
+    console.log(data.data.new_val.memoryModel);
+    drawMemoryModel(data.data.new_val.memoryModel).then(function(){
+        initPlumb();
+    });
+}
 
 /**
  * Puts jsPlumb into the application

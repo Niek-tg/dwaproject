@@ -40,12 +40,11 @@ function startWebservers(){
                 case "subscribeToChanges":
                     // TODO
                     queries.subscribeToChanges(message.data.mmid, function(err, cursor) {
-                        console.log(cursor);
+                        //console.log(cursor);
                         cursor.each(
                             function(err, row) {
                                 if (err) throw err;
-                                console.log(row);
-                                websocket.send(JSON.stringify(row))
+                                websocket.send(JSON.stringify({msgType :"newData",data:row}))
                             }
                         );
                     });
