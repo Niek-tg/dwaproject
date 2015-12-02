@@ -30,7 +30,7 @@ var expect = require('chai').expect;
 
 describe("E2E test get homepage", function(){
 
-    this.timeout(40000);
+    this.timeout(20000);
     var browser;
 
     before(function (done){
@@ -40,26 +40,16 @@ describe("E2E test get homepage", function(){
             }
         });
         browser.init(done)
-    })
+    });
 
-    //it('should get homepage', function(done){
-    //  browser
-    //   .url('https://localhost:3000')
-    //    .setValue('#memoryModelWrapper', 'initPlumb')
-    //    .click('#memoryModelWrapper')
-    //    .initPlumb()
-    //    });
 
-    //
-    //it('should get homepage', function(done){
-    //    browser
-    //        .url('http://localhost/api')
-    //        .getText(".buzzard h3").then(function(result){
-    //            console.log("headline is: ", result);
-    //            expect(result).to.be.a("string");
-    //            done();
-    //        })
-    //})
+    it("Should read Jack", function(done) {
+        browser
+            .url("http://localhost:3000")
+            .element('#test')
+            .click()
+    });
+
     after(function(done){
         browser.end(done);
     });
