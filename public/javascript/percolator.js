@@ -99,7 +99,7 @@ function chooseMemoryModel(id, prevVersion, undo) {
         getVersionList();
         setModelInfo();
 
-        console.log(currentMemoryModel.id);
+        console.log(currentMemoryModel.modelName + " ID = " + currentMemoryModel.id);
 
         // SET MEMORY MODEL ON SCREEN
         drawMemoryModel(res.memoryModel).then(function(){
