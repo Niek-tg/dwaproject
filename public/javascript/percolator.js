@@ -130,7 +130,7 @@ function getVersionList(){
     var sel = document.getElementById('memoryModelVersionList');
     $(sel).empty();
     for(var i = 1; i < highestVersion+1; i++) {
-        $(sel).append("<li class='list-group-item'><a onclick='chooseMemoryModel(this , true, false)' data-value='" +
+        $(sel).append("<li class='list-group-item'><a id='versionListItem" + i + "'  onclick='chooseMemoryModel(this , true, false)' data-value='" +
             currentMemoryModel.mmid + "' data-version='" + i + "'  href='#'>  Version: "+ i + "</a></li>")
 
     }

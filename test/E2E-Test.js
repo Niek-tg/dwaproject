@@ -85,6 +85,31 @@ describe("E2E test get homepage", function () {
             });
     });
 
+    it("Should retrieve other version if there is clicked on", function (done) {
+        browser
+            .waitForExist("#1ee3f80e-c107-4fa2-9bc4-4f24887d1754", 2000)    //
+            .element('#1ee3f80e-c107-4fa2-9bc4-4f24887d1754')
+            .click().then(function (result) {
+                browser
+                    .waitForExist("#versionListItem2", 2000)
+                    .element("#versionListItem2")
+                    .click().then(function (result) {
+                        browser
+                            .waitForValue("#owner", 2000)
+                            .getText("#headerTitle h5").then(function (result) {
+                                console.log(result[0]);
+                                console.log(result[1]);
+                                console.log(result[2]);
+                                expect(result[0]).to.equal("Owner: Pietertje");
+                                expect(result[1]).to.equal("Modelname: Het tweede geheugenmodel van pietertje");
+                                expect(result[2]).to.equal("Version: 2");
+                                done();
+
+                            });
+                    });
+            });
+    });
+
     after(function (done) {
         browser.end(done);
     });
