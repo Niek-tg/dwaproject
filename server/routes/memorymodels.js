@@ -52,12 +52,8 @@ router.get('/:id/:version?', function (req, res) {
     var mmid = req.params.id;
     var version = (req.params.version) ? parseInt(req.params.version) : null;
 
-    console.log(mmid);
-    console.log(version);
-
     if (mmid) {
         var cb = function (err, result) {
-            console.log(result);
             if (err)
                 return res.send("unexpected error: " + err);
 
@@ -82,15 +78,14 @@ router.get('/:id/:version?', function (req, res) {
 
 router.post('/', function (req, res) {
 
-    //TODO extract variables from req body en meesturen
-    var language = "Javascript";
-    var owner = "Dickie Curtis";
-    var modelName = "Dickie Curtis MemoryModel";
+    var language = req.body.language;
+    var owner = req.body.owner;
+    var modelName = req.body.modelName;
 
-    queries.createNewMemoryModel(function(err, result){
+    queries.createNewMemoryModel({language: language, owner: owner, modelName: modelName},function(err, result){
         if(err) res.send("er ging iets mis " + err);
 
-        res.send(result);
+            res.send(result);
     });
 
 });
@@ -98,7 +93,6 @@ router.post('/', function (req, res) {
 router.delete('/:id/:version', function (req,res){
     var mmid = req.params.id;
     var version = parseInt(req.params.version);
-
     queries.deleteLatestversion(mmid, version, function (err, result) {
         if (err)
             return res.send("unexpected error: " + err);

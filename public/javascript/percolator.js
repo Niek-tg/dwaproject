@@ -75,8 +75,6 @@ function chooseMemoryModel(id, prevVersion, undo) {
     var firstTime = false;
     var xhttp = new XMLHttpRequest();
 
-    $("#undoButton").css("display", "block");
-
     if (prevVersion) {
         if(undo) {
             id = currentMemoryModel.mmid;
@@ -101,7 +99,7 @@ function chooseMemoryModel(id, prevVersion, undo) {
         getVersionList();
         setModelInfo();
 
-        console.log(currentMemoryModel.id);
+        console.log(currentMemoryModel.modelName + " ID = " + currentMemoryModel.id);
 
         // SET MEMORY MODEL ON SCREEN
         drawMemoryModel(res.memoryModel).then(function(){
@@ -125,6 +123,10 @@ function setModelInfo(){
  * Determines and draws the list of versions available for the memory model
  */
 function getVersionList(){
+    if(currentMemoryModel.version === highestVersion) $("#undoButton").css("display", "block");
+    else $("#undoButton").css("display", "none");
+
+    $("#labelVersionList").css("display", "block");
     var sel = document.getElementById('memoryModelVersionList');
     $(sel).empty();
     for(var i = 1; i < highestVersion+1; i++) {
@@ -202,9 +204,11 @@ function drawFrames(location, frames) {
         );
 
         frames.forEach(function (item) {
+            var name = (item.name) ? item.name : "";
+
             $('.' + location).append(
                 "<div id='" + item.id + "' class='frame'> " +
-                "<div class='frameLabel'>" + item.name + "</div>" +
+                "<div class='frameLabel'>" + name + "</div>" +
                 "</div>");
 
             if (item.vars) drawVars('#' + item.id, item.vars);
