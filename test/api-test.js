@@ -10,14 +10,13 @@ var api = supertest(app);
 describe('API memorymodels unit test', function () {
 
     it('Retrieve multiple versions of a memory model', function (done) {
-        //Get version 1 of memory model 5331
         api
-            .get('/api/memorymodels/MEMORYMODEL/1')
+            .get('/api/memorymodels/"92524038-f0e2-4db2-ad01-321a9040df02"')
             .set('Accept', 'application/json')
             .end(function (err) {
                 if (err) return done(err);
                 api
-                    .get('/api/memoryModels/MEMORYMODEL/2')
+                    .get('/api/memoryModels/"92524038-f0e2-4db2-ad01-321a9040df02"/2')
                     .set('Accept', 'application/json')
                     .end(function (err2) {
                         if (err2) return done(err2);
