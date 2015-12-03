@@ -9,7 +9,7 @@
 .Stack {
     position: relative;
     margin: 0px;
-    width: calc(50% - 2px);
+    width: calc(30% - 2px);
     border: 1px solid gray;
     float: left;
 }
@@ -17,10 +17,13 @@
 .Heap {
     position: relative;
     float:left;
-    width: calc(50% - 2px);
+    width: calc(70% - 2px);
     margin: 0px;
     border: 1px solid gray;
 }
+    .Heap .frame {
+        width: auto;
+    }
 
 .frame {
     position: relative;

@@ -204,9 +204,11 @@ function drawFrames(location, frames) {
         );
 
         frames.forEach(function (item) {
+            var name = (item.name) ? item.name : "";
+
             $('.' + location).append(
                 "<div id='" + item.id + "' class='frame'> " +
-                "<div class='frameLabel'>" + item.name + "</div>" +
+                "<div class='frameLabel'>" + name + "</div>" +
                 "</div>");
 
             if (item.vars) drawVars('#' + item.id, item.vars);
