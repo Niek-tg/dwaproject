@@ -46,9 +46,11 @@ describe("E2E test get homepage", function(){
     it("Should retrieve memorymodel information", function(done) {
         browser
             .url("http://localhost:3000")
+            .waitForExist("#92524038-f0e2-4db2-ad01-321a9040df02", 2000)
             .element('#92524038-f0e2-4db2-ad01-321a9040df02')
             .click().then(function (result) {
                 browser
+                    .waitForValue("#owner", 2000)
                     .getText("#headerTitle h5").then(function (result) {
                         console.log(result[0]);
                         console.log(result[1]);
@@ -64,20 +66,30 @@ describe("E2E test get homepage", function(){
     it("Should undo action", function(done) {
         browser
             .url("http://localhost:3000")
-            .element('#undoButton')
+            .waitForExist("#92524038-f0e2-4db2-ad01-321a9040df02", 2000)
+
+            .element('#92524038-f0e2-4db2-ad01-321a9040df02')
             .click().then(function (result) {
                 browser
-                    .getText("#headerTitle h5").then(function (result) {
-                        console.log(result[0]);
-                        console.log(result[1]);
-                        console.log(result[2]);
-                        expect(result[0]).to.equal("Owner: Jack");
-                        //expect(result[1]).to.equal("Modelname: Mijn geheugenmodel");
-                        //expect(result[2]).to.equal("Version: 1");
-                        done();
+                    .waitForExist("#undoButton", 2000)
+                    .element("#undoButton")
+                    .click().then(function (result) {
+                        browser
+                            .waitForValue("#owner", 2000)
+                            .getText("#headerTitle h5").then(function (result) {
+                                console.log(result[0]);
+                                console.log(result[1]);
+                                console.log(result[2]);
+                                setTimeout(function() {
+                                    expect(result[0]).to.equal("Owner: Jack");
+                                    expect(result[1]).to.equal("Modelname: Mijn geheugenmodel");
+                                    expect(result[2]).to.equal("Version: 1");
+                                    done();
+                                }, 5000);
+                            });
+                        });
                     });
             });
-    });
 
     after(function(done){
         browser.end(done);
