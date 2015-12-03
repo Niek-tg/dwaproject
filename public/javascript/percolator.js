@@ -53,7 +53,7 @@ window.onload = function () {
 
         for (var i = 0; i < memoryModels.length; i++) {
             //console.log(memoryModels[i])
-            $(sel).append("<li class='list-group-item'><a onclick='chooseMemoryModel(this, false, false)' data-value='" +
+            $(sel).append("<li class='list-group-item'><a id='" + memoryModels[i].mmid + "'onclick='chooseMemoryModel(this, false, false)' data-value='" +
                 memoryModels[i].mmid + "' data-version='" + memoryModels[i].version + "'  href='#'>" +
                 memoryModels[i].modelName + "</a></li>")
         }
@@ -114,9 +114,9 @@ function chooseMemoryModel(id, prevVersion, undo) {
  * Updates the owner, name and current version of the memory model, displayed on the screen
  */
 function setModelInfo(){
-    $("#owner").html(currentMemoryModel.owner);
-    $("#modelName").html(currentMemoryModel.modelName);
-    $("#version").html("Version: " + currentMemoryModel.version);
+    $("#owner").html('Owner: '+ currentMemoryModel.owner);
+    $("#modelName").html('Modelname: '+ currentMemoryModel.modelName);
+    $("#version").html('Version: '+ currentMemoryModel.version);
 }
 
 /**
@@ -130,7 +130,7 @@ function getVersionList(){
     var sel = document.getElementById('memoryModelVersionList');
     $(sel).empty();
     for(var i = 1; i < highestVersion+1; i++) {
-        $(sel).append("<li class='list-group-item'><a onclick='chooseMemoryModel(this , true, false)' data-value='" +
+        $(sel).append("<li class='list-group-item'><a id='versionListItem" + i + "'  onclick='chooseMemoryModel(this , true, false)' data-value='" +
             currentMemoryModel.mmid + "' data-version='" + i + "'  href='#'>  Version: "+ i + "</a></li>")
 
     }
