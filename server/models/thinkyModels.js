@@ -63,7 +63,19 @@ var History = thinky.createModel("History", {
         }
 });
 
+var Layout = thinky.createModel("Layout", {
+    id: type.string(),
+    frameLocations: [
+        {
+            id: type.string(),
+            left: type.number(),
+            top: type.number()
+        }
+    ]
+});
+
 module.exports = {
     ModelInfo: ModelInfo,
-    History: History
+    History: History,
+    Layout: Layout
 };
