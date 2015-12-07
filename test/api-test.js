@@ -10,14 +10,13 @@ var api = supertest(app);
 describe('API memorymodels unit test', function () {
 
     it('Retrieve multiple versions of a memory model', function (done) {
-        //Get version 1 of memory model 5331
         api
-            .get('/api/memorymodels/MEMORYMODEL/1')
+            .get('/api/memorymodels/92524038-f0e2-4db2-ad01-321a9040df02')
             .set('Accept', 'application/json')
-            .end(function (err) {
+            .end(function (err, res) {
                 if (err) return done(err);
                 api
-                    .get('/api/memoryModels/MEMORYMODEL/2')
+                    .get('/api/memoryModels/92524038-f0e2-4db2-ad01-321a9040df02/2')
                     .set('Accept', 'application/json')
                     .end(function (err2) {
                         if (err2) return done(err2);
@@ -88,8 +87,6 @@ describe('API memorymodels GET', function () {
                     .expect(200)
                     .end(function (err, res) {
 
-                        //console.log(mmid);
-                        //console.log(res.body);
                         if (err) return done(err);
                         res.should.be.json;
                         res.body.mmid.should.equal(mmid);
@@ -112,16 +109,22 @@ describe('API memorymodels GET', function () {
                     });
             });
     });
+});
 
-    afterEach(function (done) {
+
+describe('API memorymodels ERROR handlasding', function () {
+
+    it('API does not exist!asd', function (done) {
         api
-            .del('/api/memorymodel' + mmid)
-            .end(function (err) {
+            .del('/api/memoryModels/92524038-f0e2-4db2-ad01-321a9040df02/1')
+            .end(function (err, res) {
                 if (err) return done(err);
+                res.text.should.equal('Delete request completed');
                 done();
             });
     });
 });
+
 
 /* Error handling */
 
