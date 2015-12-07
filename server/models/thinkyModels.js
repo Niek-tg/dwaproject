@@ -65,6 +65,7 @@ var History = thinky.createModel("History", {
 
 var Layout = thinky.createModel("Layout", {
     id: type.string(),
+    version: type.number(),
     frameLocations: [
         {
             id: type.string(),
