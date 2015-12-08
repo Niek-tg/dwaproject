@@ -9,10 +9,12 @@
     <script src="./javascript/bootstrap.js"></script>
 
     <script src="javascript/percolator.js"></script>
-    <link  href="css/svg.css" rel="stylesheet">
+    <script src="javascript/percolatorFrameFunctions.js"></script>
+    <!--<link href="./css/bootstrap.min.css" rel="stylesheet"/>-->
+    <!--<link href="./css/bootstrap-theme.min.css" rel="stylesheet"/>-->
     <link href="./css/custom.css" rel="stylesheet"/>
-    <link href="./css/bootstrap.min.css" rel="stylesheet"/>
-    <link href="./css/bootstrap-theme.min.css" rel="stylesheet"/>
+    <link  href="./css/memoryModel.css" rel="stylesheet">
+    <link  href="./css/percolatorFrame.css" rel="stylesheet">
 
 </head>
 <body>
@@ -31,11 +33,14 @@
         </div>
         <!--Undo button -->
         <div class="col-md-offset-10 col-md-2 ">
-            <button class="btn btn-primary" id="undoButton" onclick="chooseMemoryModel('id', true, true)"> Undo action</button>
+
         </div>
     </div>
     <!--List of all memorymodels-->
     <div id="allMemoryModels" class="col-md-2 col-sm-2">
+        <div class="togglable">
+            <button onclick="toggleActive(this)">close</button>
+        </div>
       <ul class="list-group" id="memoryModelsList"></ul>
     </div>
     <!-- Memorymodel-->
@@ -47,6 +52,10 @@
     </div>
     <!--Memorymodel versions-->
     <div id="memoryModelVersions" class="col-md-2 col-sm-2">
+        <div class="togglable">
+            <button onclick="toggleActive(this)">close</button>
+        </div>
+        <button class="btn btn-primary" id="undoButton" onclick="chooseMemoryModel('id', true, true)"> Undo action</button>
         <h5 id="labelVersionList" style="display: none">Memorymodel Versions</h5>
         <ul class="list-group" id="memoryModelVersionList"></ul>
     </div>
