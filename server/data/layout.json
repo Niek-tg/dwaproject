@@ -5,8 +5,8 @@
     "frameLocations": [
       {
         "id": "6",
-        "left": 1,
-        "top": 24555555
+        "left": 18,
+        "top": 110
       },
       {
         "id": "8",
@@ -21,13 +21,13 @@
     "frameLocations": [
       {
         "id": "6",
-        "left": 2,
-        "top": 24555555
+        "left": 18,
+        "top": 120
       },
       {
         "id": "8",
-        "left": 324,
-        "top": 445
+        "left": 24,
+        "top": 140
       }
     ]
   },
