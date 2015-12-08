@@ -67,7 +67,6 @@ queries.getMemoryModelByIdAndVersion = function (mmid, version, cb) {
                 .table('History'),
             {index: 'mmid'})
             .zip() // merge the two fields into a single document.
-
             .eqJoin('mmid',
             r.db('percolatordb')
                 .table('Layout'),
@@ -167,16 +166,35 @@ queries.subscribeToChanges = function (id, cb) {
 };
 
 queries.deleteLatestversion = function (mmid, version, cb) {
-    getConnection(function (err, conn) {
-        if (err) return cb(err, null);
-        r.db('percolatordb')
-            .table('History')
-            .filter(r.row('mmid').eq(mmid).and(r.row("version").eq(version)))
-            .delete()
-            .run(conn, function (err, result) {
-                cb(err, result);
+    return new Promise(function (resolve, reject) {
+        getConnection(function (err, conn) {
+            if (err) return reject(err, null);
+            r.db('percolatordb')
+                .table('History')
+                .filter(r.row('mmid').eq(mmid).and(r.row("version").eq(version)))
+                .delete()
+                .run(conn, function (err, result) {
+                    if (err) reject(err);
+                    else resolve(result);
+                });
+        });
+    }).then(function (data) {
+            return new Promise(function (resolve, reject) {
+                getConnection(function (err, conn) {
+                    if (err) return reject(err, null);
+                    r.db('percolatordb')
+                        .table('Layout')
+                        .filter(r.row('mmid').eq(mmid).and(r.row("modelVersion").eq(version)))
+                        .delete()
+                        .run(conn, function (err, result) {
+                            if (err) reject(err);
+                            else resolve(result);
+                        });
+                });
             });
-    });
+        }).catch(function (err) {
+            return cb(new Error("something went wrong! " + err), null);
+        })
 };
 
 
