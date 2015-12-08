@@ -9,14 +9,22 @@
     <script src="./javascript/bootstrap.js"></script>
 
     <script src="javascript/percolator.js"></script>
+    <script src="javascript/JSONEditorModule.js"></script>
+
+    <link href="./css/jsoneditor.min.css" rel="stylesheet" type="text/css">
+    <link href="./css/jsoneditor.css" rel="stylesheet" type="text/css">
+    <link href="css/svg.css" rel="stylesheet">
+    <script src="javascript/percolatorFrameFunctions.js"></script>
+    <!--<link href="./css/bootstrap.min.css" rel="stylesheet"/>-->
+    <!--<link href="./css/bootstrap-theme.min.css" rel="stylesheet"/>-->
     <script src="javascript/percolatorSocket.js"></script>
     <link  href="css/svg.css" rel="stylesheet">
     <link href="./css/custom.css" rel="stylesheet"/>
-    <link href="./css/bootstrap.min.css" rel="stylesheet"/>
-    <link href="./css/bootstrap-theme.min.css" rel="stylesheet"/>
+   
 
 </head>
 <body>
+
 <div id="memoryModelWrapper" class="col-md-12 col-sm-12 container-fluid">
     <!--Header-->
     <div id="header" class="col-md-12 col-sm-12">
@@ -37,8 +45,22 @@
     </div>
     <!--List of all memorymodels-->
     <div id="allMemoryModels" class="col-md-2 col-sm-2">
+        <div class="togglable">
+            <button onclick="toggleActive(this)">close</button>
+        </div>
       <ul class="list-group" id="memoryModelsList"></ul>
     </div>
+    <!--JSON Editor -->
+    <div class="col-md-12">
+        <div id="listOfMemoryModels" class="col-md-2">
+        </div>
+        <div class="col-md-10">
+            <button id="jsonEditorButton" onclick="initJSONEditor()">JSON editor</button>
+            <div id="JSONButtons"></div>
+            <div id="jsoneditor"></div>
+        </div>
+    </div>
+
     <!-- Memorymodel-->
     <div id="memoryModel" class="col-md-8 col-sm-8">
         <div id="diagramContainer">
@@ -48,6 +70,10 @@
     </div>
     <!--Memorymodel versions-->
     <div id="memoryModelVersions" class="col-md-2 col-sm-2">
+        <div class="togglable">
+            <button onclick="toggleActive(this)">close</button>
+        </div>
+        <button class="btn btn-primary" id="undoButton" onclick="chooseMemoryModel('id', true, true)"> Undo action</button>
         <h5 id="labelVersionList" style="display: none">Memorymodel Versions</h5>
         <ul class="list-group" id="memoryModelVersionList"></ul>
     </div>
