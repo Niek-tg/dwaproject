@@ -10,6 +10,7 @@
 
     <script src="javascript/percolator.js"></script>
     <script src="javascript/percolatorFrameFunctions.js"></script>
+    <script src="javascript/viewSwitcher.js"></script>
     <!--<link href="./css/bootstrap.min.css" rel="stylesheet"/>-->
     <!--<link href="./css/bootstrap-theme.min.css" rel="stylesheet"/>-->
     <script src="javascript/percolatorSocket.js"></script>
@@ -35,7 +36,8 @@
         </div>
         <!--Undo button -->
         <div class="col-md-offset-10 col-md-2 ">
-
+            <button onclick="enableCodeView()">Code view</button>
+            <button onclick="enableDiagramView()">Diagram view</button>
         </div>
     </div>
     <!--List of all memorymodels-->
@@ -47,10 +49,7 @@
     </div>
     <!-- Memorymodel-->
     <div id="memoryModel" class="col-md-8 col-sm-8">
-        <div id="diagramContainer">
 
-            <div class="clr"></div>
-        </div>
     </div>
     <!--Memorymodel versions-->
     <div id="memoryModelVersions" class="col-md-2 col-sm-2">

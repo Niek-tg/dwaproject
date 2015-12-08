@@ -30,4 +30,4 @@ function calculateDiagramContainerSize(){
     $("#diagramContainer").css({maxWidth : size -2 + "px"});
     jsPlumb.repaintEverything();
 }
-calculateDiagramContainerSize()
+calculateDiagramContainerSize();
