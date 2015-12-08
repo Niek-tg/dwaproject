@@ -35,7 +35,7 @@ window.onload = function () {
         var sel = document.getElementById('memoryModelsList');
 
         for (var i = 0; i < memoryModels.length; i++) {
-            //console.log(memoryModels[i])
+            console.log(memoryModels[i])
             $(sel).append("<li class='list-group-item'><a id='" + memoryModels[i].mmid + "' onclick='chooseMemoryModel(this, false, false)' data-value='" +
                 memoryModels[i].mmid + "' data-version='" + memoryModels[i].version + "'  href='#'>" +
                 memoryModels[i].modelName + "</a></li>")
@@ -82,7 +82,7 @@ function chooseMemoryModel(id, prevVersion, undo) {
         getVersionList();
         setModelInfo();
 
-        //console.log(currentMemoryModel.modelName + " ID = " + currentMemoryModel.id);
+        console.log(currentMemoryModel.modelName + " ID = " + currentMemoryModel.id);
 
         // SET MEMORY MODEL ON SCREEN
         drawMemoryModel(res.memoryModel, res.frameLocations).then(function () {
@@ -263,8 +263,8 @@ function determineVar(variable) {
  * @param data Data containing the memory model that has to be drawn
  */
 function updateMemoryModel(data) {
-    //console.log(data);
-    //console.log("update memory model called " + data.data);
+    console.log(data);
+    console.log("update memory model called " + data.data);
 
     if (data.data.new_val) {
         //console.log(data.data.new_val.memoryModel);
@@ -326,13 +326,13 @@ function redrawPlumbing() {
  */
 
 var savePositionsOfframes = function (frameId) {
-    //console.log('This is the id of a frame', frameId);
+    console.log('This is the id of a frame', frameId);
     var id = $('#' + frameId);
     var top = id.position().top;
     var left = id.position().left;
 
     stackIdEndPositions.push({id: frameId, top: Math.floor(top), left: Math.floor(left)});
-    //console.log('lengte van de array' + stackIdEndPositions.length)
+    console.log('lengte van de array' + stackIdEndPositions.length)
 }
 
 /**
@@ -340,7 +340,7 @@ var savePositionsOfframes = function (frameId) {
  */
 
 var updatePositionFrames = function (frameId) {
-    //console.log('This is the id of a frame', frameId);
+    console.log('This is the id of a frame', frameId);
     var id = $('#' + frameId);
     var top = id.position().top;
     var left = id.position().left;
@@ -348,9 +348,9 @@ var updatePositionFrames = function (frameId) {
     stackIdEndPositions.forEach(function (frame) {
         if (frameId === frame.id) {
             stackIdEndPositions[frame.id] = {id: id, top: top, left: left};
-            //console.log(frame.left)
-            //console.log(frame.top)
-            //console.log('lengte van de array' + stackIdEndPositions.length)
+            console.log(frame.left)
+            console.log(frame.top)
+            console.log('lengte van de array' + stackIdEndPositions.length)
 
         }
     });
