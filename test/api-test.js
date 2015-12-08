@@ -1,6 +1,3 @@
-/**
- * Created by Dion Koers on 1-12-2015.
- */
 var should = require('chai').should();
 var expect = require('chai').expect;
 var supertest = require('supertest');
@@ -58,7 +55,7 @@ describe('API memorymodels POST', function () {
 /* GET TEST */
 describe('API memorymodels GET', function () {
 
-    var mmid
+    var mmid;
     it('Should return a 200 response', function (done) {
         api
             .get('/api/memorymodels')
@@ -79,7 +76,7 @@ describe('API memorymodels GET', function () {
             .expect(200)
             .end(function (err, res) {
 
-                if (err) return done(err)
+                if (err) return done(err);
                 mmid = res.body.mmid.toString();
                 api
                     .get('/api/memorymodels/' + mmid)
@@ -114,7 +111,7 @@ describe('API memorymodels GET', function () {
 
 describe('API memorymodels ERROR handlasding', function () {
 
-    it('API does not exist!asd', function (done) {
+    it('API does not exist', function (done) {
         api
             .del('/api/memoryModels/92524038-f0e2-4db2-ad01-321a9040df02/1')
             .end(function (err, res) {
@@ -132,7 +129,7 @@ describe('API memorymodels ERROR handling', function () {
 
     it('API does not exist!', function (done) {
         api
-            .get('/zapii/')
+            .get('/NotExistingRoute/')
             .set('Accept', 'application/json')
             .expect(404)
             .end(function (err) {
@@ -143,7 +140,7 @@ describe('API memorymodels ERROR handling', function () {
 
     it('ID or Version does not exist', function (done) {
         api
-            .get('/api/memorymodels/mmmmmmmmmmmmmmmmmmmmm/99999999999999')
+            .get('/api/memorymodels/NotExistingMemoryModel/99999999999999')
             .set('Accept', 'application/json')
             .expect(200)
             .end(function (err, res) {

@@ -4,19 +4,19 @@ var config = require('./../../config.js');
 var connection;
 var queries = {};
 
-function getConnection( cb ) {
+function getConnection(cb) {
     if (connection) cb(null, connection);
     else r.connect(config.rethinkdb, function (err, conn) {
-            if(err) return cb(err,null);
-            connection = conn;
-            console.log("connected");
-            cb(null, connection);
-        });
+        if (err) return cb(err, null);
+        connection = conn;
+        console.log("connected");
+        cb(null, connection);
+    });
 }
 
 queries.getAll = function (cb) {
-    getConnection( function(err,conn) {
-        if(err) return cb(err,null);
+    getConnection(function (err, conn) {
+        if (err) return cb(err, null);
         r.db('percolatordb')
             .table('ModelInfo')
             .eqJoin('id',
@@ -32,7 +32,7 @@ queries.getAll = function (cb) {
 };
 
 queries.getMemoryModelById = function (mmid, cb) {
-    getConnection( function(err,conn) {
+    getConnection(function (err, conn) {
         if (err) return cb(err, null);
         r.db('percolatordb')
             .table('ModelInfo')
@@ -41,9 +41,14 @@ queries.getMemoryModelById = function (mmid, cb) {
                 .table('History'),
             {index: 'mmid'})
             .zip() // merge the two fields into a single document.
+            .eqJoin('mmid',
+            r.db('percolatordb')
+                .table('Layout'),
+            {index: 'mmid'})
+            .zip() // merge the two fields into a single document.
             .orderBy(r.desc('version'))
             .filter(function (row) {
-                return row("mmid").eq(mmid);
+                return row("mmid").eq(mmid).and(row("version").eq(row('modelVersion')));
             })
             .coerceTo('array') // making a array instead of object
             .run(conn, function (err, result) {
@@ -53,7 +58,7 @@ queries.getMemoryModelById = function (mmid, cb) {
 };
 
 queries.getMemoryModelByIdAndVersion = function (mmid, version, cb) {
-    getConnection( function(err,conn) {
+    getConnection(function (err, conn) {
         if (err) return cb(err, null);
         r.db('percolatordb')
             .table('ModelInfo')
@@ -62,10 +67,16 @@ queries.getMemoryModelByIdAndVersion = function (mmid, version, cb) {
                 .table('History'),
             {index: 'mmid'})
             .zip() // merge the two fields into a single document.
+
+            .eqJoin('mmid',
+            r.db('percolatordb')
+                .table('Layout'),
+            {index: 'mmid'})
+            .zip() // merge the two fields into a single document.
             .orderBy(r.desc('version'))
             .filter(function (row) {
-                return ( row("mmid").eq(mmid).and(row("version").eq(version)));
-            })
+                return ( row("mmid").eq(mmid).and(row("version").eq(version)).and(row("version").eq(row('modelVersion'))));
+            }).without('modelVersion')
             .coerceTo('array') // making a array instead of object
             .run(conn, function (err, result) {
                 cb(err, result);
@@ -79,9 +90,10 @@ queries.createNewMemoryModel = function (data, cb) {
     var owner = data.owner;
     var modelName = data.modelName;
     var mmid;
+    var version = 0;
 
     return new Promise(function (resolve, reject) {
-        getConnection( function(err,conn) {
+        getConnection(function (err, conn) {
             if (err) return reject(err, null);
             r.db('percolatordb')
                 .table('ModelInfo')
@@ -96,7 +108,7 @@ queries.createNewMemoryModel = function (data, cb) {
         });
     }).then(function (data) {
             return new Promise(function (resolve, reject) {
-                getConnection( function(err,conn) {
+                getConnection(function (err, conn) {
                     if (err) return reject(err, null);
                     mmid = data.generated_keys[0];
                     r.db('percolatordb')
@@ -104,7 +116,7 @@ queries.createNewMemoryModel = function (data, cb) {
                         .insert({
                             mmid: mmid,
                             modelName: modelName,
-                            version: 0
+                            version: version
                         })
                         .run(conn, function (err, result) {
                             if (err) reject(err);
@@ -112,7 +124,25 @@ queries.createNewMemoryModel = function (data, cb) {
                         });
                 });
             });
-        }).then(function () {
+        }).then(function (data) {
+            return new Promise(function (resolve, reject) {
+                getConnection(function (err, conn) {
+                    if (err) return reject(err, null);
+                    r.db('percolatordb')
+                        .table('Layout')
+                        .insert({
+                            mmid: mmid,
+                            modelVersion: version,
+                            frameLocations: []
+                        })
+                        .run(conn, function (err, result) {
+                            if (err) reject(err);
+                            else resolve(result);
+                        });
+                });
+            });
+        })
+        .then(function () {
             return cb(null, {
                 message: "memorymodel succesfully added",
                 mmid: mmid
@@ -123,7 +153,7 @@ queries.createNewMemoryModel = function (data, cb) {
 };
 
 queries.subscribeToChanges = function (id, cb) {
-    getConnection( function(err,conn) {
+    getConnection(function (err, conn) {
         if (err) return cb(err, null);
 
         r.db('percolatordb')
@@ -137,7 +167,7 @@ queries.subscribeToChanges = function (id, cb) {
 };
 
 queries.deleteLatestversion = function (mmid, version, cb) {
-    getConnection( function(err,conn) {
+    getConnection(function (err, conn) {
         if (err) return cb(err, null);
         r.db('percolatordb')
             .table('History')

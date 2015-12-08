@@ -85,7 +85,7 @@ describe("E2E test get homepage", function () {
             });
     });
 
-    it("Should retrieve other version if there is clicked on", function (done) {
+    it("Should retrieve other version when clicked", function (done) {
         browser
             .waitForExist("#1ee3f80e-c107-4fa2-9bc4-4f24887d1754", 2000)    //
             .element('#1ee3f80e-c107-4fa2-9bc4-4f24887d1754')

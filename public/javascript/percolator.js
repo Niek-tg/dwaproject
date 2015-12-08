@@ -236,7 +236,7 @@ function drawFuncs(location, funcs) {
 }
 
 /**
- * Looks of the variable is a pointer or a variable
+ * Looks if the variable is a pointer or a variable
  * @param variable Value to be converted to a variable, usable to draw with
  * @returns {String|Number} value to be drawn inside the variable or function
  */

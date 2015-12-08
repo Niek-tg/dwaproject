@@ -5,6 +5,7 @@ var path = require('path');
 var bodyParser = require('body-parser');
 var memorymodelRoute = require('./server/routes/memorymodels.js');
 var queries = require('./server/queries/queries.js');
+var messageHandler = require('./server/messageHandler.js');
 
 var config     = require('./config.js');
 
@@ -35,25 +36,7 @@ function startWebservers(){
     webSocketServer.on('connection', function connection(websocket) {
 
         websocket.on('message', function incoming(message) {
-            message = JSON.parse(message);
-            switch(message.msgType){
-                case "subscribeToChanges":
-                    // TODO
-                    queries.subscribeToChanges(message.data.mmid, function(err, cursor) {
-                        //console.log(cursor);
-                        cursor.each(
-                            function(err, row) {
-                                if (err) throw err;
-                                websocket.send(JSON.stringify({msgType :"newData",data:row}))
-
-                            }
-                        );
-                    });
-                break;
-                default :
-                    // TODO come up with a default action
-                break;
-            }
+            messageHandler.identifyMessage(message, websocket);
         });
 
         websocket.on('close', function incoming(msg) {
@@ -61,8 +44,9 @@ function startWebservers(){
         });
     });
 
+
     theHttpServer.on('request', theExpressApp).listen(config.express.port, function() {
-        console.log("The Server is lisening on port 3000.")
+        console.log("The Server is listening on port 3000.")
     });
 }
 

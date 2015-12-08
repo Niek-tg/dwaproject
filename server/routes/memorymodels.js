@@ -90,6 +90,9 @@ router.post('/', function (req, res) {
 
 });
 
+/**
+ * Delete a memory model with a given ID and version.
+ */
 router.delete('/:id/:version', function (req,res){
     var mmid = req.params.id;
     var version = parseInt(req.params.version);
