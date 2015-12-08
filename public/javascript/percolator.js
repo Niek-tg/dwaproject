@@ -53,7 +53,7 @@ window.onload = function () {
 
         for (var i = 0; i < memoryModels.length; i++) {
             //console.log(memoryModels[i])
-            $(sel).append("<li class='list-group-item'><a id='" + memoryModels[i].mmid + "'onclick='chooseMemoryModel(this, false, false)' data-value='" +
+            $(sel).append("<li class='list-group-item'><a id='" + memoryModels[i].mmid + "' onclick='chooseMemoryModel(this, false, false)' data-value='" +
                 memoryModels[i].mmid + "' data-version='" + memoryModels[i].version + "'  href='#'>" +
                 memoryModels[i].modelName + "</a></li>")
         }
