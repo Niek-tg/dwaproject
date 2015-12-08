@@ -56,6 +56,11 @@ messageHandler.subscribeToChanges = function(message, websocket){
     });
 };
 
+/**
+ * Gets all memory models from the database and sends them back to the client
+ * @param message
+ * @param websocket
+ */
 messageHandler.getAllMemoryModels = function(message, websocket){
     queries.getAll(function (err, result) {
         if(err)
@@ -87,6 +92,11 @@ messageHandler.getAllMemoryModels = function(message, websocket){
     });
 };
 
+/**
+ * Gets a model by ID (and optionally by version too) from the database and sends it to the client
+ * @param message
+ * @param websocket
+ */
 messageHandler.getModelById = function(message, websocket){
     var mmid = message.data.id;
     var version = (message.data.version) ? parseInt(message.data.version) : null;
@@ -108,6 +118,11 @@ messageHandler.getModelById = function(message, websocket){
     } else return websocket.send(JSON.stringify({msgType:"errorMsg", data:"Something went wrong in getModelById query: not a valid id"}));
 };
 
+/**
+ * Creates a new memory model in the database
+ * @param message
+ * @param websocket
+ */
 messageHandler.makeNewModel = function(message, websocket){
     var language = message.data.language;
     var owner = message.data.owner;
@@ -120,6 +135,11 @@ messageHandler.makeNewModel = function(message, websocket){
     });
 };
 
+/**
+ * Deletes a memory model with the given ID from the database
+ * @param message
+ * @param websocket
+ */
 messageHandler.deleteModel = function(message, websocket){
     var mmid = message.data.id;
     var version = parseInt(message.data.version);
