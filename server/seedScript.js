@@ -126,6 +126,7 @@ function runSeed(cb){
         History.ensureIndex("mmid");
         History.ensureIndex("version");
         Layout.ensureIndex("mmid");
+        Layout.ensureIndex("modelVersion");
     }).finally(function(){
         console.log("database seeded");
         cb();
