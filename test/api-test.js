@@ -1,6 +1,3 @@
-/**
- * Created by Dion Koers on 1-12-2015.
- */
 var should = require('chai').should();
 var expect = require('chai').expect;
 var supertest = require('supertest');
@@ -11,12 +8,12 @@ describe('API memorymodels unit test', function () {
 
     it('Retrieve multiple versions of a memory model', function (done) {
         api
-            .get('/api/memorymodels/"92524038-f0e2-4db2-ad01-321a9040df02"')
+            .get('/api/memorymodels/92524038-f0e2-4db2-ad01-321a9040df02')
             .set('Accept', 'application/json')
-            .end(function (err) {
+            .end(function (err, res) {
                 if (err) return done(err);
                 api
-                    .get('/api/memoryModels/"92524038-f0e2-4db2-ad01-321a9040df02"/2')
+                    .get('/api/memoryModels/92524038-f0e2-4db2-ad01-321a9040df02/2')
                     .set('Accept', 'application/json')
                     .end(function (err2) {
                         if (err2) return done(err2);
@@ -58,7 +55,7 @@ describe('API memorymodels POST', function () {
 /* GET TEST */
 describe('API memorymodels GET', function () {
 
-    var mmid
+    var mmid;
     it('Should return a 200 response', function (done) {
         api
             .get('/api/memorymodels')
@@ -79,7 +76,7 @@ describe('API memorymodels GET', function () {
             .expect(200)
             .end(function (err, res) {
 
-                if (err) return done(err)
+                if (err) return done(err);
                 mmid = res.body.mmid.toString();
                 api
                     .get('/api/memorymodels/' + mmid)
@@ -87,8 +84,6 @@ describe('API memorymodels GET', function () {
                     .expect(200)
                     .end(function (err, res) {
 
-                        //console.log(mmid);
-                        //console.log(res.body);
                         if (err) return done(err);
                         res.should.be.json;
                         res.body.mmid.should.equal(mmid);
@@ -111,16 +106,22 @@ describe('API memorymodels GET', function () {
                     });
             });
     });
+});
 
-    afterEach(function (done) {
+
+describe('API memorymodels ERROR handlasding', function () {
+
+    it('API does not exist', function (done) {
         api
-            .del('/api/memorymodel' + mmid)
-            .end(function (err) {
+            .del('/api/memoryModels/92524038-f0e2-4db2-ad01-321a9040df02/1')
+            .end(function (err, res) {
                 if (err) return done(err);
+                res.text.should.equal('Delete request completed');
                 done();
             });
     });
 });
+
 
 /* Error handling */
 
@@ -128,7 +129,7 @@ describe('API memorymodels ERROR handling', function () {
 
     it('API does not exist!', function (done) {
         api
-            .get('/zapii/')
+            .get('/NotExistingRoute/')
             .set('Accept', 'application/json')
             .expect(404)
             .end(function (err) {
@@ -139,7 +140,7 @@ describe('API memorymodels ERROR handling', function () {
 
     it('ID or Version does not exist', function (done) {
         api
-            .get('/api/memorymodels/mmmmmmmmmmmmmmmmmmmmm/99999999999999')
+            .get('/api/memorymodels/NotExistingMemoryModel/99999999999999')
             .set('Accept', 'application/json')
             .expect(200)
             .end(function (err, res) {
