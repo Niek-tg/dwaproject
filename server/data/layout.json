@@ -5,8 +5,8 @@
     "frameLocations": [
       {
         "id": "6",
-        "left": 1,
-        "top": 24555555
+        "left": 18,
+        "top": 110
       },
       {
         "id": "8",
@@ -21,13 +21,13 @@
     "frameLocations": [
       {
         "id": "6",
-        "left": 2,
-        "top": 24555555
+        "left": 18,
+        "top": 120
       },
       {
         "id": "8",
-        "left": 324,
-        "top": 445
+        "left": 24,
+        "top": 140
       }
     ]
   },
@@ -37,13 +37,13 @@
     "frameLocations": [
       {
         "id": "1",
-        "left": 1,
-        "top": 245
+        "left": 19,
+        "top": 180
       },
       {
         "id": "32",
-        "left": 324,
-        "top": 445
+        "left": 50,
+        "top": 200
       }
     ]
   },
@@ -53,13 +53,13 @@
     "frameLocations": [
       {
         "id": "1",
-        "left": 2,
-        "top": 245
+        "left": 30,
+        "top": 150
       },
       {
         "id": "32",
-        "left": 324,
-        "top": 445
+        "left": 45,
+        "top": 125
       }
     ]
   },
@@ -69,13 +69,13 @@
     "frameLocations": [
       {
         "id": "1",
-        "left": 3,
-        "top": 245
+        "left": 40,
+        "top": 167
       },
       {
         "id": "32",
-        "left": 324,
-        "top": 445
+        "left": 50,
+        "top": 152
       }
     ]
   }

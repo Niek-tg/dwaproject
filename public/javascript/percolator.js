@@ -29,11 +29,12 @@ window.onload = function () {
     {
         connection.send(JSON.stringify({msgType: "getAllModels"}));
     };
+    xhttp.send();
 };
 
 
 /**
- * Get memmory models en apend them to the dom element memoryModelsList
+ * Get a list of all memory models.
  */
 function getMemmoryModels(memoryModels){
     // SET MEMORY MODELS IN SELECTBOX
@@ -85,7 +86,7 @@ function chooseMemoryModel(id, prevVersion, undo) {
         console.log(currentMemoryModel.modelName + " ID = " + currentMemoryModel.id);
 
         // SET MEMORY MODEL ON SCREEN
-        drawMemoryModel(res.memoryModel).then(function () {
+        drawMemoryModel(res.memoryModel, res.frameLocations).then(function () {
             initPlumb();
             connection.send(JSON.stringify({msgType: "subscribeToChanges", data: {mmid: currentMemoryModel.id}}));
         });
@@ -152,7 +153,7 @@ function undoAction() {
  * @param model contains the data of the memory model
  * @returns {Promise} Promise to call actions when the drawing is done
  */
-function drawMemoryModel(model) {
+function drawMemoryModel(model, frameLocations) {
 
     return new Promise(function (resolve, reject) {
         var diagramContainer = $('#diagramContainer');
@@ -163,8 +164,8 @@ function drawMemoryModel(model) {
 
         var promises = [];
 
-        promises.push(drawFrames("Stack", model.stack));
-        promises.push(drawFrames("Heap", model.heap));
+        promises.push(drawFrames("Stack", model.stack, frameLocations));
+        promises.push(drawFrames("Heap", model.heap, frameLocations));
 
         Promise.all(promises).then(function () {
             resolve();
@@ -180,17 +181,25 @@ function drawMemoryModel(model) {
  * @param frames the data of the memory model
  * @returns {Promise} Promise to call actions when the drawing is done
  */
-function drawFrames(location, frames) {
+function drawFrames(location, frames, frameLocations) {
     return new Promise(function (resolve, reject) {
+
+
         $('.' + location).append(
             "<div class='frameLabel'>" + location + "</div>"
         );
 
         frames.forEach(function (item) {
+            var top = null,  left = null;
+
+            frameLocations.forEach(function (frameLocation) {
+                if (item.id === parseInt(frameLocation.id)) {  top = frameLocation.top; left = frameLocation.left;}
+            });
+
             var name = (item.name) ? item.name : "";
 
             $('.' + location).append(
-                "<div id='" + item.id + "' class='frame'> " +
+                "<div id='" + item.id + "' class='frame' style='top: " + top + "px; left: " + left + "px;'> " +
                 "<div class='frameLabel'>" + name + "</div>" +
                 "</div>");
 
@@ -259,7 +268,7 @@ function updateMemoryModel(data) {
     console.log("update memory model called " + data.data);
 
     if (data.data.new_val) {
-        console.log(data.data.new_val.memoryModel);
+        //console.log(data.data.new_val.memoryModel);
         drawMemoryModel(data.data.new_val.memoryModel).then(function () {
             redrawPlumbing()
         });
@@ -279,7 +288,7 @@ function initPlumb() {
                 jsPlumb.repaintEverything();
             },
             containment: "parent",
-            stop: function(event) {
+            stop: function (event) {
                 if ($(event.target).find('select').length == 0) {
                     updatePositionFrames(event.target.id);
                 }
@@ -323,9 +332,7 @@ var savePositionsOfframes = function (frameId) {
     var top = id.position().top;
     var left = id.position().left;
 
-    stackIdEndPositions.push({id: frameId, top: Math.floor(top) , left: Math.floor(left)});
-    console.log(left)
-    console.log(top)
+    stackIdEndPositions.push({id: frameId, top: Math.floor(top), left: Math.floor(left)});
     console.log('lengte van de array' + stackIdEndPositions.length)
 }
 
@@ -339,14 +346,11 @@ var updatePositionFrames = function (frameId) {
     var top = id.position().top;
     var left = id.position().left;
 
-    stackIdEndPositions.forEach(function(frame){
-        console.log(frame.id);
-        if(frameId == frame.id){
-            console.log('asdasd');
-            frame.top = top;
-            frame.left = left;
-            console.log('Dit zit er in left' + Math.floor(left))
-            console.log('Dit zit er in top' + Math.floor(top));
+    stackIdEndPositions.forEach(function (frame) {
+        if (frameId === frame.id) {
+            stackIdEndPositions[frame.id] = {id: id, top: top, left: left};
+            console.log(frame.left)
+            console.log(frame.top)
             console.log('lengte van de array' + stackIdEndPositions.length)
             connection.send(JSON.stringify({msgType: 'updatePositions'}));
         }

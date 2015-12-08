@@ -39,7 +39,7 @@ messageHandler.identifyMessage = function(message, websocket){
             break;
 
         default :
-            // TODO come up with a default action
+            websocket.send(JSON.stringify({msgType:"errorMsg", data:"MessageHandler: unknown msgType received="}));
             break;
     }
 };
