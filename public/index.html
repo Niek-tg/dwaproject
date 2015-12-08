@@ -9,6 +9,11 @@
     <script src="./javascript/bootstrap.js"></script>
 
     <script src="javascript/percolator.js"></script>
+    <script src="javascript/JSONEditorModule.js"></script>
+
+    <link href="./css/jsoneditor.min.css" rel="stylesheet" type="text/css">
+    <link href="./css/jsoneditor.css" rel="stylesheet" type="text/css">
+    <link href="css/svg.css" rel="stylesheet">
     <script src="javascript/percolatorFrameFunctions.js"></script>
     <script src="javascript/viewSwitcher.js"></script>
     <!--<link href="./css/bootstrap.min.css" rel="stylesheet"/>-->
@@ -47,9 +52,23 @@
         </div>
       <ul class="list-group" id="memoryModelsList"></ul>
     </div>
+    <!--JSON Editor -->
+    <div class="col-md-12">
+        <div id="listOfMemoryModels" class="col-md-2">
+        </div>
+        <div class="col-md-10">
+            <button id="jsonEditorButton" onclick="initJSONEditor()">JSON editor</button>
+            <div id="JSONButtons"></div>
+            <div id="jsoneditor"></div>
+        </div>
+    </div>
+
     <!-- Memorymodel-->
     <div id="memoryModel" class="col-md-8 col-sm-8">
+        <div id="diagramContainer">
 
+            <div class="clr"></div>
+        </div>
     </div>
     <!--Memorymodel versions-->
     <div id="memoryModelVersions" class="col-md-2 col-sm-2">
