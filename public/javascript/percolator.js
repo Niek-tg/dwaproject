@@ -21,30 +21,30 @@ var relations = [];
 var stackIdEndPositions = [];
 
 /**
- * Get a list of all memory models.
+ * Send a websocket message to the server to receive memory models.
  */
 window.onload = function () {
     console.log("LOADING ALL MEMORY MODELS");
-    var xhttp = new XMLHttpRequest();
-    xhttp.open("GET", '/api/MemoryModels', true);
-    xhttp.onload = function (e) {
-        var res = JSON.parse(xhttp.responseText);
-
-        // SET MEMORY MODELS IN SELECTBOX
-        var memoryModels = res;
-        var sel = document.getElementById('memoryModelsList');
-
-        for (var i = 0; i < memoryModels.length; i++) {
-            //console.log(memoryModels[i])
-            $(sel).append("<li class='list-group-item'><a id='" + memoryModels[i].mmid + "'onclick='chooseMemoryModel(this, false, false)' data-value='" +
-                memoryModels[i].mmid + "' data-version='" + memoryModels[i].version + "'  href='#'>" +
-                memoryModels[i].modelName + "</a></li>")
-        }
-
+    connection.onopen = function()
+    {
+        connection.send(JSON.stringify({msgType: "getAllModels"}));
     };
-    xhttp.send();
 };
 
+
+/**
+ * Get memmory models en apend them to the dom element memoryModelsList
+ */
+function getMemmoryModels(memoryModels){
+    // SET MEMORY MODELS IN SELECTBOX
+    var sel = document.getElementById('memoryModelsList');
+
+    for (var i = 0; i < memoryModels.length; i++) {
+        $(sel).append("<li class='list-group-item'><a id='" + memoryModels[i].mmid + "'onclick='chooseMemoryModel(this, false, false)' data-value='" +
+            memoryModels[i].mmid + "' data-version='" + memoryModels[i].version + "'  href='#'>" +
+            memoryModels[i].modelName + "</a></li>")
+    }
+}
 
 /**
  * Get a memory model with a given ID. And get previous versions of these.
@@ -324,6 +324,8 @@ var savePositionsOfframes = function (frameId) {
     var left = id.position().left;
 
     stackIdEndPositions.push({id: frameId, top: Math.floor(top) , left: Math.floor(left)});
+    console.log(left)
+    console.log(top)
     console.log('lengte van de array' + stackIdEndPositions.length)
 }
 
@@ -338,12 +340,15 @@ var updatePositionFrames = function (frameId) {
     var left = id.position().left;
 
     stackIdEndPositions.forEach(function(frame){
-        if(frameId === frame.id){
-            stackIdEndPositions[frame.id] = {id: id, top: top, left: left};
-            console.log(frame.left)
-            console.log(frame.top)
+        console.log(frame.id);
+        if(frameId == frame.id){
+            console.log('asdasd');
+            frame.top = top;
+            frame.left = left;
+            console.log('Dit zit er in left' + Math.floor(left))
+            console.log('Dit zit er in top' + Math.floor(top));
             console.log('lengte van de array' + stackIdEndPositions.length)
-
+            connection.send(JSON.stringify({msgType: 'updatePositions'}));
         }
     });
 }

@@ -34,6 +34,10 @@ messageHandler.identifyMessage = function(message, websocket){
             messageHandler.deleteModel(message, websocket);
             break;
 
+        case "updatePositions":
+            console.log('update socket werkt');
+            break;
+
         default :
             // TODO come up with a default action
             break;

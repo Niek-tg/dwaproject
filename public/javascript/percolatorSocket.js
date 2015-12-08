@@ -13,11 +13,12 @@ var connection = new WebSocket("ws://localhost:3000");
 connection.onmessage = function(message) {
     var data = JSON.parse(message.data);
     console.log(data);
-
     switch(data.msgType){
         case "newData":
             updateMemoryModel(data);
-
+            break;
+        case "getAllModels":
+            getMemmoryModels(data.data);
             break;
     }
 };
