@@ -7,16 +7,20 @@
     <script src="//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/jsPlumb/1.4.1/jquery.jsPlumb-1.4.1-all-min.js"></script>
     <script src="./javascript/bootstrap.js"></script>
-    <script src="javascript/jsoneditor.min.js"></script>
+
     <script src="javascript/percolator.js"></script>
     <script src="javascript/JSONEditorModule.js"></script>
 
     <link href="./css/jsoneditor.min.css" rel="stylesheet" type="text/css">
     <link href="./css/jsoneditor.css" rel="stylesheet" type="text/css">
     <link href="css/svg.css" rel="stylesheet">
+    <script src="javascript/percolatorFrameFunctions.js"></script>
+    <!--<link href="./css/bootstrap.min.css" rel="stylesheet"/>-->
+    <!--<link href="./css/bootstrap-theme.min.css" rel="stylesheet"/>-->
+    <script src="javascript/percolatorSocket.js"></script>
+    <link  href="css/svg.css" rel="stylesheet">
     <link href="./css/custom.css" rel="stylesheet"/>
-    <link href="./css/bootstrap.min.css" rel="stylesheet"/>
-    <link href="./css/bootstrap-theme.min.css" rel="stylesheet"/>
+   
 
 </head>
 <body>
@@ -41,6 +45,9 @@
     </div>
     <!--List of all memorymodels-->
     <div id="allMemoryModels" class="col-md-2 col-sm-2">
+        <div class="togglable">
+            <button onclick="toggleActive(this)">close</button>
+        </div>
       <ul class="list-group" id="memoryModelsList"></ul>
     </div>
     <!--JSON Editor -->
@@ -63,34 +70,15 @@
     </div>
     <!--Memorymodel versions-->
     <div id="memoryModelVersions" class="col-md-2 col-sm-2">
+        <div class="togglable">
+            <button onclick="toggleActive(this)">close</button>
+        </div>
+        <button class="btn btn-primary" id="undoButton" onclick="chooseMemoryModel('id', true, true)"> Undo action</button>
         <h5 id="labelVersionList" style="display: none">Memorymodel Versions</h5>
         <ul class="list-group" id="memoryModelVersionList"></ul>
     </div>
 
-
-
     <script>
-
-//        // create the editor
-//        var container = document.getElementById('jsoneditor');
-//        var editor = new JSONEditor(container);
-//        // set json
-//        document.getElementById('setJSON').onclick = function () {
-//            var modelInfo = {
-//                'language': '',
-//                'owner': '',
-//                'mmid': 123,
-//                'modelName': '',
-//                'version': 0
-//            };
-//            editor.set(modelInfo);
-//        };
-//        // get json
-//        document.getElementById('getJSON').onclick = function () {
-//            var json = editor.get();
-//            alert(JSON.stringify(json, null, 2));
-//        };
-
         $(window).resize(function () {
             jsPlumb.repaintEverything();
         })

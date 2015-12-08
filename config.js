@@ -4,7 +4,7 @@ module.exports = {
         port: 28015,
         authKey: '',
         database: "percolatordb",
-        tables: ["History", "ModelInfo"]
+        tables: ["History", "ModelInfo","Layout"]
     },
     thinky:{
         host:'node151.tezzt.nl',

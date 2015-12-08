@@ -84,12 +84,14 @@ router.post('/', function (req, res) {
 
     queries.createNewMemoryModel({language: language, owner: owner, modelName: modelName},function(err, result){
         if(err) res.send("er ging iets mis " + err);
-
             res.send(result);
     });
 
 });
 
+/**
+ * Delete a memory model with a given ID and version.
+ */
 router.delete('/:id/:version', function (req,res){
     var mmid = req.params.id;
     var version = parseInt(req.params.version);
