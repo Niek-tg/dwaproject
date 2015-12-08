@@ -45,6 +45,7 @@ function startWebservers(){
                             function(err, row) {
                                 if (err) throw err;
                                 websocket.send(JSON.stringify({msgType :"newData",data:row}))
+
                             }
                         );
                     });
@@ -53,9 +54,6 @@ function startWebservers(){
                     // TODO come up with a default action
                 break;
             }
-
-
-
         });
 
         websocket.on('close', function incoming(msg) {

@@ -1,11 +1,4 @@
 /**
- * Sets up and holds the websocket connection
- * @type {WebSocket}
- */
-
-var connection = new WebSocket("ws://localhost:3000");
-
-/**
  *  Holds the current memory model which is displayed on the webpage
  */
 var currentMemoryModel;
@@ -22,20 +15,10 @@ var highestVersion;
 var relations = [];
 
 /**
- * Listener to messages received by the websocket. Fired when a message is received.
- *
- * @param message contains the message received by the websocket
+ * Contains all the stack end heap frame id's end positions
+ * @type {Array}
  */
-connection.onmessage = function(message) {
-    var data = JSON.parse(message.data);
-    console.log(data);
-
-    switch(data.msgType){
-        case "newData":
-            updateMemoryModel(data);
-            break;
-    }
-};
+var stackIdEndPositions = [];
 
 /**
  * Get a list of all memory models.
@@ -76,11 +59,11 @@ function chooseMemoryModel(id, prevVersion, undo) {
     var xhttp = new XMLHttpRequest();
 
     if (prevVersion) {
-        if(undo) {
+        if (undo) {
             id = currentMemoryModel.mmid;
             version = undoAction();
         }
-        else{
+        else {
             version = $(id).attr('data-version');
             id = currentMemoryModel.mmid;
         }
@@ -94,7 +77,7 @@ function chooseMemoryModel(id, prevVersion, undo) {
         var res = JSON.parse(xhttp.responseText);
         currentMemoryModel = res;
 
-        if(firstTime) highestVersion = currentMemoryModel.version;
+        if (firstTime) highestVersion = currentMemoryModel.version;
 
         getVersionList();
         setModelInfo();
@@ -102,9 +85,9 @@ function chooseMemoryModel(id, prevVersion, undo) {
         console.log(currentMemoryModel.modelName + " ID = " + currentMemoryModel.id);
 
         // SET MEMORY MODEL ON SCREEN
-        drawMemoryModel(res.memoryModel).then(function(){
+        drawMemoryModel(res.memoryModel).then(function () {
             initPlumb();
-            connection.send(JSON.stringify({msgType: "subscribeToChanges", data : {mmid: currentMemoryModel.id}}));
+            connection.send(JSON.stringify({msgType: "subscribeToChanges", data: {mmid: currentMemoryModel.id}}));
         });
     };
     xhttp.send();
@@ -113,25 +96,25 @@ function chooseMemoryModel(id, prevVersion, undo) {
 /**
  * Updates the owner, name and current version of the memory model, displayed on the screen
  */
-function setModelInfo(){
-    $("#owner").html('Owner: '+ currentMemoryModel.owner);
-    $("#modelName").html('Modelname: '+ currentMemoryModel.modelName);
-    $("#version").html('Version: '+ currentMemoryModel.version);
+function setModelInfo() {
+    $("#owner").html('Owner: ' + currentMemoryModel.owner);
+    $("#modelName").html('Modelname: ' + currentMemoryModel.modelName);
+    $("#version").html('Version: ' + currentMemoryModel.version);
 }
 
 /**
  * Determines and draws the list of versions available for the memory model
  */
-function getVersionList(){
-    if(currentMemoryModel.version === highestVersion) $("#undoButton").css("display", "block");
+function getVersionList() {
+    if (currentMemoryModel.version === highestVersion) $("#undoButton").css("display", "block");
     else $("#undoButton").css("display", "none");
 
     $("#labelVersionList").css("display", "block");
     var sel = document.getElementById('memoryModelVersionList');
     $(sel).empty();
-    for(var i = 1; i < highestVersion+1; i++) {
+    for (var i = 1; i < highestVersion + 1; i++) {
         $(sel).append("<li class='list-group-item'><a id='versionListItem" + i + "'  onclick='chooseMemoryModel(this , true, false)' data-value='" +
-            currentMemoryModel.mmid + "' data-version='" + i + "'  href='#'>  Version: "+ i + "</a></li>")
+            currentMemoryModel.mmid + "' data-version='" + i + "'  href='#'>  Version: " + i + "</a></li>")
 
     }
 }
@@ -140,7 +123,7 @@ function getVersionList(){
  * Removes the latest version and sets the single last version available to be active
  * @returns {Number} Version number of the new active version
  */
-function undoAction(){
+function undoAction() {
     var version;
     if (currentMemoryModel.version > 1) {
         $.ajax({
@@ -171,7 +154,7 @@ function undoAction(){
  */
 function drawMemoryModel(model) {
 
-    return new Promise(function(resolve, reject){
+    return new Promise(function (resolve, reject) {
         var diagramContainer = $('#diagramContainer');
         diagramContainer.children().remove();
 
@@ -183,7 +166,7 @@ function drawMemoryModel(model) {
         promises.push(drawFrames("Stack", model.stack));
         promises.push(drawFrames("Heap", model.heap));
 
-        Promise.all(promises).then(function(){
+        Promise.all(promises).then(function () {
             resolve();
         });
     })
@@ -198,7 +181,7 @@ function drawMemoryModel(model) {
  * @returns {Promise} Promise to call actions when the drawing is done
  */
 function drawFrames(location, frames) {
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
         $('.' + location).append(
             "<div class='frameLabel'>" + location + "</div>"
         );
@@ -213,12 +196,11 @@ function drawFrames(location, frames) {
 
             if (item.vars) drawVars('#' + item.id, item.vars);
             if (item.funcs)drawFuncs('#' + item.id, item.funcs);
-
+            savePositionsOfframes(item.id)
         });
         resolve();
     });
 }
-
 
 /**
  * Draws the variables of the memory model.
@@ -272,19 +254,17 @@ function determineVar(variable) {
  * Updates the memory model. Redraws the entire memory model and the relations
  * @param data Data containing the memory model that has to be drawn
  */
-function updateMemoryModel(data){
+function updateMemoryModel(data) {
     console.log(data);
     console.log("update memory model called " + data.data);
 
-    if(data.data.new_val){
+    if (data.data.new_val) {
         console.log(data.data.new_val.memoryModel);
-        drawMemoryModel(data.data.new_val.memoryModel).then(function(){
+        drawMemoryModel(data.data.new_val.memoryModel).then(function () {
             redrawPlumbing()
         });
     }
-
 }
-
 
 /**
  * Initializes the JSPlumb script
@@ -298,9 +278,13 @@ function initPlumb() {
             drag: function (e) {
                 jsPlumb.repaintEverything();
             },
-            containment: "parent"
+            containment: "parent",
+            stop: function(event) {
+                if ($(event.target).find('select').length == 0) {
+                    updatePositionFrames(event.target.id);
+                }
+            }
         });
-
         redrawPlumbing();
     });
 }
@@ -308,7 +292,7 @@ function initPlumb() {
 /**
  * Draws the connections between the frames and variables where needed.
  */
-function redrawPlumbing(){
+function redrawPlumbing() {
 
     var common = {
         endpoint: "Blank",
@@ -327,3 +311,40 @@ function redrawPlumbing(){
 
     relations = [];
 }
+
+
+/**
+ * When frames are drawn it saves the positions of the frames in a array en send to the server by websocket..
+ */
+
+var savePositionsOfframes = function (frameId) {
+    console.log('This is the id of a frame', frameId);
+    var id = $('#' + frameId);
+    var top = id.position().top;
+    var left = id.position().left;
+
+    stackIdEndPositions.push({id: frameId, top: Math.floor(top) , left: Math.floor(left)});
+    console.log('lengte van de array' + stackIdEndPositions.length)
+}
+
+/**
+ * When frames are dragged, the posistions of the frames wil be updated en send to the server by websocket.
+ */
+
+var updatePositionFrames = function (frameId) {
+    console.log('This is the id of a frame', frameId);
+    var id = $('#' + frameId);
+    var top = id.position().top;
+    var left = id.position().left;
+
+    stackIdEndPositions.forEach(function(frame){
+        if(frameId === frame.id){
+            stackIdEndPositions[frame.id] = {id: id, top: top, left: left};
+            console.log(frame.left)
+            console.log(frame.top)
+            console.log('lengte van de array' + stackIdEndPositions.length)
+            
+        }
+    });
+}
+
