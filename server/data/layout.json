@@ -37,13 +37,13 @@
     "frameLocations": [
       {
         "id": "1",
-        "left": 1,
-        "top": 245
+        "left": 19,
+        "top": 180
       },
       {
         "id": "32",
-        "left": 324,
-        "top": 445
+        "left": 50,
+        "top": 200
       }
     ]
   },
@@ -53,13 +53,13 @@
     "frameLocations": [
       {
         "id": "1",
-        "left": 2,
-        "top": 245
+        "left": 30,
+        "top": 150
       },
       {
         "id": "32",
-        "left": 324,
-        "top": 445
+        "left": 45,
+        "top": 125
       }
     ]
   },
@@ -69,13 +69,13 @@
     "frameLocations": [
       {
         "id": "1",
-        "left": 3,
-        "top": 245
+        "left": 40,
+        "top": 167
       },
       {
         "id": "32",
-        "left": 324,
-        "top": 445
+        "left": 50,
+        "top": 152
       }
     ]
   }

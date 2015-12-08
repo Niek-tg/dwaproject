@@ -189,8 +189,7 @@ function drawFrames(location, frames, frameLocations) {
         );
 
         frames.forEach(function (item) {
-            var top = null;
-            var left = null;
+            var top = null,  left = null;
 
             frameLocations.forEach(function (frameLocation) {
                 if (item.id === parseInt(frameLocation.id)) {  top = frameLocation.top; left = frameLocation.left;}
