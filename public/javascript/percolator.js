@@ -21,6 +21,13 @@ var relations = [];
 var stackIdEndPositions = [];
 
 /**
+ * Contains a boolean with a check if its the first time the memmory model is loaded
+ * @type {boolean}
+ */
+
+var firstTime = false;
+
+/**
  * Send a websocket message to the server to receive memory models.
  */
 window.onload = function () {
@@ -29,9 +36,7 @@ window.onload = function () {
     {
         connection.send(JSON.stringify({msgType: "getAllModels"}));
     };
-    xhttp.send();
 };
-
 
 /**
  * Get a list of all memory models.
@@ -48,7 +53,7 @@ function getMemmoryModels(memoryModels){
 }
 
 /**
- * Get a memory model with a given ID. And get previous versions of these.
+ * Get versions of choosen memmory model.
  *
  * @param id identifier for the chosen memory model.
  * @param prevVersion boolean determining whether an older is chosen
@@ -56,8 +61,6 @@ function getMemmoryModels(memoryModels){
  */
 function chooseMemoryModel(id, prevVersion, undo) {
     var version = null;
-    var firstTime = false;
-    var xhttp = new XMLHttpRequest();
 
     if (prevVersion) {
         if (undo) {
@@ -72,13 +75,20 @@ function chooseMemoryModel(id, prevVersion, undo) {
         id = $(id).attr('data-value');
         firstTime = true;
     }
+    connection.send(JSON.stringify({msgType: 'getModelById', id: id}));
+};
 
-    xhttp.open("GET", '/api/MemoryModels/' + id + '/' + version, true);
-    xhttp.onload = function (e) {
-        var res = JSON.parse(xhttp.responseText);
-        currentMemoryModel = res;
+/**
+ * Get a memory model with a given ID.
+ *
+ * @param memoryModel contains response of socket message getModelById
+ */
+function getMemmoryModelById(memoryModel){
+        currentMemoryModel = memoryModel;
 
         if (firstTime) highestVersion = currentMemoryModel.version;
+
+        firstTime= false;
 
         getVersionList();
         setModelInfo();
@@ -86,13 +96,11 @@ function chooseMemoryModel(id, prevVersion, undo) {
         console.log(currentMemoryModel.modelName + " ID = " + currentMemoryModel.id);
 
         // SET MEMORY MODEL ON SCREEN
-        drawMemoryModel(res.memoryModel, res.frameLocations).then(function () {
+        drawMemoryModel(memoryModel.memoryModel, memoryModel.frameLocations).then(function () {
             initPlumb();
             connection.send(JSON.stringify({msgType: "subscribeToChanges", data: {mmid: currentMemoryModel.id}}));
         });
     };
-    xhttp.send();
-}
 
 /**
  * Updates the owner, name and current version of the memory model, displayed on the screen
@@ -127,14 +135,7 @@ function getVersionList() {
 function undoAction() {
     var version;
     if (currentMemoryModel.version > 1) {
-        $.ajax({
-            url: '/api/MemoryModels/' + currentMemoryModel.mmid + '/' + currentMemoryModel.version,
-            type: 'DELETE',
-            success: function (response) {
-                console.log('DELETED LAST VERSION');
-            }
-
-        });
+        connection.send(JSON.stringify({msgType: 'deleteModel', data: {mmid: currentMemoryModel.mmid, version: currentMemoryModel.version}}));
         version = currentMemoryModel.version - 1;
         currentMemoryModel.version -= 1;
         highestVersion -= 1;
@@ -171,7 +172,6 @@ function drawMemoryModel(model, frameLocations) {
             resolve();
         });
     })
-
 }
 
 /**
@@ -317,7 +317,6 @@ function redrawPlumbing() {
             target: relation.target.toString()
         }, common);
     });
-
     relations = [];
 }
 

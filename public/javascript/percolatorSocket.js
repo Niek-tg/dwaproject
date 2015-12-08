@@ -20,5 +20,16 @@ connection.onmessage = function(message) {
         case "getAllModels":
             getMemmoryModels(data.data);
             break;
+        case "getModelById":
+            getMemmoryModelById(data.data);
+            break;
+        case "getModelById":
+            getMemmoryModelById(data.data);
+            break;
+        case "errorMsg":
+            console.log(data.data);
+        default :
+            console.log('komt nog');
+            break;
     }
 };

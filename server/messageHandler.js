@@ -102,8 +102,9 @@ messageHandler.getAllMemoryModels = function(message, websocket){
  * @param websocket
  */
 messageHandler.getModelById = function(message, websocket){
-    var mmid = message.data.id;
-    var version = (message.data.version) ? parseInt(message.data.version) : null;
+    console.log(message.id)
+    var mmid = message.id;
+    var version = (message.version) ? parseInt(message.version) : null;
 
     if (mmid) {
         var cb = function (err, result) {
