@@ -10,24 +10,17 @@ connection.onmessage = function (message) {
     console.log(data);
 
     switch (data.msgType) {
-        case "newData":
-            updateMemoryModel(data);
+        case "getModelById":
+            setMemoryModel(data.data);
             break;
+
     }
 };
 
 
 
+
 function initJSONEditor() {
-    /**
-     * Get a list of all memory models.
-     */
-
-    getMemoryModelList();
-
-    /**
-     *    Create the editor and set buttons
-     */
 
     var container = document.getElementById('jsoneditor');
     var editor = new JSONEditor(container);
@@ -99,44 +92,12 @@ function initJSONEditor() {
             var json = editor.get();
             alert(JSON.stringify(json, null, 2));
         });
-
-
-
 }
 
-function getMemoryModelList(){
-    var xhttp = new XMLHttpRequest();
-    xhttp.open("GET", '/api/MemoryModels', true);
-    xhttp.onload = function (e) {
-        var res = JSON.parse(xhttp.responseText);
-
-        // SET MEMORY MODELS IN SELECTBOX
-        var memoryModels = res;
-        var sel = document.getElementById('listOfMemoryModels');
-
-        for (var i = 0; i < memoryModels.length; i++) {
-            //console.log(memoryModels[i])
-            $(sel).append("<li class='list-group-item'><a id='" + memoryModels[i].mmid + "'onclick='chooseMemorymodel()' data-value='" +
-                memoryModels[i].mmid + "' data-version='" + memoryModels[i].version + "'  href='#'>" +
-                memoryModels[i].modelName + "</a></li>")
-        }
-    };
-    xhttp.send();
+function setMemoryModel(memoryModel){
+    var selectedMemoryModel = memoryModel;
+    console.log(selectedMemoryModel);
 };
-
-function chooseMemorymodel(){
-    var xhttp = new XMLHttpRequest();
-    xhttp.open("GET", '/api/MemoryModels/' + id + '/' + version, true);
-    xhttp.onload = function (e) {
-        var res = JSON.parse(xhttp.responseText);
-        currentMemoryModel = res;
-    };
-    xhttp.send();
-}
-
-
-
-
 
 
 
