@@ -197,5 +197,17 @@ queries.deleteLatestversion = function (mmid, version, cb) {
         })
 };
 
+queries.setModelPositions = function (positions, mmid, version, cb) {
+    getConnection(function (err, conn) {
+        if (err) return cb(err, null);
+        r.db('percolatordb').table("Layout")
+            .filter(r.row('mmid').eq(mmid).and(r.row("modelVersion").eq(version)))
+            .update({"frameLocations": positions})
+            .run(conn, function (err, result) {
+                cb(err, result);
+            })
+    });
+};
+
 
 module.exports = queries;

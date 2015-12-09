@@ -34,9 +34,8 @@ messageHandler.identifyMessage = function(message, websocket){
             messageHandler.deleteModel(message, websocket);
             break;
 
-        case "setPositionsFramesDb":
-            console.log('update socket werkt');
-            messageHandler.updatePositions(message,websocket);
+        case "updateFramePositions":
+            messageHandler.setModelPositions(message,websocket);
             break;
 
         default :
@@ -163,10 +162,18 @@ messageHandler.deleteModel = function(message, websocket){
  * @param websocket
  */
 
-messageHandler.updatePositions = function(message,websocket){
+messageHandler.setModelPositions = function(message,websocket){
     var positions = message.data.frameIdEndPositions;
     var mmid = message.data.mmid;
     var version = message.data.version;
+
+    queries.setModelPositions(positions, mmid, version, function (err, result) {
+        if (err)
+            return websocket.send(JSON.stringify({msgType:"errorMsg", data: "Something went wrong in the delete query, unexpected error: " +err}));
+
+        return websocket.send(JSON.stringify({msgType:"positionsUpdated", data: "Positions updated completed"}));
+    });
+
 }
 
 module.exports = messageHandler;

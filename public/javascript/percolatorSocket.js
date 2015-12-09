@@ -39,6 +39,9 @@ connection.onmessage = function(message) {
         case "getModelById":
             getMemmoryModelById(data.data);
             break;
+        case "positionsUpdated":
+            console.log(data.data);
+            break;
         case "errorMsg":
             console.log(data.data);
         default :

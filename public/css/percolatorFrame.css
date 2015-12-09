@@ -79,9 +79,9 @@ html{
         }
 
 #diagramContainer{
-    max-width: 50%;
     float: left;
     height: calc(100vh - 119px);
+    width: 100%;
 }
 
 .clr{
