@@ -36,6 +36,7 @@ messageHandler.identifyMessage = function(message, websocket){
 
         case "setPositionsFramesDb":
             console.log('update socket werkt');
+            messageHandler.updatePositions(message,websocket);
             break;
 
         default :
@@ -155,6 +156,18 @@ messageHandler.deleteModel = function(message, websocket){
         return websocket.send(JSON.stringify({msgType:"deleteModel", data: "Delete request completed"}));
     });
 };
+
+/**
+ *
+ * @param message
+ * @param websocket
+ */
+
+messageHandler.updatePositions = function(message,websocket){
+    var positions = message.data.frameIdEndPositions;
+    var mmid = message.data.mmid;
+    var version = message.data.version;
+}
 
 module.exports = messageHandler;
 

@@ -74,7 +74,7 @@ function getMemoryModels(memoryModels) {
         id = $(id).attr('data-value');
         firstTime = true;
     }
-    connection.send(JSON.stringify({msgType: 'getModelById', id: id}));
+    connection.send(JSON.stringify({msgType: 'getModelById', id: id, version: version}));
 };
 
 /**
@@ -214,7 +214,7 @@ function drawFrames(location, frames, frameLocations) {
             if (item.funcs)drawFuncs('#' + item.id, item.funcs);
             savePositionsOfframes(item.id)
         });
-        connection.send(JSON.stringify({msgType: 'setPositionsFramesDb', data: frameIdEndPositions}));
+        connection.send(JSON.stringify({msgType: 'setPositionsFramesDb', data: {frameIdEndPositions: frameIdEndPositions, mmid: currentMemoryModel.mmid, version: currentMemoryModel.version}}));
         resolve();
     });
 }
