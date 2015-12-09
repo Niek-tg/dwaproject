@@ -36,6 +36,7 @@ messageHandler.identifyMessage = function(message, websocket){
 
         case "setPositionsFramesDb":
             console.log('update socket werkt');
+            messageHandler.updatePositions(message,websocket);
             break;
 
         default :
@@ -50,6 +51,7 @@ messageHandler.identifyMessage = function(message, websocket){
  * @param websocket Connection to the websocket so a new message can be sent to client
  */
 messageHandler.subscribeToChanges = function(message, websocket){
+    websocket.currentMMID = message.data.mmid;
     queries.subscribeToChanges(message.data.mmid, function(err, cursor) {
         cursor.each(
             function(err, row) {

@@ -71,6 +71,7 @@ function drawFrames(location, frames, frameLocations) {
             if (item.funcs)drawFuncs('#' + item.id, item.funcs);
             savePositionsOfframes(item.id)
         });
+        sendMessage({msgType: 'updatePositions'});
         resolve();
     });
 }
@@ -204,18 +205,20 @@ var savePositionsOfframes = function (frameId) {
  */
 
 var updatePositionFrames = function (frameId) {
-    console.log('This is the id of a frame', frameId);
+    frameId = parseInt(frameId);
+    console.log('UPDATED ID= ', frameId);
     var id = $('#' + frameId);
     var top = id.position().top;
     var left = id.position().left;
-
+    var i = 0;
     stackIdEndPositions.forEach(function (frame) {
         if (frameId === frame.id) {
-            stackIdEndPositions[frame.id] = {id: id, top: top, left: left};
-            console.log(frame.left)
-            console.log(frame.top)
-            console.log('lengte van de array' + stackIdEndPositions.length)
-            connection.send(JSON.stringify({msgType: 'updatePositions'}));
+            stackIdEndPositions[i] = {id: frame.id, top: top, left: left};
+            console.log("LEFT POSITION= ",frame.left);
+            console.log("TOP POSITION= ",frame.top);
+            console.log('lengte van de array' + stackIdEndPositions.length);
+            sendMessage({msgType: 'updatePositions'});
         }
+        i++;
     });
 }
