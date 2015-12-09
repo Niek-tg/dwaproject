@@ -45,6 +45,7 @@ function drawMemoryModel(model, frameLocations) {
  * @param frameLocations contains the locations of the frames
  * @returns {Promise} Promise to call actions when the drawing is done
  */
+
 function drawFrames(location, frames, frameLocations) {
     return new Promise(function (resolve, reject) {
 
@@ -53,17 +54,21 @@ function drawFrames(location, frames, frameLocations) {
             "<div class='frameLabel'>" + location + "</div>"
         );
 
+        var top, left;
         frames.forEach(function (item) {
-            var top = null,  left = null;
-
             frameLocations.forEach(function (frameLocation) {
-                if (item.id === parseInt(frameLocation.id)) {  top = frameLocation.top; left = frameLocation.left;}
+                if (item.id === parseInt(frameLocation.id)) {
+                    console.log(frameLocation);
+                    top = (frameLocation.top)? frameLocation.top : 0;
+                    left = (frameLocation.left)? frameLocation.left : 0;
+                }
             });
-
             var name = (item.name) ? item.name : "";
 
+            var style = (top && left)? 'top: ' + top + "px; left: " + left + "px;" : "position:relative";
+
             $('.' + location).append(
-                "<div id='" + item.id + "' class='frame' style='top: " + top + "px; left: " + left + "px;'> " +
+                "<div id='" + item.id + "' class='frame' style='" +style+ "'> " +
                 "<div class='frameLabel'>" + name + "</div>" +
                 "</div>");
 
@@ -217,4 +222,9 @@ var updatePositionFrames = function (frameId) {
         i++;
     });
     sendMessage({msgType: 'updateFramePositions', data:{frameIdEndPositions: frameIdEndPositions, mmid: currentMemoryModel.mmid, version: currentMemoryModel.version }});
+}
+
+function frameAlgoritm() {
+
+
 }
