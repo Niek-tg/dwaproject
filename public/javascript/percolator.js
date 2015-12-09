@@ -18,7 +18,7 @@ var relations = [];
  * Contains all the stack end heap frame id's end positions
  * @type {Array}
  */
-var stackIdEndPositions = [];
+var frameIdEndPositions = [];
 
 /**
  * Contains a boolean with a check if its the first time the memmory model is loaded
@@ -32,8 +32,7 @@ var firstTime = false;
  */
 window.onload = function () {
     console.log("LOADING ALL MEMORY MODELS");
-    connection.onopen = function()
-    {
+    connection.onopen = function () {
         connection.send(JSON.stringify({msgType: "getAllModels"}));
     };
 };
@@ -41,7 +40,7 @@ window.onload = function () {
 /**
  * Get a list of all memory models.
  */
-function getMemmoryModels(memoryModels){
+function getMemoryModels(memoryModels) {
     // SET MEMORY MODELS IN SELECTBOX
     var sel = document.getElementById('memoryModelsList');
 
@@ -59,7 +58,7 @@ function getMemmoryModels(memoryModels){
  * @param prevVersion boolean determining whether an older is chosen
  * @param undo boolean determining whether the undo button has been pressed
  */
-function chooseMemoryModel(id, prevVersion, undo) {
+    function chooseMemoryModel(id, prevVersion, undo) {
     var version = null;
 
     if (prevVersion) {
@@ -76,31 +75,33 @@ function chooseMemoryModel(id, prevVersion, undo) {
         firstTime = true;
     }
     connection.send(JSON.stringify({msgType: 'getModelById', id: id}));
-}
+};
 
 /**
  * Get a memory model with a given ID.
  *
  * @param memoryModel contains response of socket message getModelById
  */
-function getMemmoryModelById(memoryModel){
-        currentMemoryModel = memoryModel;
+function getMemmoryModelById(memoryModel) {
 
-        if (firstTime) highestVersion = currentMemoryModel.version;
+    currentMemoryModel = memoryModel;
+    frameIdEndPositions = [];
+    if (firstTime) highestVersion = currentMemoryModel.version;
 
-        firstTime= false;
+    firstTime = false;
 
-        getVersionList();
-        setModelInfo();
+    getVersionList();
+    setModelInfo();
 
-        console.log(currentMemoryModel.modelName + " ID = " + currentMemoryModel.id);
+    console.log(currentMemoryModel.modelName + " ID = " + currentMemoryModel.id);
 
-        // SET MEMORY MODEL ON SCREEN
-        drawMemoryModel(memoryModel.memoryModel, memoryModel.frameLocations).then(function () {
-            initPlumb();
-            connection.send(JSON.stringify({msgType: "subscribeToChanges", data: {mmid: currentMemoryModel.id}}));
-        });
-    }
+    // SET MEMORY MODEL ON SCREEN
+    drawMemoryModel(memoryModel.memoryModel, memoryModel.frameLocations).then(function () {
+        console.log('asddasdjlajslkd');
+        initPlumb();
+        connection.send(JSON.stringify({msgType: "subscribeToChanges", data: {mmid: currentMemoryModel.id}}));
+    });
+};
 
 /**
  * Updates the owner, name and current version of the memory model, displayed on the screen
@@ -135,7 +136,10 @@ function getVersionList() {
 function undoAction() {
     var version;
     if (currentMemoryModel.version > 1) {
-        connection.send(JSON.stringify({msgType: 'deleteModel', data: {mmid: currentMemoryModel.mmid, version: currentMemoryModel.version}}));
+        connection.send(JSON.stringify({
+            msgType: 'deleteModel',
+            data: {mmid: currentMemoryModel.mmid, version: currentMemoryModel.version}
+        }));
         version = currentMemoryModel.version - 1;
         currentMemoryModel.version -= 1;
         highestVersion -= 1;
@@ -152,6 +156,7 @@ function undoAction() {
  * Draws the memory model
  *
  * @param model contains the data of the memory model
+ * @param frameLocations contains the locations of the frames
  * @returns {Promise} Promise to call actions when the drawing is done
  */
 function drawMemoryModel(model, frameLocations) {
@@ -179,6 +184,7 @@ function drawMemoryModel(model, frameLocations) {
  *
  * @param location Decides where the frames are drawn. Stack or Heap
  * @param frames the data of the memory model
+ * @param frameLocations contains the locations of the frames
  * @returns {Promise} Promise to call actions when the drawing is done
  */
 function drawFrames(location, frames, frameLocations) {
@@ -190,10 +196,13 @@ function drawFrames(location, frames, frameLocations) {
         );
 
         frames.forEach(function (item) {
-            var top = null,  left = null;
+            var top = null, left = null;
 
             frameLocations.forEach(function (frameLocation) {
-                if (item.id === parseInt(frameLocation.id)) {  top = frameLocation.top; left = frameLocation.left;}
+                if (item.id === parseInt(frameLocation.id)) {
+                    top = frameLocation.top;
+                    left = frameLocation.left;
+                }
             });
 
             var name = (item.name) ? item.name : "";
@@ -322,37 +331,42 @@ function redrawPlumbing() {
 
 
 /**
- * When frames are drawn it saves the positions of the frames in a array en send to the server by websocket..
+ * When frames are drawn it saves the positions of the frames in a array en send to the server by websocket.
  */
 
 var savePositionsOfframes = function (frameId) {
     console.log('This is the id of a frame', frameId);
-    var id = $('#' + frameId);
-    var top = id.position().top;
-    var left = id.position().left;
 
-    stackIdEndPositions.push({id: frameId, top: Math.floor(top), left: Math.floor(left)});
-    console.log('lengte van de array' + stackIdEndPositions.length)
+        var id = $('#' + frameId);
+        var top = id.position().top;
+        var left = id.position().left;
+
+        frameIdEndPositions.push({id: frameId, top: Math.floor(top), left: Math.floor(left)});
+        console.log('lengte van de array' + frameIdEndPositions.length)
+        connection.send(JSON.stringify({msgType: 'setPositiionsFramesDb'}));
+
 }
 
 /**
- * When frames are dragged, the posistions of the frames wil be updated en send to the server by websocket.
+ * When frames are dragged, the positions of the frames wil be updated en send to the server by websocket.
  */
-
-var updatePositionFrames = function (frameId) {
-    console.log('This is the id of a frame', frameId);
-    var id = $('#' + frameId);
-    var top = id.position().top;
-    var left = id.position().left;
-
-    stackIdEndPositions.forEach(function (frame) {
-        if (frameId === frame.id) {
-            stackIdEndPositions[frame.id] = {id: id, top: top, left: left};
-            console.log(frame.left)
-            console.log(frame.top)
-            console.log('lengte van de array' + stackIdEndPositions.length)
-            connection.send(JSON.stringify({msgType: 'updatePositions'}));
-        }
-    });
-}
+    var updatePositionFrames = function (frameId) {
+        frameId = parseInt(frameId);
+        console.log('UPDATED ID= ', frameId);
+        var id = $('#' + frameId);
+        var top = id.position().top;
+        var left = id.position().left;
+        var i = 0;
+    console.log('dit zit er in geheugen model: '  + frameIdEndPositions.length);
+    frameIdEndPositions.forEach(function (frame) {
+            if (frameId == frame.id) {
+                frameIdEndPositions[i] = {id: frame.id, top: top, left: left};
+                console.log("LEFT POSITION= ",frame.left);
+                console.log("TOP POSITION= ",frame.top);
+                console.log('lengte van de array' + frameIdEndPositions.length);
+               // connection.send(JSON.stringify({msgType: 'updatePositions'}));
+            }
+            i++;
+        });
+    }
 
