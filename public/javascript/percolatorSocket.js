@@ -39,6 +39,8 @@ connection.onmessage = function(message) {
         case "getModelById":
             getMemmoryModelById(data.data);
             break;
+        case "deleteModel":
+            console.log(data.data);
         case "errorMsg":
             console.log(data.data);
         default :

@@ -38,6 +38,19 @@ function drawMemoryModel(model, frameLocations) {
 }
 
 /**
+ * Draws new frame
+ *
+ * //TODO
+ * //TODO
+ * //TODO
+ */
+
+function addNewFrame(){
+    console.log('click');
+}
+
+
+/**
  * Draws the frames of the memory model.
  *
  * @param location Decides where the frames are drawn. Stack or Heap
