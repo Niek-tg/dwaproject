@@ -157,6 +157,7 @@ function undoAction() {
  * Draws the memory model
  *
  * @param model contains the data of the memory model
+ * @param frameLocations contains the locations of the frames
  * @returns {Promise} Promise to call actions when the drawing is done
  */
 function drawMemoryModel(model, frameLocations) {
@@ -184,6 +185,7 @@ function drawMemoryModel(model, frameLocations) {
  *
  * @param location Decides where the frames are drawn. Stack or Heap
  * @param frames the data of the memory model
+ * @param frameLocations contains the locations of the frames
  * @returns {Promise} Promise to call actions when the drawing is done
  */
 function drawFrames(location, frames, frameLocations) {
