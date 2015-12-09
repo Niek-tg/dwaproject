@@ -10,11 +10,14 @@ connection.onmessage = function (message) {
     console.log(data);
 
     switch (data.msgType) {
-        case "newData":
-            updateMemoryModel(data);
+        case "getModelById":
+            setMemoryModel(data.data);
             break;
+
     }
 };
+
+
 
 
 function initJSONEditor() {
@@ -90,6 +93,11 @@ function initJSONEditor() {
             alert(JSON.stringify(json, null, 2));
         });
 }
+
+function setMemoryModel(memoryModel){
+    var selectedMemoryModel = memoryModel;
+    console.log(selectedMemoryModel);
+};
 
 
 

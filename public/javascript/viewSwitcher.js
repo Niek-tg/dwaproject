@@ -17,7 +17,9 @@ function enableDiagramView(){
  * Switches to the code view
  */
 function enableCodeView(){
-    $('#memoryModel').load('./../views/codeview.html');
+    $('#memoryModel').load('./../views/codeview.html',function(cb){
+        initJSONEditor();
+    });
     currentView = "codeView";
 }
 
