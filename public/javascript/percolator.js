@@ -18,7 +18,7 @@ var firstTime = false;
 /**
  * Get a list of all memory models.
  */
-function getMemmoryModels(memoryModels){
+function getMemoryModels(memoryModels) {
     // SET MEMORY MODELS IN SELECTBOX
     var sel = document.getElementById('memoryModelsList');
 
@@ -36,7 +36,7 @@ function getMemmoryModels(memoryModels){
  * @param prevVersion boolean determining whether an older is chosen
  * @param undo boolean determining whether the undo button has been pressed
  */
-function chooseMemoryModel(id, prevVersion, undo) {
+    function chooseMemoryModel(id, prevVersion, undo) {
     var version = null;
 
     if (prevVersion) {
@@ -61,16 +61,16 @@ function chooseMemoryModel(id, prevVersion, undo) {
  * @param memoryModel contains response of socket message getModelById
  */
 function getMemmoryModelById(memoryModel){
-
         currentMemoryModel = memoryModel;
 
         if (firstTime) highestVersion = currentMemoryModel.version;
+
         firstTime= false;
 
-        getVersionList();
-        setModelInfo();
+    getVersionList();
+    setModelInfo();
 
-        console.log(currentMemoryModel.modelName + " ID = " + currentMemoryModel.id);
+    console.log(currentMemoryModel.modelName + " ID = " + currentMemoryModel.id);
 
         // SET MEMORY MODEL ON SCREEN
         drawMemoryModel(memoryModel.memoryModel, memoryModel.frameLocations).then(function () {

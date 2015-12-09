@@ -39,10 +39,7 @@ connection.onmessage = function(message) {
             updateMemoryModel(data);
             break;
         case "getAllModels":
-            getMemmoryModels(data.data);
-            break;
-        case "getModelById":
-            getMemmoryModelById(data.data);
+            getMemoryModels(data.data);
             break;
         case "getModelById":
             getMemmoryModelById(data.data);
