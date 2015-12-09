@@ -38,6 +38,10 @@ messageHandler.identifyMessage = function(message, websocket, webSocketServer){
             console.log('update socket werkt');
             break;
 
+        case "saveModel":
+            messageHandler.saveModel(message, websocket);
+            break;
+
         default :
             websocket.send(JSON.stringify({msgType:"errorMsg", data:"MessageHandler: unknown msgType received="}));
             break;
@@ -159,6 +163,10 @@ messageHandler.deleteModel = function(message, websocket, webSocketServer){
         });
 
     });
+};
+
+messageHandler.saveModel = function(message, websocket){
+    //TODO: Use Query to update model
 };
 
 module.exports = messageHandler;

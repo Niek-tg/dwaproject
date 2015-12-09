@@ -101,7 +101,7 @@ function getMemmoryModelById(memoryModel) {
         initPlumb();
         connection.send(JSON.stringify({msgType: "subscribeToChanges", data: {mmid: currentMemoryModel.id}}));
     });
-};
+}
 
 /**
  * Updates the owner, name and current version of the memory model, displayed on the screen
