@@ -10,7 +10,7 @@ var messageHandler = {};
  * @param message Message that has been received from client
  * @param websocket Connection to the websocket so a new message can be sent to client later
  */
-messageHandler.identifyMessage = function(message, websocket){
+messageHandler.identifyMessage = function(message, websocket, webSocketServer){
    message = JSON.parse(message);
     switch(message.msgType){
 
@@ -31,7 +31,7 @@ messageHandler.identifyMessage = function(message, websocket){
             break;
 
         case "deleteModel":
-            messageHandler.deleteModel(message, websocket);
+            messageHandler.deleteModel(message, websocket, webSocketServer);
             break;
 
         case "updatePositions":
@@ -50,6 +50,7 @@ messageHandler.identifyMessage = function(message, websocket){
  * @param websocket Connection to the websocket so a new message can be sent to client
  */
 messageHandler.subscribeToChanges = function(message, websocket){
+    websocket.currentMMID = message.data.mmid;
     queries.subscribeToChanges(message.data.mmid, function(err, cursor) {
         cursor.each(
             function(err, row) {
@@ -102,7 +103,6 @@ messageHandler.getAllMemoryModels = function(message, websocket){
  * @param websocket
  */
 messageHandler.getModelById = function(message, websocket){
-    console.log(message.id)
     var mmid = message.id;
     var version = (message.version) ? parseInt(message.version) : null;
 
@@ -145,14 +145,19 @@ messageHandler.makeNewModel = function(message, websocket){
  * @param message
  * @param websocket
  */
-messageHandler.deleteModel = function(message, websocket){
+messageHandler.deleteModel = function(message, websocket, webSocketServer){
     var mmid = message.data.id;
     var version = parseInt(message.data.version);
     queries.deleteLatestversion(mmid, version, function (err, result) {
         if (err)
             return websocket.send(JSON.stringify({msgType:"errorMsg", data: "Something went wrong in the delete query, unexpected error: " +err}));
 
-        return websocket.send(JSON.stringify({msgType:"deleteModel", data: "Delete request completed"}));
+        webSocketServer.clients.forEach(function (client) {
+            if (client.mmid === mmid) {
+                websocket.send(JSON.stringify({msgType:"deleteModel", data: {message:"Delete request completed"}}));
+            }
+        });
+
     });
 };
 
