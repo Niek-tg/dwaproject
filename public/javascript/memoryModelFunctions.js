@@ -65,7 +65,7 @@ function drawFrames(location, frames, frameLocations) {
             });
             var name = (item.name) ? item.name : "";
 
-            var style = (top && left)? 'top: ' + top + "px; left: " + left + "px;" : "position:relative";
+            var style = (top && left)? 'top: ' + top + "px; left: " + left + "%;" : "position:relative";
 
             $('.' + location).append(
                 "<div id='" + item.id + "' class='frame' style='" +style+ "'> " +
@@ -198,8 +198,10 @@ function redrawPlumbing() {
 
 var savePositionsOfframes = function (frameId) {
     var id = $('#' + frameId);
+    var parent = $(id).parent();
     var top = id.position().top;
-    var left = id.position().left;
+    //var left = id.position().left;
+    var left = (100 / parent.width()) * id.position().left;
 
     frameIdEndPositions.push({id: frameId, top: top, left: left});
 }
@@ -211,8 +213,10 @@ var savePositionsOfframes = function (frameId) {
 var updatePositionFrames = function (frameId) {
     frameId = parseInt(frameId);
     var id = $('#' + frameId);
+    var parent = $(id).parent();
     var top = id.position().top;
-    var left = id.position().left;
+    //var left = id.position().left;
+    var left = (100 / parent.width()) * id.position().left;
     var i = 0;
 
     frameIdEndPositions.forEach(function (frame) {
