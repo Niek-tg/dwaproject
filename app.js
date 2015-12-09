@@ -42,8 +42,8 @@ function startWebservers(){
     webSocketServer.on('connection', function connection(websocket) {
 
         websocket.on('message', function incoming(message) {
-            console.log(message.msgType)
-            messageHandler.identifyMessage(message, websocket);
+            console.log(message.msgType);
+            messageHandler.identifyMessage(message, websocket, webSocketServer);
         });
 
         websocket.on('close', function incoming(msg) {

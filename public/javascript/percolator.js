@@ -42,7 +42,8 @@ function getMemoryModels(memoryModels) {
  * @param prevVersion boolean determining whether an older is chosen
  * @param undo boolean determining whether the undo button has been pressed
  */
-    function chooseMemoryModel(id, prevVersion, undo) {
+function chooseMemoryModel(id, prevVersion, undo) {
+    enableDiagramView();
     var version = null;
 
     if (prevVersion) {
@@ -108,6 +109,7 @@ function getVersionList() {
     for (var i = 1; i < highestVersion + 1; i++) {
         $(sel).append("<li class='list-group-item'><a id='versionListItem" + i + "'  onclick='chooseMemoryModel(this , true, false)' data-value='" +
             currentMemoryModel.mmid + "' data-version='" + i + "'  href='#'>  Version: " + i + "</a></li>")
+
     }
 }
 

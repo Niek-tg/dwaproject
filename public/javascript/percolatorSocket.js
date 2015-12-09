@@ -44,6 +44,7 @@ connection.onmessage = function(message) {
             break;
         case "errorMsg":
             console.log(data.data);
+            break;
         default :
             console.log('komt nog');
             break;
