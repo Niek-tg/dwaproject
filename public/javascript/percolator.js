@@ -63,7 +63,6 @@ function getMemoryModels(memoryModels) {
 
     if (prevVersion) {
         if (undo) {
-
             id = currentMemoryModel.mmid;
             version = undoAction();
         }
@@ -126,7 +125,6 @@ function getVersionList() {
     for (var i = 1; i < highestVersion + 1; i++) {
         $(sel).append("<li class='list-group-item'><a id='versionListItem" + i + "'  onclick='chooseMemoryModel(this , true, false)' data-value='" +
             currentMemoryModel.mmid + "' data-version='" + i + "'  href='#'>  Version: " + i + "</a></li>")
-
     }
 }
 
@@ -151,7 +149,6 @@ function undoAction() {
         return version;
     }
 }
-
 
 /**
  * Draws the memory model
@@ -217,6 +214,7 @@ function drawFrames(location, frames, frameLocations) {
             if (item.funcs)drawFuncs('#' + item.id, item.funcs);
             savePositionsOfframes(item.id)
         });
+        connection.send(JSON.stringify({msgType: 'setPositionsFramesDb', data: frameIdEndPositions}));
         resolve();
     });
 }
@@ -312,7 +310,6 @@ function initPlumb() {
  * Draws the connections between the frames and variables where needed.
  */
 function redrawPlumbing() {
-
     var common = {
         endpoint: "Blank",
         anchor: ["Left", "Right"],
@@ -342,8 +339,6 @@ var savePositionsOfframes = function (frameId) {
 
         frameIdEndPositions.push({id: frameId, top: Math.floor(top), left: Math.floor(left)});
         console.log('lengte van de array' + frameIdEndPositions.length)
-        connection.send(JSON.stringify({msgType: 'setPositiionsFramesDb'}));
-
 }
 
 /**
