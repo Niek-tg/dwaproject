@@ -6,11 +6,22 @@
 var currentView = "diagramView";
 
 /**
+ * Returns the current view
+ */
+function getCurrentView(){
+    return currentView;
+}
+
+function setCurrentView(newView){
+    currentView = newView;
+}
+
+/**
  * Switches to the diagram view
  */
 function enableDiagramView(){
     $('#memoryModel').load('./../views/diagramview.html');
-    currentView = "diagramView";
+    setCurrentView("diagramView");
 }
 
 /**
