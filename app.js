@@ -9,12 +9,18 @@ var messageHandler = require('./server/messageHandler.js');
 
 var config     = require('./config.js');
 
-const RUNSEED = (process.argv.slice(2) == 'seed');
+const ONLYSEED = (process.argv.slice(2) == 'onlySeed');
+const RUNSEEDANDSERVER = (process.argv.slice(2) == 'seed');
 
-if(RUNSEED){
+if(ONLYSEED){
+    var seedScript = require('./server/seedScript.js');
+    seedScript.runSeed();
+}
+else if(RUNSEEDANDSERVER){
     var seedScript = require('./server/seedScript.js');
     seedScript.runSeed(startWebservers); // startWebservers as callback, when done
-} else startWebservers();
+}
+else startWebservers();
 
 var theHttpServer;
 
