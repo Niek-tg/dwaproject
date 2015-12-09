@@ -60,6 +60,7 @@ function getMemmoryModels(memoryModels){
  * @param undo boolean determining whether the undo button has been pressed
  */
 function chooseMemoryModel(id, prevVersion, undo) {
+    enableDiagramView();
     var version = null;
 
     if (prevVersion) {
