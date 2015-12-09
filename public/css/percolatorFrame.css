@@ -81,7 +81,7 @@ html{
 #diagramContainer{
     float: left;
     height: calc(100vh - 119px);
-    width: calc(100% - 602px);
+    max-width: calc(100% - 602px);
 }
 
 .clr{
