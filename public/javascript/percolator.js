@@ -14,11 +14,7 @@ var highestVersion;
  */
 var relations = [];
 
-/**
- * Contains all the stack end heap frame id's end positions
- * @type {Array}
- */
-var frameIdEndPositions = [];
+
 
 /**
  * Contains a boolean with a check if its the first time the memmory model is loaded
@@ -28,14 +24,10 @@ var frameIdEndPositions = [];
 var firstTime = false;
 
 /**
- * Send a websocket message to the server to receive memory models.
+ * Contains all the stack end heap frame id's end positions
+ * @type {Array}
  */
-window.onload = function () {
-    console.log("LOADING ALL MEMORY MODELS");
-    connection.onopen = function () {
-        connection.send(JSON.stringify({msgType: "getAllModels"}));
-    };
-};
+var frameIdEndPositions = [];
 
 /**
  * Get a list of all memory models.
@@ -63,6 +55,7 @@ function getMemoryModels(memoryModels) {
 
     if (prevVersion) {
         if (undo) {
+
             id = currentMemoryModel.mmid;
             version = undoAction();
         }
@@ -74,8 +67,8 @@ function getMemoryModels(memoryModels) {
         id = $(id).attr('data-value');
         firstTime = true;
     }
-    connection.send(JSON.stringify({msgType: 'getModelById', id: id}));
-};
+    sendMessage({msgType: 'getModelById', id: id, version: version});
+}
 
 /**
  * Get a memory model with a given ID.
@@ -101,7 +94,7 @@ function getMemmoryModelById(memoryModel) {
         initPlumb();
         connection.send(JSON.stringify({msgType: "subscribeToChanges", data: {mmid: currentMemoryModel.id}}));
     });
-}
+};
 
 /**
  * Updates the owner, name and current version of the memory model, displayed on the screen
@@ -136,10 +129,7 @@ function getVersionList() {
 function undoAction() {
     var version;
     if (currentMemoryModel.version > 1) {
-        connection.send(JSON.stringify({
-            msgType: 'deleteModel',
-            data: {mmid: currentMemoryModel.mmid, version: currentMemoryModel.version}
-        }));
+        sendMessage({msgType: 'deleteModel', data: {mmid: currentMemoryModel.mmid, version: currentMemoryModel.version}});
         version = currentMemoryModel.version - 1;
         currentMemoryModel.version -= 1;
         highestVersion -= 1;
@@ -329,11 +319,9 @@ function redrawPlumbing() {
     relations = [];
 }
 
-
 /**
  * When frames are drawn it saves the positions of the frames in a array en send to the server by websocket.
  */
-
 var savePositionsOfframes = function (frameId) {
     console.log('This is the id of a frame', frameId);
 
@@ -369,4 +357,5 @@ var savePositionsOfframes = function (frameId) {
             i++;
         });
     }
+
 

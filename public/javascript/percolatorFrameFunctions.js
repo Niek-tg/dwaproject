@@ -20,7 +20,6 @@ function toggleActive(me){
         $(me).text("open");
         calculateDiagramContainerSize()
     }
-
 }
 
 function calculateDiagramContainerSize(){
