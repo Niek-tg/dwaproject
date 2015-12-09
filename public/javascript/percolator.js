@@ -16,6 +16,12 @@ var highestVersion;
 var firstTime = false;
 
 /**
+ * Contains all the stack end heap frame id's end positions
+ * @type {Array}
+ */
+var frameIdEndPositions = [];
+
+/**
  * Get a list of all memory models.
  */
 function getMemoryModels(memoryModels) {
@@ -60,12 +66,13 @@ function getMemoryModels(memoryModels) {
  *
  * @param memoryModel contains response of socket message getModelById
  */
-function getMemmoryModelById(memoryModel){
-        currentMemoryModel = memoryModel;
+function getMemmoryModelById(memoryModel) {
 
-        if (firstTime) highestVersion = currentMemoryModel.version;
+    currentMemoryModel = memoryModel;
+    frameIdEndPositions = [];
+    if (firstTime) highestVersion = currentMemoryModel.version;
 
-        firstTime= false;
+    firstTime = false;
 
     getVersionList();
     setModelInfo();
@@ -101,7 +108,6 @@ function getVersionList() {
     for (var i = 1; i < highestVersion + 1; i++) {
         $(sel).append("<li class='list-group-item'><a id='versionListItem" + i + "'  onclick='chooseMemoryModel(this , true, false)' data-value='" +
             currentMemoryModel.mmid + "' data-version='" + i + "'  href='#'>  Version: " + i + "</a></li>")
-
     }
 }
 

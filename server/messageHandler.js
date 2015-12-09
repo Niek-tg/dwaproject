@@ -34,7 +34,7 @@ messageHandler.identifyMessage = function(message, websocket){
             messageHandler.deleteModel(message, websocket);
             break;
 
-        case "updatePositions":
+        case "setPositionsFramesDb":
             console.log('update socket werkt');
             break;
 
