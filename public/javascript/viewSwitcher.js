@@ -5,6 +5,7 @@ function enableDiagramView(){
 
 function enableCodeView(){
     $('#memoryModel').load('./../views/codeview.html');
+
 }
 
 $(document).ready(function(){
