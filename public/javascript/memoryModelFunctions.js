@@ -8,7 +8,7 @@ var relations = [];
  * Contains all the stack end heap frame id's end positions
  * @type {Array}
  */
-var stackIdEndPositions = [];
+var frameIdEndPositions = [];
 
 /**
  * Draws the memory model
@@ -37,18 +37,6 @@ function drawMemoryModel(model, frameLocations) {
     })
 }
 
-/**
- * Draws new frame
- *
- * //TODO
- * //TODO
- * //TODO
- */
-
-function addNewFrame(){
-    console.log('click');
-}
-
 
 /**
  * Draws the frames of the memory model.
@@ -61,16 +49,18 @@ function addNewFrame(){
 function drawFrames(location, frames, frameLocations) {
     return new Promise(function (resolve, reject) {
 
-
         $('.' + location).append(
             "<div class='frameLabel'>" + location + "</div>"
         );
 
         frames.forEach(function (item) {
-            var top = null,  left = null;
+            var top = null, left = null;
 
             frameLocations.forEach(function (frameLocation) {
-                if (item.id === parseInt(frameLocation.id)) {  top = frameLocation.top; left = frameLocation.left;}
+                if (item.id === parseInt(frameLocation.id)) {
+                    top = frameLocation.top;
+                    left = frameLocation.left;
+                }
             });
 
             var name = (item.name) ? item.name : "";
@@ -84,7 +74,15 @@ function drawFrames(location, frames, frameLocations) {
             if (item.funcs)drawFuncs('#' + item.id, item.funcs);
             savePositionsOfframes(item.id)
         });
-        sendMessage({msgType: 'updatePositions'});
+        ;
+        sendMessage({
+            msgType: 'updateFramePositions',
+            data: {
+                frameIdEndPositions: frameIdEndPositions,
+                mmid: currentMemoryModel.mmid,
+                version: currentMemoryModel.version
+            }
+        });
         resolve();
     });
 }
@@ -204,13 +202,11 @@ function redrawPlumbing() {
  */
 
 var savePositionsOfframes = function (frameId) {
-    console.log('This is the id of a frame', frameId);
     var id = $('#' + frameId);
     var top = id.position().top;
     var left = id.position().left;
 
-    stackIdEndPositions.push({id: frameId, top: Math.floor(top), left: Math.floor(left)});
-    console.log('lengte van de array' + stackIdEndPositions.length)
+    frameIdEndPositions.push({id: frameId, top: top, left: left});
 }
 
 /**
@@ -219,19 +215,23 @@ var savePositionsOfframes = function (frameId) {
 
 var updatePositionFrames = function (frameId) {
     frameId = parseInt(frameId);
-    console.log('UPDATED ID= ', frameId);
     var id = $('#' + frameId);
     var top = id.position().top;
     var left = id.position().left;
     var i = 0;
-    stackIdEndPositions.forEach(function (frame) {
+
+    frameIdEndPositions.forEach(function (frame) {
         if (frameId === frame.id) {
-            stackIdEndPositions[i] = {id: frame.id, top: top, left: left};
-            console.log("LEFT POSITION= ",frame.left);
-            console.log("TOP POSITION= ",frame.top);
-            console.log('lengte van de array' + stackIdEndPositions.length);
-            sendMessage({msgType: 'updatePositions'});
+            frameIdEndPositions[i] = {id: frame.id, top: top, left: left};
         }
         i++;
+    });
+    sendMessage({
+        msgType: 'updateFramePositions',
+        data: {
+            frameIdEndPositions: frameIdEndPositions,
+            mmid: currentMemoryModel.mmid,
+            version: currentMemoryModel.version
+        }
     });
 }

@@ -10,6 +10,7 @@
 
     <script src="javascript/percolator.js"></script>
     <script src="javascript/memoryModelFunctions.js"></script>
+    <script src="javascript/addModelComponents.js"></script>
     <script src="javascript/jsoneditor.min.js"></script>
     <script src="javascript/JSONEditorModule.js"></script>
     <link href="./css/jsoneditor.min.css" rel="stylesheet" type="text/css">
@@ -24,11 +25,22 @@
     <link href="./css/custom.css" rel="stylesheet"/>
     <link  href="./css/memoryModel.css" rel="stylesheet">
     <link  href="./css/percolatorFrame.css" rel="stylesheet">
+    <link rel="shortcut icon" type="image/png" href="./images/fav_percolator.png"/>
 
 </head>
 <body>
 <div id="memoryModelWrapper" class="col-md-12 col-sm-12 container-fluid">
-    <button onclick="addNewFrame()">add frame</button>
+    <button id="addNewStackFrame">add stackframe</button><input type="text" id='frameLabel' value="frame name">
+    <button id="addNewHeapFrame">add heapframe</button>
+    <button id="addVariableToFrame">add variable to created frame</button>
+    <input type="text" id='variabelLabel' value="variable name">
+    <input type="text" id='variabelValue' value="variable value">
+    <button id="addFunctionToFrame">add function to created frame</button><input type="text" id='functionName' value="function name">
+    <button id="addNewMemorModel">add new memory model</button>
+    <input type="text" id='newModelName' value="model name">
+    <input type="text" id='language' value="language">
+    <input type="text" id='owner' value="Owner name">
+
     <!--Header-->
     <div id="header" class="col-md-12 col-sm-12">
         <!--Percolator Logo-->
@@ -75,10 +87,32 @@
         $(window).resize(function () {
             jsPlumb.repaintEverything();
         })
+
+        $('#addNewStackFrame').click(function(){
+            addNewFrame($("#frameLabel").val(), 'stack');
+        });
+
+        $('#addNewHeapFrame').click(function(){
+            addNewFrame($("#frameLabel").val(), 'heap');
+        });
+
+        // TODO pass in the id of the creeeded frame
+        $('#addVariableToFrame').click(function(){
+            addVariableToFrame($("#variabelLabel").val(), $("#variabelValue").val());
+        });
+
+        // TODO pass in the id of the creeeded frame
+        $('#addFunctionToFrame').click(function(){
+            addFunctionToFrame($("#functionName").val());
+        });
+
+        // TODO pass in the id of the creeeded frame
+        $('#addNewMemorModel').click(function(){
+            addNewMemorModel($("#newModelName").val(), $("#language").val(), $("#owner").val());
+        });
+
     </script>
 </div>
-
-
 
 </body>
 </html>

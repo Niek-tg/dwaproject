@@ -41,8 +41,12 @@ connection.onmessage = function(message) {
             break;
         case "deleteModel":
             console.log(data.data);
+        case "positionsUpdated":
+            console.log(data.data);
+            break;
         case "errorMsg":
             console.log(data.data);
+            break;
         default :
             console.log('komt nog');
             break;

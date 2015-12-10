@@ -22,6 +22,12 @@ var firstTime = false;
 var frameIdEndPositions = [];
 
 /**
+ * Contains a boolean with a check if a memory model is loaded
+ * @type {boolean}
+ */
+var memoryModelLoaded = false;
+
+/**
  * Get a list of all memory models.
  */
 function getMemoryModels(memoryModels) {
@@ -42,7 +48,8 @@ function getMemoryModels(memoryModels) {
  * @param prevVersion boolean determining whether an older is chosen
  * @param undo boolean determining whether the undo button has been pressed
  */
-    function chooseMemoryModel(id, prevVersion, undo) {
+function chooseMemoryModel(id, prevVersion, undo) {
+    enableDiagramView();
     var version = null;
 
     if (prevVersion) {
@@ -70,6 +77,7 @@ function getMemmoryModelById(memoryModel) {
 
     currentMemoryModel = memoryModel;
     frameIdEndPositions = [];
+    memoryModelLoaded = true;
     if (firstTime) highestVersion = currentMemoryModel.version;
 
     firstTime = false;
