@@ -38,6 +38,10 @@ messageHandler.identifyMessage = function(message, websocket){
             messageHandler.setModelPositions(message,websocket);
             break;
 
+        case "updateMemoryModel":
+            messageHandler.updateMemoryModel(message, websocket);
+            break;
+
         default :
             websocket.send(JSON.stringify({msgType:"errorMsg", data:"MessageHandler: unknown msgType received="}));
             break;
@@ -179,6 +183,20 @@ messageHandler.setModelPositions = function(message,websocket){
     });
 
 }
+
+messageHandler.updateMemoryModel = function(message,websocket){
+    console.log(message.data);
+    var memoryModel = message.data;
+
+    queries.updateMemoryModel(memoryModel, function (err, result) {
+        if (err)
+            return websocket.send(JSON.stringify({msgType:"errorMsg", data: "Something went wrong in the delete query, unexpected error: " +err}));
+
+        return websocket.send(JSON.stringify({msgType:"updatedMemoryModel", data: "Updated memorymodel completed"}));
+    });
+
+}
+
 
 module.exports = messageHandler;
 

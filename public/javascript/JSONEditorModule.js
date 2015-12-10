@@ -97,7 +97,7 @@ function initJSONEditor() {
         $("#getJSON").click(function saveMemoryModel() {
             //var json = editor.get();
             var newMemoryModel = editor.get();
-            sendMessage({msgType:'makeNewModel', data:newMemoryModel});
+            sendMessage({msgType:'updateMemoryModel', data:newMemoryModel});
 
             //alert(JSON.stringify(json, null, 2));
         });

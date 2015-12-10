@@ -107,7 +107,8 @@ queries.createNewMemoryModel = function (data, cb) {
                             mmid: mmid,
                             modelName: modelName,
                             version: version,
-                            frameLocations: []
+                            frameLocations: [],
+                            memoryModel: memoryModel
                         })
                         .run(conn, function (err, result) {
                             if (err) reject(err);
@@ -164,6 +165,51 @@ queries.setModelPositions = function (positions, mmid, version, cb) {
                 cb(err, result);
             })
     });
+};
+
+queries.updateMemoryModel = function(memoryModel, cb){
+    var mmid = memoryModel.mmid;
+    var version = memoryModel.version;
+    var id = memoryModel.id;
+    memoryModel.version +=1;
+    var history = {mmid: memoryModel.mmid,
+        version: memoryModel.version,
+        memoryModel: memoryModel.memoryModel,
+        modelName: memoryModel.modelName,
+        frameLocations: memoryModel.frameLocations
+    };
+    var modelInfo = {id: memoryModel.id, owner: memoryModel.owner, language: memoryModel.language};
+
+
+    return new Promise(function (resolve, reject) {
+        getConnection(function (err, conn) {
+            if (err) return cb(err, null);
+            r.db('percolatordb').table("ModelInfo")
+                .filter(r.row('id').eq(id))
+                .update(modelInfo)
+                .run(conn, function (err, result) {
+                    if (err) reject(err);
+                    else resolve(result);
+                })
+        });
+
+    }).then(function (data) {
+            return new Promise(function (resolve, reject) {
+                getConnection(function (err, conn) {
+                    if (err) return cb(err, null);
+                    r.db('percolatordb').table("History")
+                        .filter(r.row('mmid').eq(mmid).and(r.row("version").eq(version)))
+                        .update(history)
+                        .run(conn, function (err, result) {
+                            if (err) reject(err);
+                            else resolve(result);
+                        });
+                });
+
+            });
+        }).catch(function (err) {
+            return cb(new Error("something went wrong! " + err), null);
+        })
 };
 
 
