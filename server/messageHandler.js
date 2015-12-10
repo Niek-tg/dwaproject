@@ -68,11 +68,9 @@ messageHandler.subscribeToChanges = function(message, websocket){
  */
 messageHandler.getAllMemoryModels = function(message, websocket){
     queries.getAll(function (err, result) {
-        if(err)
-            return websocket.send(JSON.stringify({msgType: "errorMsg", data:err}));
+        if(err) return websocket.send(JSON.stringify({msgType: "errorMsg", data:err}));
 
-        if (!result)
-            return websocket.send(JSON.stringify({msgType: "errorMsg", data: "Something went wrong in the getAll query: No memory models were found!"}));
+        if (!result) return websocket.send(JSON.stringify({msgType: "errorMsg", data: "Something went wrong in the getAll query: No memory models were found!"}));
 
         var resultsArray = [];
 
@@ -82,7 +80,7 @@ messageHandler.getAllMemoryModels = function(message, websocket){
             resultsArray.forEach(function (result) {
                 if (r.mmid === result.mmid) {
                     inList = true;
-                    if (r.version > result.version) {
+                     if (r.version > result.version) {
                         resultsArray[i] = r;
                     }
                 }

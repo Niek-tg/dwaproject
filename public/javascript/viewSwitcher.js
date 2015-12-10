@@ -31,7 +31,8 @@ function enableCodeView(){
     $('#memoryModel').load('./../views/codeview.html',function(cb){
         initJSONEditor();
     });
-    currentView = "codeView";
+
+    setCurrentView("codeView");
 }
 
 $(document).ready(function(){
