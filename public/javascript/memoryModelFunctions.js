@@ -32,6 +32,7 @@ function drawMemoryModel(model, frameLocations) {
         promises.push(drawFrames("Heap", model.heap, frameLocations));
 
         Promise.all(promises).then(function () {
+            sendMessage({msgType: 'updateFramePositions', data:{frameIdEndPositions: frameIdEndPositions, mmid: currentMemoryModel.mmid, version: currentMemoryModel.version }});
             resolve();
         });
     })
@@ -54,8 +55,9 @@ function drawFrames(location, frames, frameLocations) {
             "<div class='frameLabel'>" + location + "</div>"
         );
 
-        var top, left;
+
         frames.forEach(function (item) {
+            var top, left;
             frameLocations.forEach(function (frameLocation) {
                 if (item.id === parseInt(frameLocation.id)) {
                     console.log(frameLocation);
@@ -76,8 +78,6 @@ function drawFrames(location, frames, frameLocations) {
             if (item.funcs)drawFuncs('#' + item.id, item.funcs);
             savePositionsOfframes(item.id)
         });
-
-        sendMessage({msgType: 'updateFramePositions', data:{frameIdEndPositions: frameIdEndPositions, mmid: currentMemoryModel.mmid, version: currentMemoryModel.version }});
         resolve();
     });
 }
