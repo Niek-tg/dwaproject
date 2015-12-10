@@ -50,11 +50,14 @@ messageHandler.identifyMessage = function(message, websocket){
  * @param websocket Connection to the websocket so a new message can be sent to client
  */
 messageHandler.subscribeToChanges = function(message, websocket){
-    websocket.currentMMID = message.data.mmid;
-    queries.subscribeToChanges(message.data.mmid, function(err, cursor) {
+    console.log(message);
+    websocket.currentID = message.data.id;
+    queries.subscribeToChanges(message.data.id, function(err, cursor) {
+        console.log("IN MESSAGEHANDLER SUBSCRIBE");
         cursor.each(
             function(err, row) {
                 if (err) throw err;
+                console.log("IN CURSOREACH SUBSCRIBE");
                 websocket.send(JSON.stringify({msgType :"newData",data:row}))
             }
         );

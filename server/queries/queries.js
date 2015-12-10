@@ -38,12 +38,12 @@ queries.getMemoryModelById = function (mmid, cb) {
             .table('ModelInfo')
             .eqJoin('id',
             r.db('percolatordb')
-                .table('History'),
+                .table('Layout'),
             {index: 'mmid'})
             .zip() // merge the two fields into a single document.
             .eqJoin('mmid',
             r.db('percolatordb')
-                .table('Layout'),
+                .table('History'),
             {index: 'mmid'})
             .zip() // merge the two fields into a single document.
             .orderBy(r.desc('version'))
@@ -152,6 +152,7 @@ queries.createNewMemoryModel = function (data, cb) {
 };
 
 queries.subscribeToChanges = function (id, cb) {
+    console.log("ID", id);
     getConnection(function (err, conn) {
         if (err) return cb(err, null);
 
@@ -160,6 +161,7 @@ queries.subscribeToChanges = function (id, cb) {
             .get(id)
             .changes()
             .run(conn, function (err, cursor) {
+                console.log("IN RUN OF SUBSCRIBE TO CHANGES");
                 cb(err, cursor);
             })
     });
