@@ -90,6 +90,7 @@ queries.createNewMemoryModel = function (data, cb) {
     var modelName = data.modelName;
     var mmid;
     var version = 0;
+    var memoryModel = data.memoryModel;
 
     return new Promise(function (resolve, reject) {
         getConnection(function (err, conn) {
@@ -115,7 +116,8 @@ queries.createNewMemoryModel = function (data, cb) {
                         .insert({
                             mmid: mmid,
                             modelName: modelName,
-                            version: version
+                            version: version,
+                            memoryModel : memoryModel
                         })
                         .run(conn, function (err, result) {
                             if (err) reject(err);
@@ -144,7 +146,9 @@ queries.createNewMemoryModel = function (data, cb) {
         .then(function () {
             return cb(null, {
                 message: "memorymodel succesfully added",
-                mmid: mmid
+                mmid: mmid,
+                modelVersion: version,
+                modelName: modelName
             });
         }).catch(function (err) {
             return cb(new Error("something went wrong! " + err), null);

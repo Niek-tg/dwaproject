@@ -131,11 +131,13 @@ messageHandler.makeNewModel = function(message, websocket){
     var language = message.data.language;
     var owner = message.data.owner;
     var modelName = message.data.modelName;
+    var memoryModel = message.data.memoryModel;
 
-    queries.createNewMemoryModel({language: language, owner: owner, modelName: modelName},function(err, result){
+    queries.createNewMemoryModel({language: language, owner: owner, modelName: modelName, memoryModel: memoryModel},function(err, result){
         if(err) websocket.send(JSON.stringify({msgType:"errorMsg", data:"Something went wrong in query createNewMemorymodel " + err}));
 
-       websocket.send(JSON.stringify({msgType:"makeNewModel", data: result}));
+       websocket.send(JSON.stringify({msgType:"getAllModels", data: result}));
+        console.log(JSON.stringify(result));
     });
 };
 
