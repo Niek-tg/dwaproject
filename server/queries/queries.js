@@ -146,9 +146,7 @@ queries.createNewMemoryModel = function (data, cb) {
         .then(function () {
             return cb(null, {
                 message: "memorymodel succesfully added",
-                mmid: mmid,
-                modelVersion: version,
-                modelName: modelName
+                mmid: mmid
             });
         }).catch(function (err) {
             return cb(new Error("something went wrong! " + err), null);
