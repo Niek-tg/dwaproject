@@ -79,11 +79,11 @@ function getMemmoryModelById(memoryModel) {
     setModelInfo();
 
     console.log(currentMemoryModel.modelName + " ID = " + currentMemoryModel.id);
-
+    console.log("IDDDDD= ", currentMemoryModel.id);
         // SET MEMORY MODEL ON SCREEN
         drawMemoryModel(memoryModel.memoryModel, memoryModel.frameLocations).then(function () {
             initPlumb();
-            sendMessage({msgType: "subscribeToChanges", data: {mmid: currentMemoryModel.id}});
+            sendMessage({msgType: "subscribeToChanges", data: {id: currentMemoryModel.id}});
         });
     }
 
