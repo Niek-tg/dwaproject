@@ -7,7 +7,6 @@ var config = require(__dirname +'/../config.js');
 
 var ModelInfo = require('./models/thinkyModels.js').ModelInfo;
 var History = require('./models/thinkyModels.js').History;
-var Layout = require('./models/thinkyModels.js').Layout;
 
 function runSeed(cb){
     var connection = null;
@@ -100,33 +99,9 @@ function runSeed(cb){
             });
         })
     }).then(function(){
-        return new Promise(function(resolve, reject) {
-            fs.readFile(__dirname + "/data/layout.json", 'utf8', function (err, data) {
-                if (err) reject(err);
-                resolve(JSON.parse(data));
-            })
-        })
-    }).then(function(seedData){
-        return new Promise(function(resolve, reject) {
-
-            var aantal = seedData.length;
-            var curDone = 0;
-            seedData.forEach(function(seed){
-                new Layout(seed).save().then(function(result) {
-                    curDone++;
-                    if(curDone == aantal) resolve(result);
-                }).error(function(error) {
-                    console.log(error);
-                    reject(error);
-                });
-            });
-        })
-    }).then(function(){
         // create indexes
         History.ensureIndex("mmid");
         History.ensureIndex("version");
-        Layout.ensureIndex("mmid");
-        Layout.ensureIndex("modelVersion");
     }).finally(function(){
         console.log("database seeded");
         cb();
