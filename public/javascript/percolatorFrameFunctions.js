@@ -2,24 +2,27 @@ var diagramContainer = $("#diagramContainer");
 
 function toggleActive(me){
 
+
+
     var isActive = ($(me).hasClass("active")) ? true : false;
+    var image = (isActive)? "close-icon.png" : "open-icon.png";
+    var display = (isActive)? "block" : "none";
+    var css;
     var grandparent = $(me).parent().parent();
+    if((grandparent).attr('id') == "allMemoryModels") css = (isActive)? { width: '15%', minWidth: "300px"  } : { width: '50', minWidth: "0" };
+    else css = (isActive)? { width: '8%', minWidth: "150px"  } : { width: '50', minWidth: "0" };
 
+    console.log((grandparent).attr('id'));
 
-    if(isActive){
-        $(grandparent).children().not($(me).parent()).css( "display", "block" );
-        $(grandparent).css({ width: '15%', minWidth: "300px"  }, 500);
-        $(me).removeClass("active");
-        $(me).text("close");
-        calculateDiagramContainerSize()
-    }
-    else {
-        $(grandparent).children().not($(me).parent()).css( "display", "none" );
-        $(grandparent).css({ width: '50', minWidth: "0" }, 500);
-        $(me).addClass("active");
-        $(me).text("open");
-        calculateDiagramContainerSize()
-    }
+    var notToHide = ".rotate270, .togglable";
+
+    $(grandparent).children().not(notToHide).css( "display", display );
+    $(grandparent).css(css, 500);
+    if(isActive)$(me).removeClass("active");
+    else $(me).addClass("active");
+    $(me).html("<img src='./images/"+ image +"' />");
+    calculateDiagramContainerSize()
+
 }
 
 function calculateDiagramContainerSize(){
@@ -29,4 +32,5 @@ function calculateDiagramContainerSize(){
     $("#diagramContainer").css({maxWidth : size - 3 + "px", "width": "100%"});
     jsPlumb.repaintEverything();
 }
+
 calculateDiagramContainerSize();

@@ -48,6 +48,8 @@
     padding: 0 2%;
     height: 30px;
     margin: 10px 0;
+    clear: both;
+    min-width: 200px;
     /*border: 1px solid blue;*/
 }
 

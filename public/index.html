@@ -33,43 +33,55 @@
     <div id="header" class="col-md-12 col-sm-12">
         <!--Percolator Logo-->
         <div id="logo" class="col-md-3 col-sm-3" >
-         <img src="./images/lg_percolator.png" class="img-responsive" alt="Responsive image">
+            <img src="./images/lg_percolator.png" class="img-responsive" alt="Responsive image">
         </div>
+        <div class="col-md-offset-10 col-md-2 viewButtons">
+            <button onclick="enableCodeView()" title="Code view"><img src="./images/code_icon.png">Code view</button>
+            <button onclick="enableDiagramView()" title="Diagram view"><img src="./images/diagram_icon.png">Diagram view</button>
+        </div>
+
         <!--Header Title: Owner & name of Memorymodel-->
         <div id="headerTitle" class="col-md-9 col-sm-9">
             <h5 id="owner"></h5>
             <h5 id="modelName"></h5>
             <h5 id="version"></h5>
         </div>
-        <!--Undo button -->
-        <div class="col-md-offset-10 col-md-2 ">
-            <button onclick="enableCodeView()">Code view</button>
-            <button onclick="enableDiagramView()">Diagram view</button>
-        </div>
     </div>
     <!--List of all memorymodels-->
     <div id="allMemoryModels" class="col-md-2 col-sm-2">
         <div class="togglable">
-            <button onclick="toggleActive(this)">close</button>
+            <button onclick="toggleActive(this)" class="toggleButton right"><img src="./images/close-icon.png" alt="close"/> </button>
         </div>
+
+        <div class="rotate270 rotatedTextPositioning all">All memory models</div>
+
       <ul class="list-group" id="memoryModelsList"></ul>
+
+    </div>
+
+    <div id="memoryModelVersions" class="col-md-2 col-sm-2">
+        <div class="togglable">
+            <button onclick="toggleActive(this)" class="toggleButton right"><img src="./images/close-icon.png" alt="close"/></button>
+        </div>
+
+        <div class="rotate270 rotatedTextPositioning version">Version list</div>
+
+        <div>
+            <button class="btn btn-primary" id="undoButton" onclick="chooseMemoryModel('id', true, true)"> Undo action</button>
+            <ul class="list-group" id="memoryModelVersionList"></ul>
+        </div>
+
     </div>
     <!-- Memorymodel-->
     <div id="memoryModel" class="col-md-8 col-sm-8">
         <div id="diagramContainer">
 
             <div class="clr"></div>
+
         </div>
     </div>
     <!--Memorymodel versions-->
-    <div id="memoryModelVersions" class="col-md-2 col-sm-2">
-        <div class="togglable">
-            <button onclick="toggleActive(this)">close</button>
-        </div>
-        <button class="btn btn-primary" id="undoButton" onclick="chooseMemoryModel('id', true, true)"> Undo action</button>
-        <h5 id="labelVersionList" style="display: none">Memorymodel Versions</h5>
-        <ul class="list-group" id="memoryModelVersionList"></ul>
-    </div>
+
 
     <script>
         $(window).resize(function () {
