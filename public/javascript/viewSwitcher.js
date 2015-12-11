@@ -34,7 +34,3 @@ function enableCodeView(){
 
     setCurrentView("codeView");
 }
-
-$(document).ready(function(){
-    enableDiagramView();
-});

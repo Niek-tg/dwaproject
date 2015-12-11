@@ -1,92 +1,55 @@
-html{
-    font-family: sans-serif;
-}
-* { padding: 0; margin: 0; }
-
-.left{
-    float:left;
-}
-.right{
-    float:right;
-}
-
-#header {
-    width: 100%;
-    float:left;
-    background: #f2f2f2; /* Old browsers */
-    background: -moz-linear-gradient(top,  #f2f2f2 0%, #dddddd 100%);
-    background: -webkit-linear-gradient(top,  #f2f2f2 0%,#dddddd 100%);
-    background: linear-gradient(to bottom,  #f2f2f2 0%,#dddddd 100%);
-    border-bottom: 1px solid #402D1C;
-}
-    #logo {
-        float: left;
-        max-width: 15%;
-        min-width: 301px;
+/*
+    BASIC STYLING
+*/
+    html{
+        font-family: sans-serif;
     }
-        #logo img{
-            width: 100%;
-        }
-    #headerTitle{
-        padding: 20px;
+    * { padding: 0; margin: 0; }
+
+    .left{
         float:left;
-        width: calc(70% - 40px);
+    }
+    .right{
+        float:right;
+    }
+    .clr{
+        clear:both;
     }
 
-        #headerTitle h5{
-            color: #261A10;
+/*
+    HEADER
+*/
+    #header {
+        width: 100%;
+        float:left;
+        background: #f2f2f2; /* Old browsers */
+        background: -moz-linear-gradient(top,  #f2f2f2 0%, #dddddd 100%);
+        background: -webkit-linear-gradient(top,  #f2f2f2 0%,#dddddd 100%);
+        background: linear-gradient(to bottom,  #f2f2f2 0%,#dddddd 100%);
+        border-bottom: 1px solid #402D1C;
+    }
+        #logo {
+            float: left;
+            max-width: 15%;
+            min-width: 301px;
+        }
+            #logo img{
+                width: 100%;
+            }
+        #headerTitle {
+            padding: 20px;
+            float: left;
+            height: 65px;
         }
 
-#allMemoryModels {
-    width: calc(15% - 1px);
-    background-color: #f2f2f2;
-    min-width: 300px;
-    height: calc(100vh - 119px);
-}
+            #headerTitle h5{
+                color: #261A10;
+            }
 
-#memoryModelVersions{
-    background-color: #f2f2f2;
-    width: 8%;
-    min-width: 150px;
-    height: calc(100vh - 119px);
-}
-
-
-.rotate270 {
-    -webkit-transform: rotate(270deg);
-    -webkit-transform-origin: left top;
-    -moz-transform: rotate(270deg);
-    -moz-transform-origin: left top;
-    -ms-transform: rotate(270deg);
-    -ms-transform-origin: left top;
-    -o-transform: rotate(270deg);
-    -o-transform-origin: left top;
-    transform: rotate(270deg);
-    float:left;
-    transform-origin: 90% 35px;
-}
-
-.rotatedTextPositioning.all{
-    float: right;
-    display: inline-block;
-    width: 141px;
-    line-height: 45px;
-    position: relative;
-    z-index: 1;
-}
-.rotatedTextPositioning.version{
-    float: right;
-    display: block;
-    width: 80px;
-    line-height: 45px;
-    position: relative;
-    z-index: 1;
-}
-
-.viewButtons{
-    float: left;
-    width: 140px;
-}
+    .viewButtons{
+        float: left;
+        width: 140px;
+    }
     .viewButtons button {
         border: none;
         padding: 11px 10px;
@@ -95,11 +58,12 @@ html{
         width: 140px;
         text-align: left;
         border-bottom: 1px solid #ccc;
+        border-left: 1px solid #ccc;
         border-right: 1px solid #ccc;
     }
-        .viewButtons button:last-child{
-            border-bottom:none;
-        }
+    .viewButtons button:last-child{
+        border-bottom:none;
+    }
 
     .viewButtons button img{
         max-width: 30px;
@@ -108,79 +72,156 @@ html{
         display: inline-block;
     }
 
-#allMemoryModels {
-    border-right: 1px solid #402D1C;
-    float:left;
-}
+/*
+   ALL MEMORY MODELS
+*/
+    #allMemoryModels {
+        width: calc(15% - 1px);
+        background-color: #f2f2f2;
+        min-width: 300px;
+        height: calc(100vh - 119px);
+        border-right: 1px solid #402D1C;
+        float:left;
+    }
+
     #memoryModelsList{
         float: left;
         border: 1px solid #ccc;
         width: 83%;
         margin-top: -45px;
-    }
-        #memoryModelsList .list-group-item {
-            border: none;
-            padding: 3px 5%;
-            float: left;
-            width: 90%;
-            list-style: none;
-            text-align: justify;
-            border-bottom: 1px solid #DCDCDC;
-            margin-bottom: 0px;
-            font-size: 15px;
-            line-height: 20px;
-            word-break: break-word;
-        }
-            #memoryModelsList .list-group-item a {
-                text-decoration: none;
-                color: #000;
-            }
-
-.togglable {
-    float: left;
-    width: 100%;
-}
-
-#undoButton{
-    display: none;
-    margin: 5px;
-}
-
-button.toggleButton{
-    border: 1px solid #402D1C;
-    border-top:none;
-    border-right: none;
-    border-radius: 1px;
-    cursor: pointer;
-    width: 50px;
-    height: 50px;
-    position: relative;
-    z-index: 5;
-    background: transparent;
-}
-    button.toggleButton img {
-        max-width: 70%;
+        max-height: 366px;
+        overflow-y: auto;
     }
 
+/*
+    MEMORY MODEL VERSIONS
+*/
 
-#memoryModelVersions {
-    border-right: 1px solid #402D1C;
-    float:left;
-}
-    #memoryModelVersionList{
+    #memoryModelVersions{
+        background-color: #f2f2f2;
+        width: 8%;
+        min-width: 150px;
+        height: calc(100vh - 119px);
+        border-right: 1px solid #402D1C;
+        float:left;
+    }
+
+    #versionPositioning{
+        margin-top:-45px;
+    }
+
+    #undoButton {
+        display: none;
+        float: left;
+        border: none;
+        padding: 5px;
+        width: calc(68% + 1px);
+    }
+
+    #memoryModelVersionList {
         list-style: none;
+        float: left;
+        width: 68%;
+        border-top: 1px solid #ccc;
+        border-right: 1px solid #ccc;
+        max-height: 366px;
+        overflow-y: auto;
     }
-        #memoryModelVersionList a {
+    #memoryModelVersionList a {
+        text-decoration: none;
+        color: #000;
+    }
+
+/*
+    POSITIONING OF THE ROTATED TEXT
+*/
+
+    .rotate270 {
+        -webkit-transform: rotate(270deg);
+        -webkit-transform-origin: left top;
+        -moz-transform: rotate(270deg);
+        -moz-transform-origin: left top;
+        -ms-transform: rotate(270deg);
+        -ms-transform-origin: left top;
+        -o-transform: rotate(270deg);
+        -o-transform-origin: left top;
+        transform: rotate(270deg);
+        float:left;
+        transform-origin: 90% 35px;
+    }
+
+        .rotatedTextPositioning.all{
+            float: right;
+            display: inline-block;
+            width: 141px;
+            line-height: 45px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .rotatedTextPositioning.version{
+            float: right;
+            display: block;
+            width: 80px;
+            line-height: 45px;
+            position: relative;
+            z-index: 1;
+        }
+
+/*
+    STYLING OF THE LISTS INSIDE THE TOGGLABLE DIVS
+*/
+    #memoryModelsList .list-group-item,
+    #memoryModelVersionList .list-group-item{
+        border: none;
+        padding: 3px 5%;
+        float: left;
+        width: 90%;
+        list-style: none;
+        text-align: justify;
+        border-bottom: 1px solid #DCDCDC;
+        margin-bottom: 0px;
+        font-size: 15px;
+        line-height: 20px;
+        word-break: break-word;
+    }
+        #memoryModelsList .list-group-item a {
             text-decoration: none;
             color: #000;
         }
 
-#memoryModel {
-    float: left;
-    height: calc(100vh - 119px);
-    max-width: calc(100% - 602px);
-    width: 100%;
-}
-.clr{
-    clear:both;
-}
+/*
+    TOGGLE BUTTONS STYLING
+*/
+
+    .togglable {
+        float: left;
+        width: 100%;
+    }
+
+    button.toggleButton{
+        border: 1px solid #402D1C;
+        border-top:none;
+        border-right: none;
+        border-radius: 1px;
+        cursor: pointer;
+        width: 50px;
+        height: 50px;
+        position: relative;
+        z-index: 5;
+        background: transparent;
+    }
+        button.toggleButton img {
+            max-width: 70%;
+        }
+
+/*
+    POSITIONING OF THE MEMORY MODEL DIV
+*/
+
+    #memoryModel {
+        float: left;
+        height: calc(100vh - 119px);
+        max-width: calc(100% - 602px);
+        width: 100%;
+    }

@@ -2,8 +2,6 @@ var diagramContainer = $("#diagramContainer");
 
 function toggleActive(me){
 
-
-
     var isActive = ($(me).hasClass("active")) ? true : false;
     var image = (isActive)? "close-icon.png" : "open-icon.png";
     var display = (isActive)? "block" : "none";
@@ -11,8 +9,6 @@ function toggleActive(me){
     var grandparent = $(me).parent().parent();
     if((grandparent).attr('id') == "allMemoryModels") css = (isActive)? { width: '15%', minWidth: "300px"  } : { width: '50', minWidth: "0" };
     else css = (isActive)? { width: '8%', minWidth: "150px"  } : { width: '50', minWidth: "0" };
-
-    console.log((grandparent).attr('id'));
 
     var notToHide = ".rotate270, .togglable";
 

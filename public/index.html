@@ -47,6 +47,7 @@
             <h5 id="version"></h5>
         </div>
     </div>
+
     <!--List of all memorymodels-->
     <div id="allMemoryModels" class="col-md-2 col-sm-2">
         <div class="togglable">
@@ -59,6 +60,7 @@
 
     </div>
 
+    <!--List of the memory versions-->
     <div id="memoryModelVersions" class="col-md-2 col-sm-2">
         <div class="togglable">
             <button onclick="toggleActive(this)" class="toggleButton right"><img src="./images/close-icon.png" alt="close"/></button>
@@ -66,12 +68,13 @@
 
         <div class="rotate270 rotatedTextPositioning version">Version list</div>
 
-        <div>
-            <button class="btn btn-primary" id="undoButton" onclick="chooseMemoryModel('id', true, true)"> Undo action</button>
+        <div id="versionPositioning">
+            <button class="btn btn-primary" id="undoButton" onclick="chooseMemoryModel('id', true, true)">Undo</button>
             <ul class="list-group" id="memoryModelVersionList"></ul>
         </div>
 
     </div>
+
     <!-- Memorymodel-->
     <div id="memoryModel" class="col-md-8 col-sm-8">
         <div id="diagramContainer">
@@ -80,17 +83,16 @@
 
         </div>
     </div>
-    <!--Memorymodel versions-->
 
-
-    <script>
-        $(window).resize(function () {
-            jsPlumb.repaintEverything();
-        })
-    </script>
 </div>
-
-
-
 </body>
+<script>
+    $(document).ready(function(){
+        enableDiagramView();
+    });
+
+    $(window).resize(function () {
+        jsPlumb.repaintEverything();
+    })
+</script>
 </html>
