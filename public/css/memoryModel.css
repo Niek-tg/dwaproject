@@ -29,7 +29,6 @@
     position: absolute;
     top: 0;
     display: table;
-    margin: 3%;
     /*height: 160px;*/
     max-width: 900px;
     width: calc(94% - 20px);
