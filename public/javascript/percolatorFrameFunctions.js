@@ -25,8 +25,8 @@ function calculateDiagramContainerSize(){
     var size = $(window).width();
     size -= $("#allMemoryModels").outerWidth();
     size -= $("#memoryModelVersions").outerWidth();
+    console.log(size);
     $("#diagramContainer").css({maxWidth : size - 3 + "px", "width": "100%"});
     jsPlumb.repaintEverything();
+    console.log("calculated diagram container size")
 }
-
-calculateDiagramContainerSize();

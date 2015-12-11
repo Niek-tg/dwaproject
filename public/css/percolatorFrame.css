@@ -222,6 +222,6 @@
     #memoryModel {
         float: left;
         height: calc(100vh - 119px);
-        max-width: calc(100% - 602px);
+        max-width: calc(100% - (8% + 302px));
         width: 100%;
     }
