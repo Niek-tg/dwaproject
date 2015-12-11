@@ -97,8 +97,9 @@ function initJSONEditor() {
         $("#getJSON").click(function saveMemoryModel() {
             //var json = editor.get();
             var newMemoryModel = editor.get();
-            websocket.send(JSON.stringify({msgType:'saveModel', data:newMemoryModel}));
-            alert(JSON.stringify(json, null, 2));
+            sendMessage({msgType:'updateMemoryModel', data:newMemoryModel});
+
+            //alert(JSON.stringify(json, null, 2));
         });
 
 }

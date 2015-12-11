@@ -31,6 +31,7 @@ connection.onmessage = function(message) {
     console.log(data);
     switch(data.msgType){
         case "newData":
+            console.log("newData = on");
             updateMemoryModel(data);
             break;
         case "getAllModels":
@@ -40,6 +41,9 @@ connection.onmessage = function(message) {
             getMemmoryModelById(data.data);
             break;
         case "positionsUpdated":
+            console.log(data.data);
+            break;
+        case "updatedMemoryModel":
             console.log(data.data);
             break;
         case "errorMsg":

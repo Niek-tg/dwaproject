@@ -41,14 +41,9 @@ queries.getMemoryModelById = function (mmid, cb) {
                 .table('History'),
             {index: 'mmid'})
             .zip() // merge the two fields into a single document.
-            .eqJoin('mmid',
-            r.db('percolatordb')
-                .table('Layout'),
-            {index: 'mmid'})
-            .zip() // merge the two fields into a single document.
             .orderBy(r.desc('version'))
             .filter(function (row) {
-                return row("mmid").eq(mmid).and(row("version").eq(row('modelVersion')));
+                return row("mmid").eq(mmid);
             })
             .coerceTo('array') // making a array instead of object
             .run(conn, function (err, result) {
@@ -66,16 +61,11 @@ queries.getMemoryModelByIdAndVersion = function (mmid, version, cb) {
             r.db('percolatordb')
                 .table('History'),
             {index: 'mmid'})
-            .zip() // merge the two fields into a single document.
-            .eqJoin('mmid',
-            r.db('percolatordb')
-                .table('Layout'),
-            {index: 'mmid'})
-            .zip() // merge the two fields into a single document.
+            .zip()// merge the two fields into a single document.
             .orderBy(r.desc('version'))
             .filter(function (row) {
-                return ( row("mmid").eq(mmid).and(row("version").eq(version)).and(row("version").eq(row('modelVersion'))));
-            }).without('modelVersion')
+                return ( row("mmid").eq(mmid).and(row("version").eq(version)));
+            })
             .coerceTo('array') // making a array instead of object
             .run(conn, function (err, result) {
                 cb(err, result);
@@ -90,6 +80,7 @@ queries.createNewMemoryModel = function (data, cb) {
     var modelName = data.modelName;
     var mmid;
     var version = 0;
+    var memoryModel = data.memoryModel;
 
     return new Promise(function (resolve, reject) {
         getConnection(function (err, conn) {
@@ -115,7 +106,9 @@ queries.createNewMemoryModel = function (data, cb) {
                         .insert({
                             mmid: mmid,
                             modelName: modelName,
-                            version: version
+                            version: version,
+                            frameLocations: [],
+                            memoryModel: memoryModel
                         })
                         .run(conn, function (err, result) {
                             if (err) reject(err);
@@ -123,25 +116,7 @@ queries.createNewMemoryModel = function (data, cb) {
                         });
                 });
             });
-        }).then(function (data) {
-            return new Promise(function (resolve, reject) {
-                getConnection(function (err, conn) {
-                    if (err) return reject(err, null);
-                    r.db('percolatordb')
-                        .table('Layout')
-                        .insert({
-                            mmid: mmid,
-                            modelVersion: version,
-                            frameLocations: []
-                        })
-                        .run(conn, function (err, result) {
-                            if (err) reject(err);
-                            else resolve(result);
-                        });
-                });
-            });
-        })
-        .then(function () {
+        }).then(function () {
             return cb(null, {
                 message: "memorymodel succesfully added",
                 mmid: mmid
@@ -152,6 +127,7 @@ queries.createNewMemoryModel = function (data, cb) {
 };
 
 queries.subscribeToChanges = function (id, cb) {
+    console.log("ID", id);
     getConnection(function (err, conn) {
         if (err) return cb(err, null);
 
@@ -160,53 +136,80 @@ queries.subscribeToChanges = function (id, cb) {
             .get(id)
             .changes()
             .run(conn, function (err, cursor) {
+                console.log("IN RUN OF SUBSCRIBE TO CHANGES");
                 cb(err, cursor);
             })
     });
 };
 
 queries.deleteLatestversion = function (mmid, version, cb) {
-    return new Promise(function (resolve, reject) {
-        getConnection(function (err, conn) {
-            if (err) return reject(err, null);
-            r.db('percolatordb')
-                .table('History')
-                .filter(r.row('mmid').eq(mmid).and(r.row("version").eq(version)))
-                .delete()
-                .run(conn, function (err, result) {
-                    if (err) reject(err);
-                    else resolve(result);
-                });
-        });
-    }).then(function (data) {
-            return new Promise(function (resolve, reject) {
-                getConnection(function (err, conn) {
-                    if (err) return reject(err, null);
-                    r.db('percolatordb')
-                        .table('Layout')
-                        .filter(r.row('mmid').eq(mmid).and(r.row("modelVersion").eq(version)))
-                        .delete()
-                        .run(conn, function (err, result) {
-                            if (err) reject(err);
-                            else resolve(result);
-                        });
-                });
+    getConnection(function (err, conn) {
+        if (err) return cb(err, null);
+        r.db('percolatordb')
+            .table('History')
+            .filter(r.row('mmid').eq(mmid).and(r.row("version").eq(version)))
+            .delete()
+            .run(conn, function (err, result) {
+                cb(err, result);
             });
-        }).catch(function (err) {
-            return cb(new Error("something went wrong! " + err), null);
-        })
+    });
 };
 
 queries.setModelPositions = function (positions, mmid, version, cb) {
     getConnection(function (err, conn) {
         if (err) return cb(err, null);
-        r.db('percolatordb').table("Layout")
-            .filter(r.row('mmid').eq(mmid).and(r.row("modelVersion").eq(version)))
+        r.db('percolatordb').table("History")
+            .filter(r.row('mmid').eq(mmid).and(r.row("version").eq(version)))
             .update({"frameLocations": positions})
             .run(conn, function (err, result) {
                 cb(err, result);
             })
     });
+};
+
+queries.updateMemoryModel = function(memoryModel, cb){
+    var mmid = memoryModel.mmid;
+    var version = memoryModel.version;
+    var id = memoryModel.id;
+    memoryModel.version +=1;
+    var history = {mmid: memoryModel.mmid,
+        version: memoryModel.version,
+        memoryModel: memoryModel.memoryModel,
+        modelName: memoryModel.modelName,
+        frameLocations: memoryModel.frameLocations
+    };
+    var modelInfo = {id: memoryModel.id, owner: memoryModel.owner, language: memoryModel.language};
+
+
+    return new Promise(function (resolve, reject) {
+        getConnection(function (err, conn) {
+            if (err) return cb(err, null);
+            r.db('percolatordb').table("ModelInfo")
+                .filter(r.row('id').eq(id))
+                .update(modelInfo)
+                .run(conn, function (err, result) {
+                    if (err) reject(err);
+                    else resolve(result);
+                })
+        });
+
+    }).then(function (data) {
+            return new Promise(function (resolve, reject) {
+                getConnection(function (err, conn) {
+                    if (err) return cb(err, null);
+                    r.db('percolatordb').table("History")
+                        .filter(r.row('mmid').eq(mmid).and(r.row("version").eq(version)))
+                        .update(history)
+                        .run(conn, function (err, result) {
+                            if (err) reject(err);
+                            else resolve(result);
+                        });
+                });
+
+            });
+        }).catch(function (err) {
+            return cb(new Error("something went wrong! " + err), null);
+        })
 };
 
 
