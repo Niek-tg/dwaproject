@@ -1,9 +1,7 @@
 /*
  * E2E User story 1
  * */
-//
-//var webdriverio = require('webdriverio');
-//var expect = require('chai').expect;
+
 
 
 /*
@@ -27,29 +25,45 @@
 // required libraries
 var webdriverio = require('webdriverio');
 var expect = require('chai').expect;
+var siteURL        = "http://localhost:3000/";
 
 describe("E2E test get homepage", function () {
 
-    this.timeout(20000);
-    var browser;
+    this.timeout(50000);
 
-    before(function (done) {
-        browser = webdriverio.remote({
-            desiredCapabilities: {
-                browserName: 'chrome'
-            }
-        });
-        browser.init(done)
+    var allBrowsers, masterBrowser, first_browser, second_browser;
+
+    before( function (done) {
+        var browserSpecs = {
+            master: { desiredCapabilities: {browserName: 'firefox'}},
+            first:  { desiredCapabilities: {browserName: 'firefox'}},
+            second:  { desiredCapabilities: {browserName: 'firefox'}}
+        };
+
+        allBrowsers = webdriverio.multiremote( browserSpecs );
+        masterBrowser = allBrowsers.select("master");
+        first_browser  = allBrowsers.select("first");
+        second_browser = allBrowsers.select("second");
+
+        allBrowsers
+            .init()
+            .url(siteURL)
+            .then(function() {
+                done();
+            });
+    });
+
+    after( function(done) {
+        allBrowsers.end(done);
     });
 
 
     it("Should retrieve memorymodel information", function (done) {
-        browser
-            .url("http://localhost:3000")
+        return first_browser
             .waitForExist("#92524038-f0e2-4db2-ad01-321a9040df02", 2000)
             .element('#92524038-f0e2-4db2-ad01-321a9040df02')
             .click().then(function (result) {
-                browser
+                first_browser
                     .waitForValue("#owner", 2000)
                     .getText("#headerTitle h5").then(function (result) {
                         console.log(result[0]);
@@ -60,15 +74,18 @@ describe("E2E test get homepage", function () {
                         expect(result[2]).to.equal("Version: 2");
                         done();
                     });
+            })
+            .catch(function(exception){
+                done(exception);
             });
     });
 
     it("Should undo action", function (done) {
-        browser
+        return first_browser
             .waitForExist("#undoButton", 2000)
             .element("#undoButton")
             .click().then(function (result) {
-                browser
+                first_browser
                     .waitForValue("#owner", 2000)
                     .getText("#headerTitle h5").then(function (result) {
                         console.log("Should undo action");
@@ -86,11 +103,11 @@ describe("E2E test get homepage", function () {
     });
 
     it("Should retrieve other version when clicked", function (done) {
-        browser
+        return first_browser
             .waitForExist("#1ee3f80e-c107-4fa2-9bc4-4f24887d1754", 2000)    //
             .element('#1ee3f80e-c107-4fa2-9bc4-4f24887d1754')
             .click().then(function (result) {
-                browser
+                first_browser
                     .waitForExist("#versionListItem2", 2000)
                     .element("#versionListItem2")
                     .click().then(function (result) {
@@ -110,9 +127,6 @@ describe("E2E test get homepage", function () {
             });
     });
 
-    after(function (done) {
-        browser.end(done);
-    });
 
 })
 ;

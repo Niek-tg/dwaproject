@@ -43,8 +43,13 @@ connection.onmessage = function(message) {
         case "positionsUpdated":
             console.log(data.data);
             break;
-        case "deleteModel":
-            console.log('HIJ KOMT IN DE DELETEMODEL AAN DE CLIENT KANT');
+        case "updateMemoryModel":
+            getMemoryModels(data.data);
+            break;
+        case "updateList":
+            console.log('HIJ KOMT IN DE UPDATE LISt');
+            console.log(data.data)
+            getVersionList(true);
             break;
         case "errorMsg":
             console.log(data.data);

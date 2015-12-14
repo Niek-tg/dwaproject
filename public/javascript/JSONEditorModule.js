@@ -94,14 +94,24 @@ function initJSONEditor() {
         var saveMemorymodelButton = $('<input/>').attr({type: 'button', id: 'getJSON', value: 'Opslaan'});
         $("#JSONButtons").append(saveMemorymodelButton);
 
-        $("#getJSON").click(function saveMemoryModel() {
-            var newMemoryModel = editor.get();
-            console.log(newMemoryModel);
-            sendMessage({msgType:'updateMemoryModel', data:newMemoryModel});
-            console.log("Msg verzonden udatememorymodel");
+    $("#getJSON").click(function saveMemoryModel() {
+        var newMemoryModel = editor.get();
+        sendMessage({msgType: 'updateMemoryModel', data: newMemoryModel});
+        alert('Memory model is updated');
+    });
 
-        });
-
+    $(window).bind('keydown', function (event) {
+        if ((event.ctrlKey || event.metaKey) && event.which == 83) {
+            switch (String.fromCharCode(event.which).toLowerCase()) {
+                case 's':
+                    event.preventDefault();
+                    var newMemoryModel = editor.get();
+                    alert('ctrl-s - fired - memory model is updated');
+                    sendMessage({msgType: 'updateMemoryModel', data: newMemoryModel});
+                    break;
+            }
+        }
+    });
 }
 
 /**

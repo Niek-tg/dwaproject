@@ -1,4 +1,5 @@
 var queries = require('./queries/queries.js');
+var app = require('../app.js');
 
 /**
  * Exportable object that stores all methods of the messageHandler

@@ -56,9 +56,9 @@ function drawFrames(location, model, frameLocations) {
             $('#' + location + i).append(
                 "<div class='frameLabel'>" + location + "</div>"
             );
-
-            frames.forEach(function (item) {
-                var top, left;
+            
+        frames.forEach(function (item) {
+            var top, left;
 
                 frameLocations.forEach(function (frameLocation) {
                     if (item.id === parseInt(frameLocation.id)) {
@@ -230,8 +230,8 @@ var updatePositionFrames = function (frameId) {
     var left = (100 / parent.outerWidth()) * (id.offset().left - id.parent().offset().left);
 
     var i = 0;
-    console.log("UPDATING");
-    console.log(frameIdEndPositions);
+
+
     frameIdEndPositions.forEach(function (frame) {
         if (frameId === frame.id) {
             frameIdEndPositions[i] = {id: frame.id, top: top, left: left};

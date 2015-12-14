@@ -22,19 +22,24 @@ else if(RUNSEEDANDSERVER){
 }
 else startWebservers();
 
+
 var theHttpServer;
+var webSocketServer;
 
 //Function to set up HTTP server with settings from config.js
 
+
 function startWebservers(){
 
-    var theExpressApp = express();
     theHttpServer = http.createServer();
-    theExpressApp.use(bodyParser.json());
 
-    var webSocketServer = new ws.Server({
+    webSocketServer = new ws.Server({
         server: theHttpServer
     });
+
+    var theExpressApp = express();
+
+    theExpressApp.use(bodyParser.json());
 
     theExpressApp.use(express.static(path.join(__dirname, 'public')));
     theExpressApp.use('/api/memorymodels', memorymodelRoute);
@@ -51,10 +56,15 @@ function startWebservers(){
         });
     });
 
-
     theHttpServer.on('request', theExpressApp).listen(config.express.port, function() {
         console.log("The Server is listening on port 3000.")
     });
 }
 
-module.exports = theHttpServer;
+function broadCastToAll(message){
+    webSocketServer.clients.forEach(function (client) {
+        client.send(JSON.stringify({message: message}));
+    })
+}
+
+module.exports = {theHttpServer : theHttpServer, broadCastToAll: broadCastToAll};

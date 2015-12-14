@@ -143,16 +143,17 @@ queries.subscribeToChanges = function (id, cb) {
 };
 
 queries.deleteLatestversion = function (mmid, version, cb) {
-    getConnection(function (err, conn) {
-        if (err) return cb(err, null);
-        r.db('percolatordb')
-            .table('History')
-            .filter(r.row('mmid').eq(mmid).and(r.row("version").eq(version)))
-            .delete()
-            .run(conn, function (err, result) {
-                cb(err, result);
-            });
-    });
+        getConnection(function (err, conn) {
+            if (err) return cb(err, null);
+            r.db('percolatordb')
+                .table('History')
+                .filter(r.row('mmid').eq(mmid).and(r.row("version").eq(version)))
+                .delete()
+                .run(conn, function (err, result) {
+                    cb(err, result);
+                });
+        });
+
 };
 
 queries.setModelPositions = function (positions, mmid, version, cb) {
@@ -167,12 +168,12 @@ queries.setModelPositions = function (positions, mmid, version, cb) {
     });
 };
 
- queries.updateMemoryModel = function(memoryModel, cb){
+queries.updateMemoryModel = function (memoryModel, cb) {
     var mmid = memoryModel.mmid;
     var version = memoryModel.version;
     var id = memoryModel.id;
 
-    memoryModel.version +=1;
+    memoryModel.version += 1;
     var history = {
         mmid: memoryModel.mmid,
         version: memoryModel.version,
