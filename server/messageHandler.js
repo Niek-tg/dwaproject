@@ -159,12 +159,17 @@ messageHandler.makeNewModel = function(message, websocket){
  * @param websocket
  */
 messageHandler.deleteModel = function(message, websocket){
-    var mmid = message.data.id;
+    var mmid = message.data.mmid;
+    console.log('Dit zit er in deleteModel mmid')
+    console.log(mmid)
     var version = parseInt(message.data.version);
+    console.log('Dit zit er in deleteModel version')
+    console.log(version)
     queries.deleteLatestversion(mmid, version, function (err, result) {
         if (err)
             return websocket.send(JSON.stringify({msgType:"errorMsg", data: "Something went wrong in the delete query, unexpected error: " +err}));
-
+        console.log('dit zit in de result van de delete querie');
+        console.log(result);
         return websocket.send(JSON.stringify({msgType:"deleteModel", data: "Delete request completed"}));
     });
 };

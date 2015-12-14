@@ -46,6 +46,10 @@ connection.onmessage = function(message) {
         case "updateMemoryModel":
             getMemoryModels(data.data);
             break;
+        case "deleteModel":
+
+            console.log('HIJ KOMT IN DE DELETEMODEL AAN DE CLIENT KANT');
+            break;
         case "errorMsg":
             console.log(data.data);
             break;
