@@ -43,8 +43,8 @@ connection.onmessage = function(message) {
         case "positionsUpdated":
             console.log(data.data);
             break;
-        case "updatedMemoryModel":
-            console.log(data.data);
+        case "updateMemoryModel":
+            getMemoryModels(data.data);
             break;
         case "errorMsg":
             console.log(data.data);
