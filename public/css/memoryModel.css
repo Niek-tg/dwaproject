@@ -29,7 +29,6 @@
     position: absolute;
     top: 0;
     display: table;
-    margin: 3%;
     /*height: 160px;*/
     max-width: 900px;
     width: calc(94% - 20px);
@@ -48,6 +47,8 @@
     padding: 0 2%;
     height: 30px;
     margin: 10px 0;
+    clear: both;
+    min-width: 200px;
     /*border: 1px solid blue;*/
 }
 
