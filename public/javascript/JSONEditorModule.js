@@ -25,6 +25,10 @@
  *  When the "nieuw geheugenmodel" button is clicked it will create a new memorymodel.
  */
 
+//Boolean to make sure the event listener on keydown isn't created twice.
+var keydownExists = false;
+
+
 function initJSONEditor() {
 
     var container = document.getElementById('jsoneditor');
@@ -100,7 +104,10 @@ function initJSONEditor() {
         alert('Memory model is updated');
     });
 
+
+if(keydownExists === false){
     $(window).bind('keydown', function (event) {
+        keydownExists = true;
         if ((event.ctrlKey || event.metaKey) && event.which == 83) {
             console.log("Keydown event aangeroepen");
             switch (String.fromCharCode(event.which).toLowerCase()) {
@@ -112,7 +119,7 @@ function initJSONEditor() {
                     break;
             }
         }
-    });
+    })}
 }
 
 /**
