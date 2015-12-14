@@ -167,26 +167,28 @@ queries.setModelPositions = function (positions, mmid, version, cb) {
     });
 };
 
-queries.updateMemoryModel = function(memoryModel, cb){
+ queries.updateMemoryModel = function(memoryModel, cb){
     var mmid = memoryModel.mmid;
     var version = memoryModel.version;
     var id = memoryModel.id;
+
     memoryModel.version +=1;
-    var history = {mmid: memoryModel.mmid,
+    var history = {
+        mmid: memoryModel.mmid,
         version: memoryModel.version,
         memoryModel: memoryModel.memoryModel,
         modelName: memoryModel.modelName,
         frameLocations: memoryModel.frameLocations
     };
-    var modelInfo = {id: memoryModel.id, owner: memoryModel.owner, language: memoryModel.language};
+    var modelInfo = {id: memoryModel.mmid, owner: memoryModel.owner, language: memoryModel.language};
 
 
     return new Promise(function (resolve, reject) {
         getConnection(function (err, conn) {
             if (err) return cb(err, null);
             r.db('percolatordb').table("ModelInfo")
-                .filter(r.row('id').eq(id))
-                .update(modelInfo)
+                .filter(r.row('id').eq(mmid))
+                .replace(modelInfo)
                 .run(conn, function (err, result) {
                     if (err) reject(err);
                     else resolve(result);
@@ -198,15 +200,21 @@ queries.updateMemoryModel = function(memoryModel, cb){
                 getConnection(function (err, conn) {
                     if (err) return cb(err, null);
                     r.db('percolatordb').table("History")
-                        .filter(r.row('mmid').eq(mmid).and(r.row("version").eq(version)))
-                        .update(history)
+                        .insert(history)
                         .run(conn, function (err, result) {
+                            console.log(result);
                             if (err) reject(err);
                             else resolve(result);
+
                         });
                 });
 
             });
+        }).then(function(data){
+         return cb(null, {
+             message: "memorymodel succesfully updated",
+             mmid: mmid
+         });
         }).catch(function (err) {
             return cb(new Error("something went wrong! " + err), null);
         })

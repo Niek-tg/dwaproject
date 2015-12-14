@@ -42,6 +42,11 @@ messageHandler.identifyMessage = function(message, websocket){
             messageHandler.updateMemoryModel(message, websocket);
             break;
 
+        case "testCase":
+            console.log("Komt in testcaseKomt in testcaseKomt in testcaseKomt in testcaseKomt in testcaseKomt " +
+                "in testcaseKomt in testcaseKomt in testcaseKomt in testcaseKomt in testcaseKomt in testcase");
+            break;
+
         default :
             websocket.send(JSON.stringify({msgType:"errorMsg", data:"MessageHandler: unknown msgType received="}));
             break;
@@ -154,12 +159,17 @@ messageHandler.makeNewModel = function(message, websocket){
  * @param websocket
  */
 messageHandler.deleteModel = function(message, websocket){
-    var mmid = message.data.id;
+    var mmid = message.data.mmid;
+    console.log('Dit zit er in deleteModel mmid')
+    console.log(mmid)
     var version = parseInt(message.data.version);
+    console.log('Dit zit er in deleteModel version')
+    console.log(version)
     queries.deleteLatestversion(mmid, version, function (err, result) {
         if (err)
             return websocket.send(JSON.stringify({msgType:"errorMsg", data: "Something went wrong in the delete query, unexpected error: " +err}));
-
+        console.log('dit zit in de result van de delete querie');
+        console.log(result);
         return websocket.send(JSON.stringify({msgType:"deleteModel", data: "Delete request completed"}));
     });
 };
@@ -182,20 +192,24 @@ messageHandler.setModelPositions = function(message,websocket){
         return websocket.send(JSON.stringify({msgType:"positionsUpdated", data: "Positions updated completed"}));
     });
 
-}
+};
 
 messageHandler.updateMemoryModel = function(message,websocket){
-    console.log(message.data);
     var memoryModel = message.data;
 
     queries.updateMemoryModel(memoryModel, function (err, result) {
-        if (err)
-            return websocket.send(JSON.stringify({msgType:"errorMsg", data: "Something went wrong in the delete query, unexpected error: " +err}));
+        if (err){
+            return websocket.send(JSON.stringify({msgType:"errorMsg", data: "Something went wrong in the updateMemoryModel query, unexpected error: " + err}));
+        }
 
-        return websocket.send(JSON.stringify({msgType:"updatedMemoryModel", data: "Updated memorymodel completed"}));
+        else{
+
+           return messageHandler.getAllMemoryModels(message,websocket);
+        }
+
     });
 
-}
+};
 
 
 module.exports = messageHandler;

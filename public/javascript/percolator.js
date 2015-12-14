@@ -27,12 +27,15 @@ var frameIdEndPositions = [];
 function getMemoryModels(memoryModels) {
     // SET MEMORY MODELS IN SELECTBOX
     var sel = document.getElementById('memoryModelsList');
-
+    console.log("hallooooo memmorymodels " + memoryModels);
+    sel.innerHTML = "";
     for (var i = 0; i < memoryModels.length; i++) {
+        console.log("Hij is in de lijstfunctie");
         $(sel).append("<li class='list-group-item'><a id='" + memoryModels[i].mmid + "'onclick='chooseMemoryModel(this, false, false)' data-value='" +
             memoryModels[i].mmid + "' data-version='" + memoryModels[i].version + "'  href='#'>" +
             memoryModels[i].modelName + "</a></li>")
     }
+
 }
 
 /**
