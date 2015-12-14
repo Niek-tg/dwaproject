@@ -97,9 +97,10 @@ function initJSONEditor() {
         $("#getJSON").click(function saveMemoryModel() {
             //var json = editor.get();
             var newMemoryModel = editor.get();
+            console.log(newMemoryModel);
             sendMessage({msgType:'updateMemoryModel', data:newMemoryModel});
+            console.log("Msg verzonden udatememorymodel");
 
-            //alert(JSON.stringify(json, null, 2));
         });
 
 }
