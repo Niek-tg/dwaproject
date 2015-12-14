@@ -142,7 +142,7 @@ queries.subscribeToChanges = function (id, cb) {
     });
 };
 
-queries.deleteLatestversion = function (mmid, version, cb) {
+    queries.deleteLatestversion = function (mmid, version, cb) {
     getConnection(function (err, conn) {
         if (err) return cb(err, null);
         r.db('percolatordb')
