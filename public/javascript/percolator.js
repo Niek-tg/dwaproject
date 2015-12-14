@@ -46,6 +46,7 @@ function getMemoryModels(memoryModels) {
  * @param undo boolean determining whether the undo button has been pressed
  */
 function chooseMemoryModel(id, prevVersion, undo) {
+    $(".viewButtons").css("display", "block");
     enableDiagramView();
     var version = null;
 
@@ -59,7 +60,8 @@ function chooseMemoryModel(id, prevVersion, undo) {
             id = currentMemoryModel.mmid;
         }
     } else {
-        id = $(id).attr('data-value');
+        if (typeof id !== "string") id = $(id).attr('data-value');
+
         firstTime = true;
     }
     sendMessage({msgType: 'getModelById', id: id, version: version});
@@ -109,11 +111,11 @@ function getVersionList(update) {
 
     $("#labelVersionList").css("display", "block");
     var sel = document.getElementById('memoryModelVersionList');
-        $(sel).empty();
-        for (var i = 1; i < highestVersion + 1; i++) {
-            $(sel).append("<li class='list-group-item'><a id='versionListItem" + i + "'  onclick='chooseMemoryModel(this , true, false)' data-value='" +
-                currentMemoryModel.mmid + "' data-version='" + i + "'  href='#'>  Version: " + i + "</a></li>")
-        }
+    $(sel).empty();
+    for (var i = 1; i < highestVersion + 1; i++) {
+        $(sel).append("<li class='list-group-item'><a id='versionListItem" + i + "'  onclick='chooseMemoryModel(this , true, false)' data-value='" +
+            currentMemoryModel.mmid + "' data-version='" + i + "'  href='#'>  Version: " + i + "</a></li>")
+    }
 
 }
 
