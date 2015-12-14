@@ -18,53 +18,31 @@
 //    }
 //};
 
+
 /**
  *  Adds a JSON editor on the page and fills it with data selected from the Memorymodel list.
  *  When the "opslaan" button is clicked it will be saved to the database.
+ *  When the "nieuw geheugenmodel" button is clicked it will create a new memorymodel.
  */
-
 
 function initJSONEditor() {
 
     var container = document.getElementById('jsoneditor');
-    var editor = new JSONEditor(container);
     var selectedMemoryModel = currentMemoryModel;
-    editor.set(selectedMemoryModel);
-
+    var editor = new JSONEditor(container, options, selectedMemoryModel );
     var newMemorymodelButton = $('<input/>').attr({type: 'button', id: 'setJSON', value: 'Nieuw geheugenmodel'});
+
     $("#JSONButtons").append(newMemorymodelButton);
 
     $("#setJSON").click(function newMemoryModel() {
-        var modelInfo = {
-            'language': '',
-            'owner': '',
-            'mmid': 21,
-            'modelName': '',
-            'version': 0,
-            'memoryModel': {
-                stack: [{
-                    id: '',
-                    name: '',
-                    order: '',
-                    vars: [
-                        {
-                            id: '',
-                            name: '',
-                            value: '',
-                            undefined: '',
-                            reference: ''
-                        }
-                    ],
-                    funcs: [
-                        {
-                            id: '',
-                            name: '',
-                            reference: ''
-                        }
-                    ]
-                }],
-                heap: [
-                    {
+            var modelInfo = {
+                'language': '',
+                'owner': '',
+                'mmid': 21,
+                'modelName': '',
+                'version': 0,
+                'memoryModel': {
+                    stack: [{
                         id: '',
                         name: '',
                         order: '',
@@ -84,15 +62,37 @@ function initJSONEditor() {
                                 reference: ''
                             }
                         ]
-                    }
-                ]
-            }
-        };
-        editor.set(modelInfo);
-    });
+                    }],
+                    heap: [
+                        {
+                            id: '',
+                            name: '',
+                            order: '',
+                            vars: [
+                                {
+                                    id: '',
+                                    name: '',
+                                    value: '',
+                                    undefined: '',
+                                    reference: ''
+                                }
+                            ],
+                            funcs: [
+                                {
+                                    id: '',
+                                    name: '',
+                                    reference: ''
+                                }
+                            ]
+                        }
+                    ]
+                }
+            };
+            editor.set(modelInfo);
+        });
 
-    var saveMemorymodelButton = $('<input/>').attr({type: 'button', id: 'getJSON', value: 'Opslaan'});
-    $("#JSONButtons").append(saveMemorymodelButton);
+        var saveMemorymodelButton = $('<input/>').attr({type: 'button', id: 'getJSON', value: 'Opslaan'});
+        $("#JSONButtons").append(saveMemorymodelButton);
 
     $("#getJSON").click(function saveMemoryModel() {
         var newMemoryModel = editor.get();
@@ -114,6 +114,28 @@ function initJSONEditor() {
     });
 }
 
+/**
+ * Function to disable some fields en values in de JSON editor.
+ * @type {{editable: Function}}
+ */
+
+var options = {
+    editable: function (object) {
+        console.log(object);
+        switch (object.field) {
+            case 'mmid':
+            case 'id':
+                return false;
+            break;
+
+            default:
+                return {
+                    field: false,
+                    value: true
+                };
+        }
+    }
+};
 
 
 

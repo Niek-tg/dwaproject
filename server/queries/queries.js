@@ -206,10 +206,16 @@ queries.updateMemoryModel = function (memoryModel, cb) {
                             console.log(result);
                             if (err) reject(err);
                             else resolve(result);
+
                         });
                 });
 
             });
+        }).then(function(data){
+         return cb(null, {
+             message: "memorymodel succesfully updated",
+             mmid: mmid
+         });
         }).catch(function (err) {
             return cb(new Error("something went wrong! " + err), null);
         })
