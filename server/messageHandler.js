@@ -195,6 +195,7 @@ messageHandler.setModelPositions = function(message,websocket){
 };
 
 messageHandler.updateMemoryModel = function(message,websocket){
+    var memoryModel = message.data;
 
     queries.updateMemoryModel(memoryModel, function (err, result) {
         if (err){

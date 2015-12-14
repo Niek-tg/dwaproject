@@ -211,7 +211,6 @@ queries.setModelPositions = function (positions, mmid, version, cb) {
 
             });
         }).then(function(data){
-            console.log("hij komt hier toch niet.");
          return cb(null, {
              message: "memorymodel succesfully updated",
              mmid: mmid
