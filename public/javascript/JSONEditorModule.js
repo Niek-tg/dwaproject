@@ -32,17 +32,39 @@ function initJSONEditor() {
     editor.set(selectedMemoryModel);
 
     var newMemorymodelButton = $('<input/>').attr({type: 'button', id: 'setJSON', value: 'Nieuw geheugenmodel'});
-        $("#JSONButtons").append(newMemorymodelButton);
+    $("#JSONButtons").append(newMemorymodelButton);
 
-        $("#setJSON").click(function newMemoryModel() {
-            var modelInfo = {
-                'language': '',
-                'owner': '',
-                'mmid': 21,
-                'modelName': '',
-                'version': 0,
-                'memoryModel': {
-                    stack: [{
+    $("#setJSON").click(function newMemoryModel() {
+        var modelInfo = {
+            'language': '',
+            'owner': '',
+            'mmid': 21,
+            'modelName': '',
+            'version': 0,
+            'memoryModel': {
+                stack: [{
+                    id: '',
+                    name: '',
+                    order: '',
+                    vars: [
+                        {
+                            id: '',
+                            name: '',
+                            value: '',
+                            undefined: '',
+                            reference: ''
+                        }
+                    ],
+                    funcs: [
+                        {
+                            id: '',
+                            name: '',
+                            reference: ''
+                        }
+                    ]
+                }],
+                heap: [
+                    {
                         id: '',
                         name: '',
                         order: '',
@@ -62,47 +84,34 @@ function initJSONEditor() {
                                 reference: ''
                             }
                         ]
-                    }],
-                    heap: [
-                        {
-                            id: '',
-                            name: '',
-                            order: '',
-                            vars: [
-                                {
-                                    id: '',
-                                    name: '',
-                                    value: '',
-                                    undefined: '',
-                                    reference: ''
-                                }
-                            ],
-                            funcs: [
-                                {
-                                    id: '',
-                                    name: '',
-                                    reference: ''
-                                }
-                            ]
-                        }
-                    ]
-                }
-            };
-            editor.set(modelInfo);
-        });
+                    }
+                ]
+            }
+        };
+        editor.set(modelInfo);
+    });
 
-        var saveMemorymodelButton = $('<input/>').attr({type: 'button', id: 'getJSON', value: 'Opslaan'});
-        $("#JSONButtons").append(saveMemorymodelButton);
+    var saveMemorymodelButton = $('<input/>').attr({type: 'button', id: 'getJSON', value: 'Opslaan'});
+    $("#JSONButtons").append(saveMemorymodelButton);
 
-        $("#getJSON").click(function saveMemoryModel() {
-            //var json = editor.get();
-            var newMemoryModel = editor.get();
-            console.log(newMemoryModel);
-            sendMessage({msgType:'updateMemoryModel', data:newMemoryModel});
-            console.log("Msg verzonden udatememorymodel");
+    $("#getJSON").click(function saveMemoryModel() {
+        var newMemoryModel = editor.get();
+        sendMessage({msgType: 'updateMemoryModel', data: newMemoryModel});
+        alert('Memory model is updated');
+    });
 
-        });
-
+    $(window).bind('keydown', function (event) {
+        if ((event.ctrlKey || event.metaKey) && event.which == 83) {
+            switch (String.fromCharCode(event.which).toLowerCase()) {
+                case 's':
+                    event.preventDefault();
+                    var newMemoryModel = editor.get();
+                    alert('ctrl-s - fired - memory model is updated');
+                    sendMessage({msgType: 'updateMemoryModel', data: newMemoryModel});
+                    break;
+            }
+        }
+    });
 }
 
 

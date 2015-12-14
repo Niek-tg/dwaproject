@@ -1,4 +1,5 @@
 var queries = require('./queries/queries.js');
+var app = require('../app.js');
 
 /**
  * Exportable object that stores all methods of the messageHandler
@@ -10,9 +11,9 @@ var messageHandler = {};
  * @param message Message that has been received from client
  * @param websocket Connection to the websocket so a new message can be sent to client later
  */
-messageHandler.identifyMessage = function(message, websocket){
-   message = JSON.parse(message);
-    switch(message.msgType){
+messageHandler.identifyMessage = function (message, websocket) {
+    message = JSON.parse(message);
+    switch (message.msgType) {
 
         case "subscribeToChanges":
             messageHandler.subscribeToChanges(message, websocket);
@@ -35,7 +36,7 @@ messageHandler.identifyMessage = function(message, websocket){
             break;
 
         case "updateFramePositions":
-            messageHandler.setModelPositions(message,websocket);
+            messageHandler.setModelPositions(message, websocket);
             break;
 
         case "updateMemoryModel":
@@ -48,26 +49,27 @@ messageHandler.identifyMessage = function(message, websocket){
             break;
 
         default :
-            websocket.send(JSON.stringify({msgType:"errorMsg", data:"MessageHandler: unknown msgType received="}));
+            websocket.send(JSON.stringify({msgType: "errorMsg", data: "MessageHandler: unknown msgType received="}));
             break;
     }
 };
+
 
 /**
  * Subscribes to a memory model and sends new updates of the model to the client
  * @param message Message that has been received from client, has a mmid in this case
  * @param websocket Connection to the websocket so a new message can be sent to client
  */
-messageHandler.subscribeToChanges = function(message, websocket){
+messageHandler.subscribeToChanges = function (message, websocket) {
     console.log(message);
     websocket.currentID = message.data.id;
-    queries.subscribeToChanges(message.data.id, function(err, cursor) {
+    queries.subscribeToChanges(message.data.id, function (err, cursor) {
         console.log("IN MESSAGEHANDLER SUBSCRIBE");
         cursor.each(
-            function(err, row) {
+            function (err, row) {
                 if (err) throw err;
                 console.log("IN CURSOREACH SUBSCRIBE");
-                websocket.send(JSON.stringify({msgType :"newData",data:row}))
+                websocket.send(JSON.stringify({msgType: "newData", data: row}))
             }
         );
     });
@@ -78,11 +80,14 @@ messageHandler.subscribeToChanges = function(message, websocket){
  * @param message
  * @param websocket
  */
-messageHandler.getAllMemoryModels = function(message, websocket){
+messageHandler.getAllMemoryModels = function (message, websocket) {
     queries.getAll(function (err, result) {
-        if(err) return websocket.send(JSON.stringify({msgType: "errorMsg", data:err}));
+        if (err) return websocket.send(JSON.stringify({msgType: "errorMsg", data: err}));
 
-        if (!result) return websocket.send(JSON.stringify({msgType: "errorMsg", data: "Something went wrong in the getAll query: No memory models were found!"}));
+        if (!result) return websocket.send(JSON.stringify({
+            msgType: "errorMsg",
+            data: "Something went wrong in the getAll query: No memory models were found!"
+        }));
 
         var resultsArray = [];
 
@@ -92,7 +97,7 @@ messageHandler.getAllMemoryModels = function(message, websocket){
             resultsArray.forEach(function (result) {
                 if (r.mmid === result.mmid) {
                     inList = true;
-                     if (r.version > result.version) {
+                    if (r.version > result.version) {
                         resultsArray[i] = r;
                     }
                 }
@@ -112,7 +117,7 @@ messageHandler.getAllMemoryModels = function(message, websocket){
  * @param message
  * @param websocket
  */
-messageHandler.getModelById = function(message, websocket){
+messageHandler.getModelById = function (message, websocket) {
     console.log(message.id)
     var mmid = message.id;
     var version = (message.version) ? parseInt(message.version) : null;
@@ -120,18 +125,24 @@ messageHandler.getModelById = function(message, websocket){
     if (mmid) {
         var cb = function (err, result) {
             if (err)
-               return websocket.send(JSON.stringify({msgType:"errorMsg",data:err}));
+                return websocket.send(JSON.stringify({msgType: "errorMsg", data: err}));
 
             if (result[0])
-               return websocket.send(JSON.stringify({msgType:"getModelById", data: result[0]}));
+                return websocket.send(JSON.stringify({msgType: "getModelById", data: result[0]}));
 
-            return websocket.send(JSON.stringify({msgType:"errorMsg", data:"Something went wrong in the getModelById callback: ID or version does not exist"}));
+            return websocket.send(JSON.stringify({
+                msgType: "errorMsg",
+                data: "Something went wrong in the getModelById callback: ID or version does not exist"
+            }));
         };
 
         if (version) queries.getMemoryModelByIdAndVersion(mmid, version, cb);
         else query = queries.getMemoryModelById(mmid, cb);
 
-    } else return websocket.send(JSON.stringify({msgType:"errorMsg", data:"Something went wrong in getModelById query: not a valid id"}));
+    } else return websocket.send(JSON.stringify({
+        msgType: "errorMsg",
+        data: "Something went wrong in getModelById query: not a valid id"
+    }));
 };
 
 /**
@@ -139,16 +150,24 @@ messageHandler.getModelById = function(message, websocket){
  * @param message
  * @param websocket
  */
-messageHandler.makeNewModel = function(message, websocket){
+messageHandler.makeNewModel = function (message, websocket) {
     var language = message.data.language;
     var owner = message.data.owner;
     var modelName = message.data.modelName;
     var memoryModel = message.data.memoryModel;
 
-    queries.createNewMemoryModel({language: language, owner: owner, modelName: modelName, memoryModel: memoryModel},function(err, result){
-        if(err) websocket.send(JSON.stringify({msgType:"errorMsg", data:"Something went wrong in query createNewMemorymodel " + err}));
+    queries.createNewMemoryModel({
+        language: language,
+        owner: owner,
+        modelName: modelName,
+        memoryModel: memoryModel
+    }, function (err, result) {
+        if (err) websocket.send(JSON.stringify({
+            msgType: "errorMsg",
+            data: "Something went wrong in query createNewMemorymodel " + err
+        }));
 
-       websocket.send(JSON.stringify({msgType:"getAllModels", data: result}));
+        websocket.send(JSON.stringify({msgType: "getAllModels", data: result}));
         console.log(JSON.stringify(result));
     });
 };
@@ -158,7 +177,7 @@ messageHandler.makeNewModel = function(message, websocket){
  * @param message
  * @param websocket
  */
-messageHandler.deleteModel = function(message, websocket){
+messageHandler.deleteModel = function (message, websocket) {
     var mmid = message.data.mmid;
     console.log('Dit zit er in deleteModel mmid')
     console.log(mmid)
@@ -166,11 +185,17 @@ messageHandler.deleteModel = function(message, websocket){
     console.log('Dit zit er in deleteModel version')
     console.log(version)
     queries.deleteLatestversion(mmid, version, function (err, result) {
-        if (err)
-            return websocket.send(JSON.stringify({msgType:"errorMsg", data: "Something went wrong in the delete query, unexpected error: " +err}));
-        console.log('dit zit in de result van de delete querie');
-        console.log(result);
-        return websocket.send(JSON.stringify({msgType:"deleteModel", data: "Delete request completed"}));
+        if (err) {
+            return websocket.send(JSON.stringify({
+                msgType: "errorMsg",
+                data: "Something went wrong in the delete query, unexpected error: " + err
+            }));
+        } else {
+            console.log('Hij komt in de callback');
+            console.log(result);
+            app.broadCastToAll({msgType: "updateList", data: "Ik ben een test"});
+
+        }
     });
 };
 
@@ -180,31 +205,40 @@ messageHandler.deleteModel = function(message, websocket){
  * @param websocket
  */
 
-messageHandler.setModelPositions = function(message,websocket){
+messageHandler.setModelPositions = function (message, websocket) {
     var positions = message.data.frameIdEndPositions;
     var mmid = message.data.mmid;
     var version = message.data.version;
 
     queries.setModelPositions(positions, mmid, version, function (err, result) {
         if (err)
-            return websocket.send(JSON.stringify({msgType:"errorMsg", data: "Something went wrong in the delete query, unexpected error: " +err}));
+            return websocket.send(JSON.stringify({
+                msgType: "errorMsg",
+                data: "Something went wrong in the delete query, unexpected error: " + err
+            }));
 
-        return websocket.send(JSON.stringify({msgType:"positionsUpdated", data: "Positions updated completed"}));
+        return websocket.send(JSON.stringify({msgType: "positionsUpdated", data: "Positions updated completed"}));
     });
 
 };
 
-messageHandler.updateMemoryModel = function(message,websocket){
+messageHandler.updateMemoryModel = function (message, websocket) {
     var memoryModel = message.data;
 
     queries.updateMemoryModel(memoryModel, function (err, result) {
         console.log("Koekenzopeioeioieiooioioiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii");
-        if (err){
-            return websocket.send(JSON.stringify({msgType:"errorMsg", data: "Something went wrong in the delete query, unexpected error: " +err}));
+        if (err) {
+            return websocket.send(JSON.stringify({
+                msgType: "errorMsg",
+                data: "Something went wrong in the delete query, unexpected error: " + err
+            }));
         }
 
-        else{
-            return websocket.send(JSON.stringify({msgType:"updateMemoryModel", data: "Updated memorymodel completed"}));
+        else {
+            return websocket.send(JSON.stringify({
+                msgType: "updateMemoryModel",
+                data: "Updated memorymodel completed"
+            }));
         }
 
     });
