@@ -567,6 +567,7 @@
   background-color: white;
   padding: 0 2px;
   margin: 0;
+  position:relative;
 }
 
 .jsoneditor .search .frame table {
