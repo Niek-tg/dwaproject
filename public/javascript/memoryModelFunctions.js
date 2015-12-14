@@ -68,7 +68,14 @@ function drawFrames(location, model, frameLocations) {
                 });
 
                 var name = (item.name) ? item.name : "";
-                var style = (top && left) ? 'top: ' + top + "px; left: " + left + "%;" : "position:relative";
+                var style;
+
+                if(top === undefined) {
+                    style = "position:relative";
+                }
+                else{
+                    style = 'position: absolute; top: ' + top + "px; left: " + left + "%;"
+                }
 
                 $('#' + location + i).append(
                     "<div id='" + item.id + "' class='frame' style='" + style + "'> " +
@@ -205,14 +212,8 @@ var savePositionsOfframes = function (frameId) {
     var id = $('#' + frameId);
 
     var parent = $(id).parent();
-    //id.css({position: "absolute"});
     var top = (id.offset().top - id.parent().offset().top);
     var left = (100 / parent.outerWidth()) * (id.offset().left - id.parent().offset().left);
-    //var left = id.position().left;
-
-
-    //left = id.position().left;
-
 
     frameIdEndPositions.push({id: frameId, top: top, left: left});
 }
@@ -228,10 +229,9 @@ var updatePositionFrames = function (frameId) {
     var top = (id.offset().top - id.parent().offset().top);
     var left = (100 / parent.outerWidth()) * (id.offset().left - id.parent().offset().left);
 
-    //var left = id.offset().left;
     var i = 0;
-
-
+    console.log("UPDATING");
+    console.log(frameIdEndPositions);
     frameIdEndPositions.forEach(function (frame) {
         if (frameId === frame.id) {
             frameIdEndPositions[i] = {id: frame.id, top: top, left: left};
@@ -248,7 +248,3 @@ var updatePositionFrames = function (frameId) {
     });
 }
 
-function frameAlgoritm() {
-
-
-}
