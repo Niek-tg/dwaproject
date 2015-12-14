@@ -102,6 +102,7 @@ function initJSONEditor() {
 
     $(window).bind('keydown', function (event) {
         if ((event.ctrlKey || event.metaKey) && event.which == 83) {
+            console.log("Keydown event aangeroepen");
             switch (String.fromCharCode(event.which).toLowerCase()) {
                 case 's':
                     event.preventDefault();
@@ -125,12 +126,12 @@ var options = {
         switch (object.field) {
             case 'mmid':
             case 'id':
-                return false;
+                return true;
             break;
 
             default:
                 return {
-                    field: false,
+                    field: true,
                     value: true
                 };
         }
