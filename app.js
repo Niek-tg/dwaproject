@@ -7,6 +7,7 @@ var memorymodelRoute = require('./server/routes/memorymodels.js');
 var queries = require('./server/queries/queries.js');
 var messageHandler = require('./server/messageHandler.js');
 
+console.log('==============', messageHandler)
 var config     = require('./config.js');
 
 const ONLYSEED = (process.argv.slice(2) == 'onlySeed');
@@ -27,7 +28,6 @@ var theHttpServer;
 var webSocketServer;
 
 //Function to set up HTTP server with settings from config.js
-
 
 function startWebservers(){
 
@@ -61,10 +61,7 @@ function startWebservers(){
     });
 }
 
-function broadCastToAll(message){
-    webSocketServer.clients.forEach(function (client) {
-        client.send(JSON.stringify({message: message}));
-    })
-}
+var exp = {theHttpServer : theHttpServer};
 
-module.exports = {theHttpServer : theHttpServer, broadCastToAll: broadCastToAll};
+
+module.exports = exp;
