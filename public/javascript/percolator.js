@@ -44,6 +44,7 @@ function getMemoryModels(memoryModels) {
  * @param undo boolean determining whether the undo button has been pressed
  */
 function chooseMemoryModel(id, prevVersion, undo) {
+    $(".viewButtons").css("display", "block");
     enableDiagramView();
     var version = null;
 
@@ -57,7 +58,8 @@ function chooseMemoryModel(id, prevVersion, undo) {
             id = currentMemoryModel.mmid;
         }
     } else {
-        id = $(id).attr('data-value');
+        if (typeof id !== "string") id = $(id).attr('data-value');
+
         firstTime = true;
     }
     sendMessage({msgType: 'getModelById', id: id, version: version});

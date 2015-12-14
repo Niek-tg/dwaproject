@@ -49,6 +49,7 @@
     .viewButtons{
         float: left;
         width: 140px;
+        display: none;
     }
     .viewButtons button {
         border: none;
