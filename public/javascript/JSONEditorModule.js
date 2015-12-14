@@ -4,6 +4,19 @@
  */
 
 //var connection = new WebSocket("ws://localhost:3000");
+//
+//connection.onmessage = function (message) {
+//    var data = JSON.parse(message.data);
+//    console.log(data);
+//
+//    switch (data.msgType) {
+//        case "getModelById":
+//            setMemoryModel(data.data);
+//            console.log("komt in switch");
+//            break;
+//
+//    }
+//};
 
 
 /**
@@ -83,7 +96,10 @@ function initJSONEditor() {
 
         $("#getJSON").click(function saveMemoryModel() {
             var newMemoryModel = editor.get();
+            console.log(newMemoryModel);
             sendMessage({msgType:'updateMemoryModel', data:newMemoryModel});
+            console.log("Msg verzonden udatememorymodel");
+
         });
 
 }

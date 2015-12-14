@@ -29,10 +29,12 @@ function getMemoryModels(memoryModels) {
     var sel = document.getElementById('memoryModelsList');
 
     for (var i = 0; i < memoryModels.length; i++) {
+        console.log("Hij is in de lijstfunctie");
         $(sel).append("<li class='list-group-item'><a id='" + memoryModels[i].mmid + "'onclick='chooseMemoryModel(this, false, false)' data-value='" +
             memoryModels[i].mmid + "' data-version='" + memoryModels[i].version + "'  href='#'>" +
             memoryModels[i].modelName + "</a></li>")
     }
+
 }
 
 /**
@@ -79,7 +81,7 @@ function getMemmoryModelById(memoryModel) {
     setModelInfo();
 
     console.log(currentMemoryModel.modelName + " ID = " + currentMemoryModel.id);
-    console.log("IDDDDD= ", currentMemoryModel.id);
+    console.log("CURRENTMEMORYMODEL= ");
     console.log(currentMemoryModel);
         // SET MEMORY MODEL ON SCREEN
         drawMemoryModel(memoryModel.memoryModel, memoryModel.frameLocations).then(function () {
