@@ -27,7 +27,8 @@ var frameIdEndPositions = [];
 function getMemoryModels(memoryModels) {
     // SET MEMORY MODELS IN SELECTBOX
     var sel = document.getElementById('memoryModelsList');
-
+    console.log("hallooooo memmorymodels " + memoryModels);
+    sel.innerHTML = "";
     for (var i = 0; i < memoryModels.length; i++) {
         console.log("Hij is in de lijstfunctie");
         $(sel).append("<li class='list-group-item'><a id='" + memoryModels[i].mmid + "'onclick='chooseMemoryModel(this, false, false)' data-value='" +
@@ -83,12 +84,12 @@ function getMemmoryModelById(memoryModel) {
     console.log(currentMemoryModel.modelName + " ID = " + currentMemoryModel.id);
     console.log("CURRENTMEMORYMODEL= ");
     console.log(currentMemoryModel);
-        // SET MEMORY MODEL ON SCREEN
-        drawMemoryModel(memoryModel.memoryModel, memoryModel.frameLocations).then(function () {
-            initPlumb();
-            sendMessage({msgType: "subscribeToChanges", data: {id: currentMemoryModel.id}});
-        });
-    }
+    // SET MEMORY MODEL ON SCREEN
+    drawMemoryModel(memoryModel.memoryModel, memoryModel.frameLocations).then(function () {
+        initPlumb();
+        sendMessage({msgType: "subscribeToChanges", data: {id: currentMemoryModel.id}});
+    });
+}
 
 /**
  * Updates the owner, name and current version of the memory model, displayed on the screen
@@ -102,18 +103,18 @@ function setModelInfo() {
 /**
  * Determines and draws the list of versions available for the memory model
  */
-function getVersionList() {
+function getVersionList(update) {
     if (currentMemoryModel.version === highestVersion) $("#undoButton").css("display", "block");
     else $("#undoButton").css("display", "none");
 
     $("#labelVersionList").css("display", "block");
     var sel = document.getElementById('memoryModelVersionList');
-    $(sel).empty();
-    for (var i = 1; i < highestVersion + 1; i++) {
-        $(sel).append("<li class='list-group-item'><a id='versionListItem" + i + "'  onclick='chooseMemoryModel(this , true, false)' data-value='" +
-            currentMemoryModel.mmid + "' data-version='" + i + "'  href='#'>  Version: " + i + "</a></li>")
+        $(sel).empty();
+        for (var i = 1; i < highestVersion + 1; i++) {
+            $(sel).append("<li class='list-group-item'><a id='versionListItem" + i + "'  onclick='chooseMemoryModel(this , true, false)' data-value='" +
+                currentMemoryModel.mmid + "' data-version='" + i + "'  href='#'>  Version: " + i + "</a></li>")
+        }
 
-    }
 }
 
 /**
@@ -123,7 +124,10 @@ function getVersionList() {
 function undoAction() {
     var version;
     if (currentMemoryModel.version > 1) {
-        sendMessage({msgType: 'deleteModel', data: {mmid: currentMemoryModel.mmid, version: currentMemoryModel.version}});
+        sendMessage({
+            msgType: 'deleteModel',
+            data: {mmid: currentMemoryModel.mmid, version: currentMemoryModel.version}
+        });
         version = currentMemoryModel.version - 1;
         currentMemoryModel.version -= 1;
         highestVersion -= 1;

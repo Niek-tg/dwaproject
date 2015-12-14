@@ -23,14 +23,11 @@ function drawMemoryModel(model, frameLocations) {
         var diagramContainer = $('#diagramContainer');
         diagramContainer.children().remove();
 
-        diagramContainer.append("<div class='Stack'></div>");
-        diagramContainer.append("<div class='Heap'></div>");
-
         var promises = [];
 
         frameIdEndPositions = [];
-        promises.push(drawFrames("Stack", model.stack, frameLocations));
-        promises.push(drawFrames("Heap", model.heap, frameLocations));
+        promises.push(drawFrames("Stack", model.stacks, frameLocations));
+        promises.push(drawFrames("Heap", model.heaps, frameLocations));
 
         Promise.all(promises).then(function () {
             resolve();
@@ -42,43 +39,49 @@ function drawMemoryModel(model, frameLocations) {
  * Draws the frames of the memory model.
  *
  * @param location Decides where the frames are drawn. Stack or Heap
- * @param frames the data of the memory model
+ * @param model the data of the memory model
  * @param frameLocations contains the locations of the frames
  * @returns {Promise} Promise to call actions when the drawing is done
  */
 
-function drawFrames(location, frames, frameLocations) {
+function drawFrames(location, model, frameLocations) {
     return new Promise(function (resolve, reject) {
+        var diagramContainer = $('#diagramContainer');
+        var i = 1;
+
+        model.forEach(function (frames) {
+            diagramContainer.append("<div id='" + location + i + "' class='" + location + "'></div>");
 
 
-        $('.' + location).append(
-            "<div class='frameLabel'>" + location + "</div>"
-        );
-
+            $('#' + location + i).append(
+                "<div class='frameLabel'>" + location + "</div>"
+            );
+            
         frames.forEach(function (item) {
             var top, left;
 
 
-            frameLocations.forEach(function (frameLocation) {
-                if (item.id === parseInt(frameLocation.id)) {
-                    top = (frameLocation.top) ? frameLocation.top : 0;
-                    left = (frameLocation.left) ? frameLocation.left : 0;
-                }
+                frameLocations.forEach(function (frameLocation) {
+                    if (item.id === parseInt(frameLocation.id)) {
+                        top = (frameLocation.top) ? frameLocation.top : 0;
+                        left = (frameLocation.left) ? frameLocation.left : 0;
+                    }
+                });
+
+                var name = (item.name) ? item.name : "";
+                var style = (top && left) ? 'top: ' + top + "px; left: " + left + "%;" : "position:relative";
+
+                $('#' + location + i).append(
+                    "<div id='" + item.id + "' class='frame' style='" + style + "'> " +
+                    "<div class='frameLabel'>" + name + "</div>" +
+                    "</div>");
+
+                if (item.vars) drawVars('#' + item.id, item.vars);
+                if (item.funcs)drawFuncs('#' + item.id, item.funcs);
+                savePositionsOfframes(item.id);
+
             });
-
-            var name = (item.name) ? item.name : "";
-
-            var style = (top && left) ? 'top: ' + top + "px; left: " + left + "%;" : "position:relative";
-
-            $('.' + location).append(
-                "<div id='" + item.id + "' class='frame' style='" + style + "'> " +
-                "<div class='frameLabel'>" + name + "</div>" +
-                "</div>");
-
-            if (item.vars) drawVars('#' + item.id, item.vars);
-            if (item.funcs)drawFuncs('#' + item.id, item.funcs);
-            savePositionsOfframes(item.id);
-
+            i++;
         });
         resolve();
     });
@@ -137,7 +140,8 @@ function determineVar(variable) {
  * @param data Data containing the memory model that has to be drawn
  */
 function updateMemoryModel(data) {
-    console.log("update memory model called " + data.data);
+    //console.log(data);
+    //console.log("update memory model called " + data.data);
 
     if (data.data.new_val) {
         //console.log(data.data.new_val.memoryModel);
@@ -202,8 +206,14 @@ var savePositionsOfframes = function (frameId) {
     var id = $('#' + frameId);
 
     var parent = $(id).parent();
+    //id.css({position: "absolute"});
     var top = (id.offset().top - id.parent().offset().top);
     var left = (100 / parent.outerWidth()) * (id.offset().left - id.parent().offset().left);
+    //var left = id.position().left;
+
+
+    //left = id.position().left;
+
 
     frameIdEndPositions.push({id: frameId, top: top, left: left});
 }
@@ -219,6 +229,7 @@ var updatePositionFrames = function (frameId) {
     var top = (id.offset().top - id.parent().offset().top);
     var left = (100 / parent.outerWidth()) * (id.offset().left - id.parent().offset().left);
     var i = 0;
+
 
     frameIdEndPositions.forEach(function (frame) {
         if (frameId === frame.id) {

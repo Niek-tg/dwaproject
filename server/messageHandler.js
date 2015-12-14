@@ -1,4 +1,5 @@
 var queries = require('./queries/queries.js');
+var app = require('../app.js');
 
 /**
  * Exportable object that stores all methods of the messageHandler
@@ -198,13 +199,13 @@ messageHandler.updateMemoryModel = function(message,websocket){
     var memoryModel = message.data;
 
     queries.updateMemoryModel(memoryModel, function (err, result) {
-        console.log("Koekenzopeioeioieiooioioiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii");
         if (err){
-            return websocket.send(JSON.stringify({msgType:"errorMsg", data: "Something went wrong in the delete query, unexpected error: " +err}));
+            return websocket.send(JSON.stringify({msgType:"errorMsg", data: "Something went wrong in the updateMemoryModel query, unexpected error: " + err}));
         }
 
         else{
-            return websocket.send(JSON.stringify({msgType:"updateMemoryModel", data: "Updated memorymodel completed"}));
+
+           return messageHandler.getAllMemoryModels(message,websocket);
         }
 
     });

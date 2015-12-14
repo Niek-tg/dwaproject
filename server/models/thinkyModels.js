@@ -11,34 +11,14 @@ var ModelInfo = thinky.createModel("ModelInfo", {
 
 var History = thinky.createModel("History", {
 
-        id: type.string(),
-        mmid: type.string(),
-        modelName: type.string(),
-        version: type.number(),
-        frameLocations: type.array(),
-        memoryModel: {
-            stack: [{
-                id: type.number(),
-                name: type.string(),
-                order: type.number(),
-                vars: [
-                    {
-                        id: type.number(),
-                        name: type.string(),
-                        value: type.number(),
-                        undefined: type.boolean(),
-                        reference: type.number()
-                    }
-                ],
-                funcs: [
-                    {
-                        id: type.number(),
-                        name: type.string(),
-                        reference: type.number()
-                    }
-                ]
-            }],
-            heap: [
+    id: type.string(),
+    mmid: type.string(),
+    modelName: type.string(),
+    version: type.number(),
+    frameLocations: type.array(),
+    memoryModel: {
+        stacks: [
+            [
                 {
                     id: type.number(),
                     name: type.string(),
@@ -47,7 +27,7 @@ var History = thinky.createModel("History", {
                         {
                             id: type.number(),
                             name: type.string(),
-                            value: type.string(),
+                            value: type.number(),
                             undefined: type.boolean(),
                             reference: type.number()
                         }
@@ -59,9 +39,33 @@ var History = thinky.createModel("History", {
                             reference: type.number()
                         }
                     ]
-                }
-            ]
-        }
+                }]
+        ],
+        heaps: [
+            [{
+                id: type.number(),
+                name: type.string(),
+                order: type.number(),
+                vars: [
+                    {
+                        id: type.number(),
+                        name: type.string(),
+                        value: type.string(),
+                        undefined: type.boolean(),
+                        reference: type.number()
+                    }
+                ],
+                funcs: [
+                    {
+                        id: type.number(),
+                        name: type.string(),
+                        reference: type.number()
+                    }
+                ]
+            }]
+
+        ]
+    }
 });
 
 module.exports = {
