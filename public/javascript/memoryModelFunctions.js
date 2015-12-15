@@ -171,6 +171,7 @@ function initPlumb() {
         $(".frame").draggable({
             drag: function (e) {
                 jsPlumb.repaintEverything();
+                console.log("dragged");
             },
             containment: "parent",
             stop: function (event) {

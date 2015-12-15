@@ -6,7 +6,8 @@ var queries = require('./queries/queries.js');
 var messageHandler = {};
 
 /**
- * Holds the location to the results of the memorymodel that should be watched. Only used by the subscribeToChanges fuction
+ * Holds an array of cursors, listening to the memory model they are currently viewing.
+ * They are identified by using the ID given to the websocket on connection
  */
 var cursorArray = [];
 
@@ -92,14 +93,10 @@ messageHandler.subscribeToChanges = function(message, websocket){
  */
 messageHandler.unsubscribeToChanges = function(websocket){
     var id = websocket.connectionInfo.id;
-    console.log(websocket.connectionInfo.id);
-
-    console.log(id);
     var cursor = (cursorArray[id])? cursorArray[id] : null;
-    console.log(cursor);
     if(cursor) cursor.close();
     console.log("unsubscribed to changes");
-}
+};
 
 /**
  * Gets all memory models from the database and sends them back to the client
