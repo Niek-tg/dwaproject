@@ -109,12 +109,10 @@ if(keydownExists === false){
     $(window).bind('keydown', function (event) {
         keydownExists = true;
         if ((event.ctrlKey || event.metaKey) && event.which == 83) {
-            console.log("Keydown event aangeroepen");
             switch (String.fromCharCode(event.which).toLowerCase()) {
                 case 's':
                     event.preventDefault();
                     var newMemoryModel = editor.get();
-                    alert('ctrl-s - fired - memory model is updated');
                     sendMessage({msgType: 'updateMemoryModel', data: newMemoryModel});
                     break;
             }

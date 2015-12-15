@@ -60,14 +60,11 @@ messageHandler.identifyMessage = function(message, websocket){
  * @param websocket Connection to the websocket so a new message can be sent to client
  */
 messageHandler.subscribeToChanges = function(message, websocket){
-    console.log(message);
     websocket.currentID = message.data.id;
     queries.subscribeToChanges(message.data.id, function(err, cursor) {
-        console.log("IN MESSAGEHANDLER SUBSCRIBE");
         cursor.each(
             function(err, row) {
                 if (err) throw err;
-                console.log("IN CURSOREACH SUBSCRIBE");
                 websocket.send(JSON.stringify({msgType :"newData",data:row}))
             }
         );
@@ -100,7 +97,7 @@ messageHandler.getAllMemoryModels = function(message, websocket){
                 else inList = false;
                 i++;
             });
-            if (inList === false) {
+            if (!inList) {
                 resultsArray.push(r);
             }
         });
@@ -114,7 +111,6 @@ messageHandler.getAllMemoryModels = function(message, websocket){
  * @param websocket
  */
 messageHandler.getModelById = function(message, websocket){
-    console.log(message.id)
     var mmid = message.id;
     var version = (message.version) ? parseInt(message.version) : null;
 
@@ -150,7 +146,6 @@ messageHandler.makeNewModel = function(message, websocket){
         if(err) websocket.send(JSON.stringify({msgType:"errorMsg", data:"Something went wrong in query createNewMemorymodel " + err}));
 
        websocket.send(JSON.stringify({msgType:"getAllModels", data: result}));
-        console.log(JSON.stringify(result));
     });
 };
 
@@ -161,22 +156,18 @@ messageHandler.makeNewModel = function(message, websocket){
  */
 messageHandler.deleteModel = function(message, websocket){
     var mmid = message.data.mmid;
-    console.log('Dit zit er in deleteModel mmid')
-    console.log(mmid)
     var version = parseInt(message.data.version);
-    console.log('Dit zit er in deleteModel version')
-    console.log(version)
+
     queries.deleteLatestversion(mmid, version, function (err, result) {
         if (err)
             return websocket.send(JSON.stringify({msgType:"errorMsg", data: "Something went wrong in the delete query, unexpected error: " +err}));
-        console.log('dit zit in de result van de delete querie');
-        console.log(result);
+
         return websocket.send(JSON.stringify({msgType:"deleteModel", data: "Delete request completed"}));
     });
 };
 
 /**
- *
+ * Updates positions (x and y) of memory models in the database
  * @param message
  * @param websocket
  */
@@ -195,6 +186,11 @@ messageHandler.setModelPositions = function(message,websocket){
 
 };
 
+/**
+ * Updates a memory model in the database
+ * @param message
+ * @param websocket
+ */
 messageHandler.updateMemoryModel = function(message,websocket){
     var memoryModel = message.data;
 
