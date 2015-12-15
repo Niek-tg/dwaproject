@@ -59,7 +59,6 @@ function chooseMemoryModel(id, prevVersion, undo) {
         }
     } else {
         if (typeof id !== "string") id = $(id).attr('data-value');
-
         firstTime = true;
     }
     sendMessage({msgType: 'getModelById', id: id, version: version});

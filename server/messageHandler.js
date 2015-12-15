@@ -232,4 +232,3 @@ messageHandler.updateMemoryModel = function (message, websocket) {
 };
 
 module.exports = messageHandler;
-

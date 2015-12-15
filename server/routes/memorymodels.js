@@ -4,7 +4,6 @@ var queries = require('./../queries/queries.js');
 
 /**
  * Get a list of all memory models.
- *
  * @returns {Object|Array} Returns a list of the latest versions of all the available memory models
  */
 router.get('/', function (req, res) {

@@ -1,5 +1,5 @@
 /**
- * Sets up and holds the websocket connection
+ * Sets up and holds the websocket connection.
  * @type {WebSocket}
  */
 
@@ -7,14 +7,15 @@ var connection = new WebSocket("ws://localhost:3000");
 
 /**
  * Sends a JSON message to the server
- * @param data
+ * @param data The data to send
  */
 function sendMessage(data){
     connection.send(JSON.stringify(data));
 }
 
 /**
- * Send a websocket message to the server to receive memory models.
+ * Send a websocket message to the server when connection is opened,
+ * to get all memory models
  */
 connection.onopen = function() {
     console.log("getting memory models");
@@ -22,9 +23,8 @@ connection.onopen = function() {
 };
 
 /**
- * Listener to messages received by the websocket. Fired when a message is received.
- *
- * @param message contains the message received by the websocket
+ * MessageListener for the client, runs when a new message is received.
+ * @param message Contains the received message
  */
 connection.onmessage = function(message) {
     var data = JSON.parse(message.data);
@@ -42,14 +42,14 @@ connection.onmessage = function(message) {
         case "updateMemoryModel":
             getMemoryModels(data.data);
             break;
-        case "removeLatestVersion":
+        case "updateList":
             getVersionList(true);
             break;
         case "errorMsg":
             console.log(data.data);
             break;
         default :
-            console.log('komt nog');
+            console.log('client messagehandler: unknown message received ' + data.msgType);
             break;
     }
 };
