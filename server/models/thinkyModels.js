@@ -26,8 +26,8 @@ var History = thinky.createModel("History", {
                         {
                             id: type.number(),
                             name: type.string(),
-                            value: type.mix(),
-                            type: type.mix()
+                            value: type.any(),
+                            type: type.any()
                             //undefined: type.boolean(),
                             //reference: type.number()
                         }

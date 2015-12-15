@@ -26,21 +26,12 @@ function initJSONEditor() {
                     stack: [{
                         id: '',
                         name: '',
-                        order: '',
                         vars: [
                             {
                                 id: '',
                                 name: '',
                                 value: '',
-                                undefined: '',
-                                reference: ''
-                            }
-                        ],
-                        funcs: [
-                            {
-                                id: '',
-                                name: '',
-                                reference: ''
+                                type: ''
                             }
                         ]
                     }],
@@ -48,21 +39,12 @@ function initJSONEditor() {
                         {
                             id: '',
                             name: '',
-                            order: '',
                             vars: [
                                 {
                                     id: '',
                                     name: '',
                                     value: '',
-                                    undefined: '',
-                                    reference: ''
-                                }
-                            ],
-                            funcs: [
-                                {
-                                    id: '',
-                                    name: '',
-                                    reference: ''
+                                    type:''
                                 }
                             ]
                         }
