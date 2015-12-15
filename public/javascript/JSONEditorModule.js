@@ -17,11 +17,11 @@ var keydownExists = false; //Boolean to make sure the event listener on keydown 
 function initJSONEditor() {
 
     var container = document.getElementById('jsoneditor');
-    var selectedMemoryModel = currentMemoryModel;
-    var editor = new JSONEditor(container, options, selectedMemoryModel );
+    var editor = new JSONEditor(container, options, currentMemoryModel );
     var newMemorymodelButton = $('<input/>').attr({type: 'button', id: 'setJSON', value: 'Nieuw geheugenmodel'});
+    var saveMemorymodelButton = $('<input/>').attr({type: 'button', id: 'getJSON', value: 'Opslaan'});
 
-    $("#JSONButtons").append(newMemorymodelButton);
+    $("#JSONButtons").append(newMemorymodelButton, saveMemorymodelButton);
 
     $("#setJSON").click(function newMemoryModel() {
             var modelInfo = {
@@ -79,9 +79,6 @@ function initJSONEditor() {
             };
             editor.set(modelInfo);
         });
-
-        var saveMemorymodelButton = $('<input/>').attr({type: 'button', id: 'getJSON', value: 'Opslaan'});
-        $("#JSONButtons").append(saveMemorymodelButton);
 
     $("#getJSON").click(function saveMemoryModel() {
         var newMemoryModel = editor.get();
