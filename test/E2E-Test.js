@@ -2,8 +2,6 @@
  * E2E User story 1
  * */
 
-
-
 /*
  * Situation: database connection bestaat
  *            RethinkDB database draait
