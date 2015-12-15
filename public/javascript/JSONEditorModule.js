@@ -1,38 +1,19 @@
 /**
- * Sets up and holds the websocket connection
- * @type {WebSocket}
- */
-
-//var connection = new WebSocket("ws://localhost:3000");
-//
-//connection.onmessage = function (message) {
-//    var data = JSON.parse(message.data);
-//    console.log(data);
-//
-//    switch (data.msgType) {
-//        case "getModelById":
-//            setMemoryModel(data.data);
-//            console.log("komt in switch");
-//            break;
-//
-//    }
-//};
-
-
-/**
  *  Adds a JSON editor on the page and fills it with data selected from the Memorymodel list.
  *  When the "opslaan" button is clicked it will be saved to the database.
  *  When the "nieuw geheugenmodel" button is clicked it will create a new memorymodel.
  */
 
+var keydownExists = false; //Boolean to make sure the event listener on keydown isn't created twice.
+
 function initJSONEditor() {
 
     var container = document.getElementById('jsoneditor');
-    var selectedMemoryModel = currentMemoryModel;
-    var editor = new JSONEditor(container, options, selectedMemoryModel );
+    var editor = new JSONEditor(container, options, currentMemoryModel );
     var newMemorymodelButton = $('<input/>').attr({type: 'button', id: 'setJSON', value: 'Nieuw geheugenmodel'});
+    var saveMemorymodelButton = $('<input/>').attr({type: 'button', id: 'getJSON', value: 'Opslaan'});
 
-    $("#JSONButtons").append(newMemorymodelButton);
+    $("#JSONButtons").append(newMemorymodelButton, saveMemorymodelButton);
 
     $("#setJSON").click(function newMemoryModel() {
             var modelInfo = {
@@ -91,31 +72,29 @@ function initJSONEditor() {
             editor.set(modelInfo);
         });
 
-        var saveMemorymodelButton = $('<input/>').attr({type: 'button', id: 'getJSON', value: 'Opslaan'});
-        $("#JSONButtons").append(saveMemorymodelButton);
-
     $("#getJSON").click(function saveMemoryModel() {
         var newMemoryModel = editor.get();
-        sendMessage({msgType: 'updateMemoryModel', data: newMemoryModel});
-        alert('Memory model is updated');
+        jsonSendMessage({msgType: 'updateMemoryModel', data: newMemoryModel});
     });
 
+
+if(!keydownExists){
     $(window).bind('keydown', function (event) {
+        keydownExists = true;
         if ((event.ctrlKey || event.metaKey) && event.which == 83) {
             switch (String.fromCharCode(event.which).toLowerCase()) {
                 case 's':
                     event.preventDefault();
                     var newMemoryModel = editor.get();
-                    alert('ctrl-s - fired - memory model is updated');
-                    sendMessage({msgType: 'updateMemoryModel', data: newMemoryModel});
+                    jsonSendMessage({msgType: 'updateMemoryModel', data: newMemoryModel});
                     break;
             }
         }
-    });
+    })}
 }
 
 /**
- * Function to disable some fields en values in de JSON editor.
+ * Function to disable some fields or/and values in de JSON-editor. Setting it to true or false.
  * @type {{editable: Function}}
  */
 
@@ -125,12 +104,10 @@ var options = {
         switch (object.field) {
             case 'mmid':
             case 'id':
-                return false;
-            break;
-
+                return true;
             default:
                 return {
-                    field: false,
+                    field: true,
                     value: true
                 };
         }
