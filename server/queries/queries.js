@@ -9,7 +9,7 @@ function getConnection(cb) {
     else r.connect(config.rethinkdb, function (err, conn) {
         if (err) return cb(err, null);
         connection = conn;
-        console.log("connected");
+        //console.log("connected");
         cb(null, connection);
     });
 }
@@ -127,7 +127,7 @@ queries.createNewMemoryModel = function (data, cb) {
 };
 
 queries.subscribeToChanges = function (id, cb) {
-    console.log("ID", id);
+    //console.log("ID", id);
     getConnection(function (err, conn) {
         if (err) return cb(err, null);
 
@@ -136,7 +136,7 @@ queries.subscribeToChanges = function (id, cb) {
             .get(id)
             .changes()
             .run(conn, function (err, cursor) {
-                console.log("IN RUN OF SUBSCRIBE TO CHANGES");
+                //console.log("IN RUN OF SUBSCRIBE TO CHANGES");
                 cb(err, cursor);
             })
     });
@@ -203,7 +203,7 @@ queries.updateMemoryModel = function (memoryModel, cb) {
                     r.db('percolatordb').table("History")
                         .insert(history)
                         .run(conn, function (err, result) {
-                            console.log(result);
+                            //console.log(result);
                             if (err) reject(err);
                             else resolve(result);
 

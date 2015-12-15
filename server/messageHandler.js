@@ -6,6 +6,12 @@ var app = require('../app.js');
  */
 var messageHandler = {};
 
+
+/**
+ * Holds the location to the results of the memorymodel that should be watched. Only used by the subscribeToChanges fuction
+ */
+var cursor;
+
 /**
  * Handles all incoming messages from clients and calls the corresponding methods
  * @param message Message that has been received from client
@@ -43,6 +49,9 @@ messageHandler.identifyMessage = function(message, websocket){
             messageHandler.updateMemoryModel(message, websocket);
             break;
 
+        case "unsubscribeToCurrentCursor":
+            messageHandler.unsubscribeToChanges();
+            break;
         case "testCase":
             console.log("Komt in testcaseKomt in testcaseKomt in testcaseKomt in testcaseKomt in testcaseKomt " +
                 "in testcaseKomt in testcaseKomt in testcaseKomt in testcaseKomt in testcaseKomt in testcase");
@@ -60,19 +69,27 @@ messageHandler.identifyMessage = function(message, websocket){
  * @param websocket Connection to the websocket so a new message can be sent to client
  */
 messageHandler.subscribeToChanges = function(message, websocket){
-    console.log(message);
+    console.log("subscribed to changes");
     websocket.currentID = message.data.id;
-    queries.subscribeToChanges(message.data.id, function(err, cursor) {
-        console.log("IN MESSAGEHANDLER SUBSCRIBE");
+    queries.subscribeToChanges(message.data.id, function(err, curs) {
+        cursor = curs;
         cursor.each(
             function(err, row) {
                 if (err) throw err;
-                console.log("IN CURSOREACH SUBSCRIBE");
+                //console.log("IN CURSOREACH SUBSCRIBE");
                 websocket.send(JSON.stringify({msgType :"newData",data:row}))
             }
         );
     });
 };
+
+/**
+ * Unsubscribes to a memory model
+ */
+messageHandler.unsubscribeToChanges = function(){
+   if(cursor) cursor.close();
+    console.log("unsubscribed to changes");
+}
 
 /**
  * Gets all memory models from the database and sends them back to the client
@@ -114,7 +131,7 @@ messageHandler.getAllMemoryModels = function(message, websocket){
  * @param websocket
  */
 messageHandler.getModelById = function(message, websocket){
-    console.log(message.id)
+    //console.log(message.id)
     var mmid = message.id;
     var version = (message.version) ? parseInt(message.version) : null;
 
@@ -161,16 +178,16 @@ messageHandler.makeNewModel = function(message, websocket){
  */
 messageHandler.deleteModel = function(message, websocket){
     var mmid = message.data.mmid;
-    console.log('Dit zit er in deleteModel mmid')
-    console.log(mmid)
+    //console.log('Dit zit er in deleteModel mmid')
+    //console.log(mmid)
     var version = parseInt(message.data.version);
-    console.log('Dit zit er in deleteModel version')
-    console.log(version)
+    //console.log('Dit zit er in deleteModel version')
+    //console.log(version)
     queries.deleteLatestversion(mmid, version, function (err, result) {
         if (err)
             return websocket.send(JSON.stringify({msgType:"errorMsg", data: "Something went wrong in the delete query, unexpected error: " +err}));
-        console.log('dit zit in de result van de delete querie');
-        console.log(result);
+        //console.log('dit zit in de result van de delete querie');
+        //console.log(result);
         return websocket.send(JSON.stringify({msgType:"deleteModel", data: "Delete request completed"}));
     });
 };

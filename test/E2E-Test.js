@@ -26,31 +26,34 @@
 var webdriverio = require('webdriverio');
 var expect = require('chai').expect;
 var siteURL        = "http://localhost:3000/";
+var mainBrowser = 'chrome';
 
 describe("E2E test get homepage", function () {
 
-    this.timeout(50000);
+    this.timeout(500000);
 
-    var allBrowsers, masterBrowser, first_browser, second_browser;
+    var allBrowsers, first_browser, second_browser;
 
     before( function (done) {
         var browserSpecs = {
-            master: { desiredCapabilities: {browserName: 'firefox'}},
-            first:  { desiredCapabilities: {browserName: 'firefox'}},
-            second:  { desiredCapabilities: {browserName: 'firefox'}}
+            //master: { desiredCapabilities: {browserName: mainBrowser}},
+            first:  { desiredCapabilities: {browserName: mainBrowser}},
+            second:  { desiredCapabilities: {browserName: mainBrowser}}
         };
 
         allBrowsers = webdriverio.multiremote( browserSpecs );
-        masterBrowser = allBrowsers.select("master");
+        //masterBrowser = allBrowsers.select("master");
         first_browser  = allBrowsers.select("first");
         second_browser = allBrowsers.select("second");
 
-        allBrowsers
-            .init()
-            .url(siteURL)
-            .then(function() {
-                done();
-            });
+        require("./../server/seedScript").runSeed(function(){
+            allBrowsers
+                .init()
+                .url(siteURL)
+                .then(function() {
+                    done();
+                });
+        });
     });
 
     after( function(done) {
@@ -58,7 +61,7 @@ describe("E2E test get homepage", function () {
     });
 
 
-    it("Should retrieve memorymodel information", function (done) {
+    it("Should retrieve information about the memory model", function (done) {
         return first_browser
             .waitForExist("#92524038-f0e2-4db2-ad01-321a9040df02", 2000)
             .element('#92524038-f0e2-4db2-ad01-321a9040df02')
@@ -66,9 +69,9 @@ describe("E2E test get homepage", function () {
                 first_browser
                     .waitForValue("#owner", 2000)
                     .getText("#headerTitle h5").then(function (result) {
-                        console.log(result[0]);
-                        console.log(result[1]);
-                        console.log(result[2]);
+                        //console.log(result[0]);
+                        //console.log(result[1]);
+                        //console.log(result[2]);
                         expect(result[0]).to.equal("Owner: Jack");
                         expect(result[1]).to.equal("Modelname: Mijn tweede geheugenmodel");
                         expect(result[2]).to.equal("Version: 2");
@@ -80,7 +83,7 @@ describe("E2E test get homepage", function () {
             });
     });
 
-    it("Should undo action", function (done) {
+    it("Should execute the undo action when clicked on the undo button", function (done) {
         return first_browser
             .waitForExist("#undoButton", 2000)
             .element("#undoButton")
@@ -88,10 +91,10 @@ describe("E2E test get homepage", function () {
                 first_browser
                     .waitForValue("#owner", 2000)
                     .getText("#headerTitle h5").then(function (result) {
-                        console.log("Should undo action");
-                        console.log(result[0]);
-                        console.log(result[1]);
-                        console.log(result[2]);
+                        //console.log("Should undo action");
+                        //console.log(result[0]);
+                        //console.log(result[1]);
+                        //console.log(result[2]);
 
                         expect(result[0]).to.equal("Owner: Jack");
                         expect(result[1]).to.equal("Modelname: Mijn geheugenmodel");
@@ -108,15 +111,12 @@ describe("E2E test get homepage", function () {
             .element('#1ee3f80e-c107-4fa2-9bc4-4f24887d1754')
             .click().then(function (result) {
                 first_browser
-                    .waitForExist("#versionListItem2", 2000)
+                    .waitForExist("#memoryModelVersionList", 2000)
                     .element("#versionListItem2")
                     .click().then(function (result) {
-                        browser
+                        first_browser
                             .waitForValue("#owner", 2000)
                             .getText("#headerTitle h5").then(function (result) {
-                                console.log(result[0]);
-                                console.log(result[1]);
-                                console.log(result[2]);
                                 expect(result[0]).to.equal("Owner: Pietertje");
                                 expect(result[1]).to.equal("Modelname: Het tweede geheugenmodel van pietertje");
                                 expect(result[2]).to.equal("Version: 2");
@@ -124,6 +124,61 @@ describe("E2E test get homepage", function () {
 
                             });
                     });
+            });
+    });
+
+    it("Should move a memory model frame across the screen and should be seen by all viewing browsers", function (done) {
+        var id = '#92524038-f0e2-4db2-ad01-321a9040df02';
+        var divToMove = "#6";
+        first_browser
+            .element(id)
+            .click().then(function () {
+                second_browser
+                    .element(id)
+                    .click().then(function(){
+                        first_browser
+                            .waitForExist(".Heap", 2000)
+                            .waitForExist(".Stack", 2000)
+                            .moveToObject(divToMove,0,0).then(function(){
+                                second_browser
+                                    .waitForExist(".Heap", 2000)
+                                    .waitForExist(".Stack", 2000)
+                                    .then(function() {
+                                        first_browser.buttonDown()
+                                            .pause(50)
+                                            .then(function () {
+                                                first_browser.moveToObject(divToMove, 150, 0)
+                                                    .pause(50)
+                                                    .then(function () {
+                                                        first_browser.buttonUp().pause(50).then(function () {
+                                                            first_browser
+                                                                .pause(200)
+                                                                .getLocation(divToMove).then(function (firstbrowser_Location) {
+
+                                                                    second_browser
+                                                                        .pause(1000)
+                                                                        .getCssProperty(divToMove, 'left').then(function (leftLocation) {
+
+                                                                            second_browser
+                                                                                .pause(1000)
+                                                                                .getCssProperty(divToMove, 'top').then(function (topLocation) {
+                                                                                    console.log("left location", leftLocation.value);
+                                                                                    console.log("top location", topLocation.value);
+                                                                                    console.log("firstbrowser location x", firstbrowser_Location.x);
+                                                                                    console.log("firstbrowser location y", firstbrowser_Location.y);
+                                                                                    //expect(firstbrowser_Location.x).to.equal(leftLocation.value);
+                                                                                    //expect(firstbrowser_Location.y).to.equal(topLocation.value);
+                                                                                    console.log("equal check done");
+                                                                                    //done();
+                                                                                });
+                                                                        });
+                                                                })
+                                                        });
+                                                    });
+                                            })
+                                    })
+                            })
+                    })
             });
     });
 

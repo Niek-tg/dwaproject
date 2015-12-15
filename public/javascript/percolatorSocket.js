@@ -22,13 +22,22 @@ connection.onopen = function() {
 };
 
 /**
+ * Triggered when the windows is closed. the current cursor is being unsubscribed to prevent server errors and eventually the websocket is closed
+ */
+window.onbeforeunload = function() {
+    connection.onclose = function () {}; // disable onclose handler first
+    sendMessage({msgType: "unsubscribeToCurrentCursor"});
+    connection.close()
+};
+
+/**
  * Listener to messages received by the websocket. Fired when a message is received.
  *
  * @param message contains the message received by the websocket
  */
 connection.onmessage = function(message) {
     var data = JSON.parse(message.data);
-    console.log(data);
+    //console.log(data);
     switch(data.msgType){
         case "newData":
             console.log("newData = on");
@@ -47,8 +56,7 @@ connection.onmessage = function(message) {
             getMemoryModels(data.data);
             break;
         case "updateList":
-            console.log('HIJ KOMT IN DE UPDATE LISt');
-            console.log(data.data)
+            console.log(data.data);
             getVersionList(true);
             break;
         case "errorMsg":

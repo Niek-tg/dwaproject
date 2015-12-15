@@ -47,7 +47,7 @@ function startWebservers(){
     webSocketServer.on('connection', function connection(websocket) {
 
         websocket.on('message', function incoming(message) {
-            console.log(message.msgType);
+            //console.log(message.msgType);
             messageHandler.identifyMessage(message, websocket, webSocketServer);
         });
 
