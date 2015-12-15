@@ -104,7 +104,9 @@ var options = {
         switch (object.field) {
             case 'mmid':
             case 'id':
-                return true;
+            case 'version':
+            case 'frameLocations':
+                return false;
             default:
                 return {
                     field: true,

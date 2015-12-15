@@ -11,28 +11,28 @@ var ModelInfo = thinky.createModel("ModelInfo", {
 
 var History = thinky.createModel("History", {
 
-    id: type.string(),
-    mmid: type.string(),
+    id: type.string(), // mag weg voor client (websocket houdt het bij)
+    mmid: type.string(), //mag weg voor client
     modelName: type.string(),
-    version: type.number(),
-    frameLocations: type.array(),
+    version: type.number(), //disable
+    frameLocations: type.array(), // mag weg voor client, misschien apart houden voor stack en heap
     memoryModel: {
         stacks: [
             [
                 {
-                    id: type.number(),
+                    id: type.number(),//disable
                     name: type.string(),
-                    order: type.number(),
-                    vars: [
+                    order: type.number(), //verwijderen
+                    vars: [ //properties value & type
                         {
-                            id: type.number(),
+                            id: type.number(), //disable
                             name: type.string(),
-                            value: type.number(),
+                            value: type.mix(),
                             undefined: type.boolean(),
                             reference: type.number()
                         }
                     ],
-                    funcs: [
+                    funcs: [ // funcs verwijderen. op de heap is het alleen nodig met object en func
                         {
                             id: type.number(),
                             name: type.string(),
@@ -45,7 +45,7 @@ var History = thinky.createModel("History", {
             [{
                 id: type.number(),
                 name: type.string(),
-                order: type.number(),
+                order: type.number(), //verwijderen
                 vars: [
                     {
                         id: type.number(),
