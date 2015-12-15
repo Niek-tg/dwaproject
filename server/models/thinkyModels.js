@@ -11,31 +11,20 @@ var ModelInfo = thinky.createModel("ModelInfo", {
 
 var History = thinky.createModel("History", {
 
-    id: type.string(), // mag weg voor client (websocket houdt het bij)
-    mmid: type.string(), //mag weg voor client
+    id: type.string(),
+    mmid: type.string(),
     modelName: type.string(),
-    version: type.number(), //disable voor client
+    version: type.number(),
+    frameLocations: type.array(),
     memoryModel: {
         stacks: [
-
-            {
-                frameLocations:[
-                    {
-                        id: type.number,
-                        top: type.number,
-                        left: type.number
-                    }
-                ]
-            },
-
-
             [
                 {
-                    id: type.number(),//disable voor client
+                    id: type.number(),
                     name: type.string(),
-                    vars: [ //properties value & type
+                    vars: [
                         {
-                            id: type.number(), //disable voor client
+                            id: type.number(),
                             name: type.string(),
                             value: type.mix(),
                             type: type.mix()
@@ -46,19 +35,9 @@ var History = thinky.createModel("History", {
                 }]
         ],
         heaps: [
-            {
-                frameLocations:[
-                    {
-                        id: type.number,
-                        top: type.number,
-                        left: type.number
-                    }
-                ]
-            },
             [{
                 id: type.number(),
                 name: type.string(),
-                //order: type.number(), //verwijderen
                 vars: [
                     {
                         id: type.number(),
