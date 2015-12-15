@@ -17,7 +17,6 @@ function sendMessage(data){
  * Send a websocket message to the server to receive memory models.
  */
 connection.onopen = function() {
-    console.log("getting memory models");
     connection.send(JSON.stringify({msgType: "getAllModels"}));
 };
 
@@ -28,10 +27,8 @@ connection.onopen = function() {
  */
 connection.onmessage = function(message) {
     var data = JSON.parse(message.data);
-    console.log(data);
     switch(data.msgType){
         case "newData":
-            console.log("newData = on");
             updateMemoryModel(data);
             break;
         case "getAllModels":
@@ -53,7 +50,7 @@ connection.onmessage = function(message) {
             console.log(data.data);
             break;
         default :
-            console.log('komt nog');
+            console.log('default');
             break;
     }
 };
