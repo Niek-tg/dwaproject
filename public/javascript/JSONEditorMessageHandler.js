@@ -3,20 +3,20 @@
  * @type {WebSocket}
  */
 
-var connection = new WebSocket("ws://localhost:3000");
+var jsonEditorConnection = new WebSocket("ws://localhost:3000");
 
 /**
  * Sends a JSON message to the server
  * @param data
  */
-function sendMessage(data){
-    connection.send(JSON.stringify(data));
+function jsonSendMessage(data){
+    jsonEditorConnection.send(JSON.stringify(data));
 }
 
 /**
  * Send a websocket message to the server to receive memory models.
  */
-connection.onopen = function() {
+jsonEditorConnection.onopen = function() {
     console.log("getting memory models");
     connection.send(JSON.stringify({msgType: "getAllModels"}));
 };
@@ -26,14 +26,10 @@ connection.onopen = function() {
  *
  * @param message contains the message received by the websocket
  */
-connection.onmessage = function(message) {
+jsonEditorConnection.onmessage = function(message) {
     var data = JSON.parse(message.data);
     console.log(data);
     switch(data.msgType){
-        case "newData":
-            console.log("newData = on");
-            updateMemoryModel(data);
-            break;
         case "getAllModels":
             getMemoryModels(data.data);
             break;
@@ -53,7 +49,7 @@ connection.onmessage = function(message) {
             console.log(data.data);
             break;
         default :
-            console.log('komt nog');
+            console.log('default');
             break;
     }
 };

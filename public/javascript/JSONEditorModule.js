@@ -1,12 +1,4 @@
 /**
- * Sets up and holds the websocket connection
- * @type {WebSocket}
- */
-
-//var connection = new WebSocket("ws://localhost:3000");
-
-
-/**
  *  Adds a JSON editor on the page and fills it with data selected from the Memorymodel list.
  *  When the "opslaan" button is clicked it will be saved to the database.
  *  When the "nieuw geheugenmodel" button is clicked it will create a new memorymodel.
@@ -82,7 +74,7 @@ function initJSONEditor() {
 
     $("#getJSON").click(function saveMemoryModel() {
         var newMemoryModel = editor.get();
-        sendMessage({msgType: 'updateMemoryModel', data: newMemoryModel});
+        jsonSendMessage({msgType: 'updateMemoryModel', data: newMemoryModel});
     });
 
 
@@ -94,7 +86,7 @@ if(!keydownExists){
                 case 's':
                     event.preventDefault();
                     var newMemoryModel = editor.get();
-                    sendMessage({msgType: 'updateMemoryModel', data: newMemoryModel});
+                    jsonSendMessage({msgType: 'updateMemoryModel', data: newMemoryModel});
                     break;
             }
         }
