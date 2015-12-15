@@ -22,21 +22,14 @@ var History = thinky.createModel("History", {
                 {
                     id: type.number(),
                     name: type.string(),
-                    order: type.number(),
                     vars: [
                         {
                             id: type.number(),
                             name: type.string(),
-                            value: type.number(),
-                            undefined: type.boolean(),
-                            reference: type.number()
-                        }
-                    ],
-                    funcs: [
-                        {
-                            id: type.number(),
-                            name: type.string(),
-                            reference: type.number()
+                            value: type.mix(),
+                            type: type.mix()
+                            //undefined: type.boolean(),
+                            //reference: type.number()
                         }
                     ]
                 }]
@@ -45,20 +38,12 @@ var History = thinky.createModel("History", {
             [{
                 id: type.number(),
                 name: type.string(),
-                order: type.number(),
                 vars: [
                     {
                         id: type.number(),
                         name: type.string(),
                         value: type.string(),
                         undefined: type.boolean(),
-                        reference: type.number()
-                    }
-                ],
-                funcs: [
-                    {
-                        id: type.number(),
-                        name: type.string(),
                         reference: type.number()
                     }
                 ]
