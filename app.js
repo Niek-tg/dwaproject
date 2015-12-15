@@ -7,7 +7,7 @@ var memorymodelRoute = require('./server/routes/memorymodels.js');
 var queries = require('./server/queries/queries.js');
 var messageHandler = require('./server/messageHandler.js');
 
-console.log('==============', messageHandler)
+console.log('==============', messageHandler);
 var config     = require('./config.js');
 
 const ONLYSEED = (process.argv.slice(2) == 'onlySeed');

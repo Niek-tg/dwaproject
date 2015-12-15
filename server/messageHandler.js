@@ -9,6 +9,7 @@ var messageHandler = {};
  * Handles all incoming messages from clients and calls the corresponding methods
  * @param message Message that has been received from client
  * @param websocket Connection to the websocket so a new message can be sent to client later
+ * @param webSocketServer
  */
 
 messageHandler.identifyMessage = function (message, websocket, webSocketServer) {
@@ -36,16 +37,11 @@ messageHandler.identifyMessage = function (message, websocket, webSocketServer) 
             break;
 
         case "updateFramePositions":
-            messageHandler.setModelPositions(message, websocket);
+            messageHandler.updateFramePositions(message, websocket);
             break;
 
         case "updateMemoryModel":
             messageHandler.updateMemoryModel(message, websocket);
-            break;
-
-        case "testCase":
-            console.log("Komt in testcaseKomt in testcaseKomt in testcaseKomt in testcaseKomt in testcaseKomt " +
-                "in testcaseKomt in testcaseKomt in testcaseKomt in testcaseKomt in testcaseKomt in testcase");
             break;
         default :
             websocket.send(JSON.stringify({msgType: "errorMsg", data: "MessageHandler: unknown msgType received="}));
@@ -117,7 +113,6 @@ messageHandler.getAllMemoryModels = function (message, websocket) {
  * @param websocket
  */
 messageHandler.getModelById = function (message, websocket) {
-    console.log(message.id)
     var mmid = message.id;
     var version = (message.version) ? parseInt(message.version) : null;
 
@@ -163,7 +158,7 @@ messageHandler.makeNewModel = function (message, websocket) {
     }, function (err, result) {
         if (err) websocket.send(JSON.stringify({
             msgType: "errorMsg",
-            data: "Something went wrong in query createNewMemorymodel " + err
+            data: "Something went wrong in query create NewMemorymodel " + err
         }));
 
         websocket.send(JSON.stringify({msgType: "getAllModels", data: result}));
@@ -185,7 +180,7 @@ messageHandler.deleteModel = function (message, websocket, webSocketServer) {
         if (err) {
             return websocket.send(JSON.stringify({
                 msgType: "errorMsg",
-                data: "Something went wrong in the delete query, unexpected error: " + err
+                data: "Something went wrong in the delete query: " + err
             }));
         } else {
             webSocketServer.clients.forEach(function (client) {
@@ -203,16 +198,16 @@ messageHandler.deleteModel = function (message, websocket, webSocketServer) {
  * @param websocket
  */
 
-messageHandler.setModelPositions = function (message, websocket) {
+messageHandler.updateFramePositions = function (message, websocket) {
     var positions = message.data.frameIdEndPositions;
     var mmid = message.data.mmid;
     var version = message.data.version;
 
-    queries.setModelPositions(positions, mmid, version, function (err, result) {
+    queries.updateFramePositions(positions, mmid, version, function (err, result) {
         if (err)
             return websocket.send(JSON.stringify({
                 msgType: "errorMsg",
-                data: "Something went wrong in the delete query, unexpected error: " + err
+                data: "Something went wrong in the updateFramePositions query " + err
             }));
 
         return websocket.send(JSON.stringify({msgType: "positionsUpdated", data: "Positions updated completed"}));
