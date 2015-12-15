@@ -54,7 +54,7 @@ connection.onmessage = function(message) {
         case "updateMemoryModel":
             getMemoryModels(data.data);
             break;
-        case "updateList":
+        case "removeLatestVersion":
             getVersionList(true);
             break;
         case "errorMsg":

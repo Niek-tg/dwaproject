@@ -37,7 +37,7 @@ messageHandler.identifyMessage = function (message, websocket, webSocketServer) 
             messageHandler.makeNewModel(message, websocket);
             break;
 
-        case "deleteModel":
+        case "removeLatestVersion":
             messageHandler.deleteModel(message, websocket, webSocketServer);
             break;
 
@@ -258,3 +258,4 @@ messageHandler.updateMemoryModel = function (message, websocket) {
 };
 
 module.exports = messageHandler;
+
