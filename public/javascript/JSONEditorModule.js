@@ -4,19 +4,6 @@
  */
 
 //var connection = new WebSocket("ws://localhost:3000");
-//
-//connection.onmessage = function (message) {
-//    var data = JSON.parse(message.data);
-//    console.log(data);
-//
-//    switch (data.msgType) {
-//        case "getModelById":
-//            setMemoryModel(data.data);
-//            console.log("komt in switch");
-//            break;
-//
-//    }
-//};
 
 
 /**
@@ -25,9 +12,7 @@
  *  When the "nieuw geheugenmodel" button is clicked it will create a new memorymodel.
  */
 
-//Boolean to make sure the event listener on keydown isn't created twice.
-var keydownExists = false;
-
+var keydownExists = false; //Boolean to make sure the event listener on keydown isn't created twice.
 
 function initJSONEditor() {
 
@@ -101,20 +86,17 @@ function initJSONEditor() {
     $("#getJSON").click(function saveMemoryModel() {
         var newMemoryModel = editor.get();
         sendMessage({msgType: 'updateMemoryModel', data: newMemoryModel});
-        alert('Memory model is updated');
     });
 
 
-if(keydownExists === false){
+if(!keydownExists){
     $(window).bind('keydown', function (event) {
         keydownExists = true;
         if ((event.ctrlKey || event.metaKey) && event.which == 83) {
-            console.log("Keydown event aangeroepen");
             switch (String.fromCharCode(event.which).toLowerCase()) {
                 case 's':
                     event.preventDefault();
                     var newMemoryModel = editor.get();
-                    alert('ctrl-s - fired - memory model is updated');
                     sendMessage({msgType: 'updateMemoryModel', data: newMemoryModel});
                     break;
             }
@@ -123,7 +105,7 @@ if(keydownExists === false){
 }
 
 /**
- * Function to disable some fields en values in de JSON editor.
+ * Function to disable some fields or/and values in de JSON-editor. Setting it to true or false.
  * @type {{editable: Function}}
  */
 
@@ -134,8 +116,6 @@ var options = {
             case 'mmid':
             case 'id':
                 return true;
-            break;
-
             default:
                 return {
                     field: true,
