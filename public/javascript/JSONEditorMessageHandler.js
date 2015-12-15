@@ -66,4 +66,11 @@ jsonEditorConnection.onmessage = function(message) {
     }
 };
 
+/**
+ *
+ */
+jsonEditorConnection.onclose = function() {
+    console.log("websocket connection has been closed");
+};
+
 

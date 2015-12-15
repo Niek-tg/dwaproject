@@ -8,7 +8,7 @@ var messageHandler = {};
 /**
  * Holds the location to the results of the memorymodel that should be watched. Only used by the subscribeToChanges fuction
  */
-var cursor;
+var cursorArray = [];
 
 /**
  * Handles all incoming messages from clients and calls the corresponding methods
@@ -50,7 +50,7 @@ messageHandler.identifyMessage = function (message, websocket, webSocketServer) 
             break;
 
         case "unsubscribeToCurrentCursor":
-            messageHandler.unsubscribeToChanges();
+            messageHandler.unsubscribeToChanges(websocket);
             break;
         
         case "testCase":
@@ -72,9 +72,12 @@ messageHandler.identifyMessage = function (message, websocket, webSocketServer) 
 messageHandler.subscribeToChanges = function(message, websocket){
     console.log("subscribed to changes");
     websocket.currentID = message.data.id;
+
     queries.subscribeToChanges(message.data.id, function(err, curs) {
-        cursor = curs;
-        cursor.each(
+        var socketID = websocket.connectionInfo.id;
+        cursorArray[socketID] = curs;
+
+        cursorArray[socketID].each(
             function (err, row) {
                 if (err) throw err;
                 //console.log("IN CURSOREACH SUBSCRIBE");
@@ -87,8 +90,14 @@ messageHandler.subscribeToChanges = function(message, websocket){
 /**
  * Unsubscribes to a memory model
  */
-messageHandler.unsubscribeToChanges = function(){
-   if(cursor) cursor.close();
+messageHandler.unsubscribeToChanges = function(websocket){
+    var id = websocket.connectionInfo.id;
+    console.log(websocket.connectionInfo.id);
+
+    console.log(id);
+    var cursor = (cursorArray[id])? cursorArray[id] : null;
+    console.log(cursor);
+    if(cursor) cursor.close();
     console.log("unsubscribed to changes");
 }
 

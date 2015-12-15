@@ -2,6 +2,7 @@ var should = require('chai').should();
 var expect = require('chai').expect;
 var supertest = require('supertest');
 var app = require('./../app.js');
+var percolator = require('./../javascript/percolator.js');
 var api = supertest(app);
 
 
@@ -18,7 +19,7 @@ var api = supertest(app);
 
 
 
-xdescribe('API memorymodels unit test', function(){
+describe('API memorymodels unit test', function(){
     //
     //chooseMemoryModel
 
