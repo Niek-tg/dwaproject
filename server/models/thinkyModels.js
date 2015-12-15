@@ -15,14 +15,24 @@ var History = thinky.createModel("History", {
     mmid: type.string(), //mag weg voor client
     modelName: type.string(),
     version: type.number(), //disable voor client
-    frameLocations: type.array(), // mag weg voor client, misschien apart houden voor stack en heap
     memoryModel: {
         stacks: [
+
+            {
+                frameLocations:[
+                    {
+                        id: type.number,
+                        top: type.number,
+                        left: type.number
+                    }
+                ]
+            },
+
+
             [
                 {
                     id: type.number(),//disable voor client
                     name: type.string(),
-                    //order: type.number(), //verwijderen
                     vars: [ //properties value & type
                         {
                             id: type.number(), //disable voor client
@@ -33,16 +43,18 @@ var History = thinky.createModel("History", {
                             //reference: type.number()
                         }
                     ]
-                    //funcs: [ // funcs verwijderen. op de heap is het alleen nodig met object en func
-                    //    {
-                    //        id: type.number(),
-                    //        name: type.string(),
-                    //        reference: type.number()
-                    //    }
-                    //]
                 }]
         ],
         heaps: [
+            {
+                frameLocations:[
+                    {
+                        id: type.number,
+                        top: type.number,
+                        left: type.number
+                    }
+                ]
+            },
             [{
                 id: type.number(),
                 name: type.string(),
@@ -53,13 +65,6 @@ var History = thinky.createModel("History", {
                         name: type.string(),
                         value: type.string(),
                         undefined: type.boolean(),
-                        reference: type.number()
-                    }
-                ],
-                funcs: [
-                    {
-                        id: type.number(),
-                        name: type.string(),
                         reference: type.number()
                     }
                 ]
