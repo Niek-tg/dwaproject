@@ -43,7 +43,15 @@ function startWebservers(){
     theExpressApp.use(express.static(path.join(__dirname, 'public')));
     theExpressApp.use('/api/memorymodels', memorymodelRoute);
 
+
+    var websocketId = 0;
     webSocketServer.on('connection', function connection(websocket) {
+
+        websocketId++;
+        websocket.connectionInfo = {
+            id : websocketId
+        };
+
 
         websocket.on('message', function incoming(message) {
             //console.log(message.msgType);
