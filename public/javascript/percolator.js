@@ -129,7 +129,7 @@ function undoAction() {
     var version;
     if (currentMemoryModel.version > 1) {
         sendMessage({
-            msgType: 'deleteModel',
+            msgType: 'removeLatestVersion',
             data: {mmid: currentMemoryModel.mmid, version: currentMemoryModel.version}
         });
         version = currentMemoryModel.version - 1;

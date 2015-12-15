@@ -30,20 +30,8 @@ jsonEditorConnection.onmessage = function(message) {
     var data = JSON.parse(message.data);
     console.log(data);
     switch(data.msgType){
-        case "getAllModels":
-            getMemoryModels(data.data);
-            break;
-        case "getModelById":
-            getMemmoryModelById(data.data);
-            break;
-        case "positionsUpdated":
-            console.log(data.data);
-            break;
         case "updateMemoryModel":
             getMemoryModels(data.data);
-            break;
-        case "removeLatestVersion":
-            getVersionList(true);
             break;
         case "errorMsg":
             console.log(data.data);
