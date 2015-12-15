@@ -52,7 +52,12 @@ messageHandler.identifyMessage = function (message, websocket, webSocketServer) 
         case "unsubscribeToCurrentCursor":
             messageHandler.unsubscribeToChanges(websocket);
             break;
-        
+        case "socketIdentifier":
+                websocket.connectionInfo.identity = message.identity;
+                websocket.connectionInfo.state = message.state;
+                console.log('dit zit er in de websocket data', websocket.connectionInfo.identity );
+        break;
+
         case "testCase":
             console.log("Komt in testcaseKomt in testcaseKomt in testcaseKomt in testcaseKomt in testcaseKomt " +
                 "in testcaseKomt in testcaseKomt in testcaseKomt in testcaseKomt in testcaseKomt in testcase");
@@ -69,11 +74,11 @@ messageHandler.identifyMessage = function (message, websocket, webSocketServer) 
  * @param message Message that has been received from client, has a mmid in this case
  * @param websocket Connection to the websocket so a new message can be sent to client
  */
-messageHandler.subscribeToChanges = function(message, websocket){
+messageHandler.subscribeToChanges = function (message, websocket) {
     console.log("subscribed to changes");
     websocket.currentID = message.data.id;
 
-    queries.subscribeToChanges(message.data.id, function(err, curs) {
+    queries.subscribeToChanges(message.data.id, function (err, curs) {
         var socketID = websocket.connectionInfo.id;
         cursorArray[socketID] = curs;
 
@@ -81,7 +86,7 @@ messageHandler.subscribeToChanges = function(message, websocket){
             function (err, row) {
                 if (err) throw err;
                 //console.log("IN CURSOREACH SUBSCRIBE");
-                websocket.send(JSON.stringify({msgType :"newData",data:row}))
+                websocket.send(JSON.stringify({msgType: "newData", data: row}))
             }
         );
     });
@@ -90,14 +95,14 @@ messageHandler.subscribeToChanges = function(message, websocket){
 /**
  * Unsubscribes to a memory model
  */
-messageHandler.unsubscribeToChanges = function(websocket){
+messageHandler.unsubscribeToChanges = function (websocket) {
     var id = websocket.connectionInfo.id;
     console.log(websocket.connectionInfo.id);
 
     console.log(id);
-    var cursor = (cursorArray[id])? cursorArray[id] : null;
+    var cursor = (cursorArray[id]) ? cursorArray[id] : null;
     console.log(cursor);
-    if(cursor) cursor.close();
+    if (cursor) cursor.close();
     console.log("unsubscribed to changes");
 }
 
@@ -143,7 +148,7 @@ messageHandler.getAllMemoryModels = function (message, websocket) {
  * @param message
  * @param websocket
  */
-messageHandler.getModelById = function(message, websocket){
+messageHandler.getModelById = function (message, websocket) {
     //console.log(message.id)
     var mmid = message.id;
     var version = (message.version) ? parseInt(message.version) : null;
@@ -151,18 +156,24 @@ messageHandler.getModelById = function(message, websocket){
     if (mmid) {
         var cb = function (err, result) {
             if (err)
-               return websocket.send(JSON.stringify({msgType:"errorMsg",data:err}));
+                return websocket.send(JSON.stringify({msgType: "errorMsg", data: err}));
 
             if (result[0])
-               return websocket.send(JSON.stringify({msgType:"getModelById", data: result[0]}));
+                return websocket.send(JSON.stringify({msgType: "getModelById", data: result[0]}));
 
-            return websocket.send(JSON.stringify({msgType:"errorMsg", data:"Something went wrong in the getModelById callback: ID or version does not exist"}));
+            return websocket.send(JSON.stringify({
+                msgType: "errorMsg",
+                data: "Something went wrong in the getModelById callback: ID or version does not exist"
+            }));
         };
 
         if (version) queries.getMemoryModelByIdAndVersion(mmid, version, cb);
         else query = queries.getMemoryModelById(mmid, cb);
 
-    } else return websocket.send(JSON.stringify({msgType:"errorMsg", data:"Something went wrong in getModelById query: not a valid id"}));
+    } else return websocket.send(JSON.stringify({
+        msgType: "errorMsg",
+        data: "Something went wrong in getModelById query: not a valid id"
+    }));
 };
 
 /**
@@ -193,7 +204,8 @@ messageHandler.makeNewModel = function (message, websocket) {
 };
 
 /**
- * Deletes a memory model with the given ID from the database en send a broadcast to al clients except the current websocket
+ * Deletes a memory model with the given ID from the database en send a broadcast to al clients that
+ * are active except the current websocket
  * @param message
  * @param websocket
  * @param webSocketServer
@@ -210,10 +222,12 @@ messageHandler.deleteModel = function (message, websocket, webSocketServer) {
             }));
         } else {
             webSocketServer.clients.forEach(function (client) {
-                if (client != websocket) {
-                    client.send(JSON.stringify({msgType: "removeLatestVersion"}))
-        }
-    });
+                if(websocket != client){
+                    if (client.connectionInfo.state === 'active') {
+                        client.send(JSON.stringify({msgType: "removeLatestVersion"}))
+                    }
+                }
+            });
         }
     });
 };

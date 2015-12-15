@@ -242,7 +242,7 @@ var updatePositionFrames = function (frameId) {
         }
         i++;
     });
-    sendMessage({
+    percolatorSend({
         msgType: 'updateFramePositions',
         data: {
             frameIdEndPositions: frameIdEndPositions,

@@ -48,7 +48,7 @@ function chooseMemoryModel(id, prevVersion, undo) {
     enableDiagramView();
     var version = null;
 
-    sendMessage({msgType: "unsubscribeToCurrentCursor"});
+    percolatorSend({msgType: "unsubscribeToCurrentCursor"});
 
     if (prevVersion) {
         if (undo) {
@@ -63,7 +63,7 @@ function chooseMemoryModel(id, prevVersion, undo) {
         if (typeof id !== "string") id = $(id).attr('data-value');
         firstTime = true;
     }
-    sendMessage({msgType: 'getModelById', id: id, version: version});
+    percolatorSend({msgType: 'getModelById', id: id, version: version});
 }
 
 /**
@@ -88,7 +88,7 @@ function getMemmoryModelById(memoryModel) {
     // SET MEMORY MODEL ON SCREEN
     drawMemoryModel(memoryModel.memoryModel, memoryModel.frameLocations).then(function () {
         initPlumb();
-        sendMessage({msgType: "subscribeToChanges", data: {id: currentMemoryModel.id}});
+        percolatorSend({msgType: "subscribeToChanges", data: {id: currentMemoryModel.id}});
     });
 }
 
@@ -130,7 +130,7 @@ function getVersionList(update) {
 function undoAction() {
     var version;
     if (currentMemoryModel.version > 1) {
-        sendMessage({
+        percolatorSend({
             msgType: 'removeLatestVersion',
             data: {mmid: currentMemoryModel.mmid, version: currentMemoryModel.version}
         });
