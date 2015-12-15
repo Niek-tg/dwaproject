@@ -6,6 +6,11 @@ var queries = require('./queries/queries.js');
 var messageHandler = {};
 
 /**
+ * Holds the location to the results of the memorymodel that should be watched. Only used by the subscribeToChanges fuction
+ */
+var cursorArray = [];
+
+/**
  * Handles all incoming messages from clients and calls the corresponding methods
  * @param message Message that has been received from client
  * @param websocket Connection to the websocket so a new message can be sent to client later
@@ -32,7 +37,7 @@ messageHandler.identifyMessage = function (message, websocket, webSocketServer) 
             messageHandler.makeNewModel(message, websocket);
             break;
 
-        case "deleteModel":
+        case "removeLatestVersion":
             messageHandler.deleteModel(message, websocket, webSocketServer);
             break;
 
@@ -43,32 +48,58 @@ messageHandler.identifyMessage = function (message, websocket, webSocketServer) 
         case "updateMemoryModel":
             messageHandler.updateMemoryModel(message, websocket);
             break;
+
+        case "unsubscribeToCurrentCursor":
+            messageHandler.unsubscribeToChanges(websocket);
+            break;
+        
+        case "testCase":
+            console.log("Komt in testcaseKomt in testcaseKomt in testcaseKomt in testcaseKomt in testcaseKomt " +
+                "in testcaseKomt in testcaseKomt in testcaseKomt in testcaseKomt in testcaseKomt in testcase");
+            break;
+
         default :
             websocket.send(JSON.stringify({msgType: "errorMsg", data: "MessageHandler: unknown msgType received="}));
             break;
     }
 };
 
-
 /**
  * Subscribes to a memory model and sends new updates of the model to the client
  * @param message Message that has been received from client, has a mmid in this case
  * @param websocket Connection to the websocket so a new message can be sent to client
  */
-messageHandler.subscribeToChanges = function (message, websocket) {
-    console.log(message);
+messageHandler.subscribeToChanges = function(message, websocket){
+    console.log("subscribed to changes");
     websocket.currentID = message.data.id;
-    queries.subscribeToChanges(message.data.id, function (err, cursor) {
-        console.log("IN MESSAGEHANDLER SUBSCRIBE");
-        cursor.each(
+
+    queries.subscribeToChanges(message.data.id, function(err, curs) {
+        var socketID = websocket.connectionInfo.id;
+        cursorArray[socketID] = curs;
+
+        cursorArray[socketID].each(
             function (err, row) {
                 if (err) throw err;
-                console.log("IN CURSOREACH SUBSCRIBE");
-                websocket.send(JSON.stringify({msgType: "newData", data: row}))
+                //console.log("IN CURSOREACH SUBSCRIBE");
+                websocket.send(JSON.stringify({msgType :"newData",data:row}))
             }
         );
     });
 };
+
+/**
+ * Unsubscribes to a memory model
+ */
+messageHandler.unsubscribeToChanges = function(websocket){
+    var id = websocket.connectionInfo.id;
+    console.log(websocket.connectionInfo.id);
+
+    console.log(id);
+    var cursor = (cursorArray[id])? cursorArray[id] : null;
+    console.log(cursor);
+    if(cursor) cursor.close();
+    console.log("unsubscribed to changes");
+}
 
 /**
  * Gets all memory models from the database and sends them back to the client
@@ -112,31 +143,26 @@ messageHandler.getAllMemoryModels = function (message, websocket) {
  * @param message
  * @param websocket
  */
-messageHandler.getModelById = function (message, websocket) {
+messageHandler.getModelById = function(message, websocket){
+    //console.log(message.id)
     var mmid = message.id;
     var version = (message.version) ? parseInt(message.version) : null;
 
     if (mmid) {
         var cb = function (err, result) {
             if (err)
-                return websocket.send(JSON.stringify({msgType: "errorMsg", data: err}));
+               return websocket.send(JSON.stringify({msgType:"errorMsg",data:err}));
 
             if (result[0])
-                return websocket.send(JSON.stringify({msgType: "getModelById", data: result[0]}));
+               return websocket.send(JSON.stringify({msgType:"getModelById", data: result[0]}));
 
-            return websocket.send(JSON.stringify({
-                msgType: "errorMsg",
-                data: "Something went wrong in the getModelById callback: ID or version does not exist"
-            }));
+            return websocket.send(JSON.stringify({msgType:"errorMsg", data:"Something went wrong in the getModelById callback: ID or version does not exist"}));
         };
 
         if (version) queries.getMemoryModelByIdAndVersion(mmid, version, cb);
         else query = queries.getMemoryModelById(mmid, cb);
 
-    } else return websocket.send(JSON.stringify({
-        msgType: "errorMsg",
-        data: "Something went wrong in getModelById query: not a valid id"
-    }));
+    } else return websocket.send(JSON.stringify({msgType:"errorMsg", data:"Something went wrong in getModelById query: not a valid id"}));
 };
 
 /**
@@ -232,3 +258,4 @@ messageHandler.updateMemoryModel = function (message, websocket) {
 };
 
 module.exports = messageHandler;
+

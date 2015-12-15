@@ -48,6 +48,8 @@ function chooseMemoryModel(id, prevVersion, undo) {
     enableDiagramView();
     var version = null;
 
+    sendMessage({msgType: "unsubscribeToCurrentCursor"});
+
     if (prevVersion) {
         if (undo) {
             id = currentMemoryModel.mmid;
@@ -129,7 +131,7 @@ function undoAction() {
     var version;
     if (currentMemoryModel.version > 1) {
         sendMessage({
-            msgType: 'deleteModel',
+            msgType: 'removeLatestVersion',
             data: {mmid: currentMemoryModel.mmid, version: currentMemoryModel.version}
         });
         version = currentMemoryModel.version - 1;

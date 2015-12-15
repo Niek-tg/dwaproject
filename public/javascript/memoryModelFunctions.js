@@ -18,14 +18,16 @@ var frameIdEndPositions = [];
  * @returns {Promise} Promise to call actions when the drawing is done
  */
 function drawMemoryModel(model, frameLocations) {
-    console.log("drawing");
+    //console.log("drawing");
     return new Promise(function (resolve, reject) {
         var diagramContainer = $('#diagramContainer');
         diagramContainer.children().remove();
 
         var promises = [];
 
+        jsPlumb.detachEveryConnection();
         frameIdEndPositions = [];
+        relations = [];
         promises.push(drawFrames("Stack", model.stacks, frameLocations));
         promises.push(drawFrames("Heap", model.heaps, frameLocations));
 
@@ -162,7 +164,7 @@ function updateMemoryModel(data) {
  * Initializes the JSPlumb script
  */
 function initPlumb() {
-    jsPlumb.ready(function () {
+    jsPlumb.ready(function ()         {
 
         jsPlumb.Defaults.Container = $("#diagramContainer");
 
@@ -195,11 +197,13 @@ function redrawPlumbing() {
     };
 
     relations.forEach(function (relation) {
+        //console.log(relation);
         jsPlumb.connect({
             source: relation.source.toString(),
             target: relation.target.toString()
         }, common);
     });
+
     relations = [];
 }
 
