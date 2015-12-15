@@ -93,10 +93,11 @@
 <script>
     $(document).ready(function(){
         enableDiagramView();
-        calculateDiagramContainerSize();
+
     });
 
     $(window).resize(function () {
+        calculateDiagramContainerSize();
         jsPlumb.repaintEverything();
     })
 </script>

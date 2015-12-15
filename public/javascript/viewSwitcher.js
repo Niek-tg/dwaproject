@@ -22,6 +22,7 @@ function setCurrentView(newView){
 function enableDiagramView(){
     $('#memoryModel').load('./../views/diagramview.html');
     setCurrentView("diagramView");
+    calculateDiagramContainerSize();
 }
 
 /**
@@ -31,6 +32,5 @@ function enableCodeView(){
     $('#memoryModel').load('./../views/codeview.html',function(cb){
         initJSONEditor();
     });
-
     setCurrentView("codeView");
 }

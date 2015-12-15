@@ -30,11 +30,33 @@ function drawMemoryModel(model, frameLocations) {
         relations = [];
         promises.push(drawFrames("Stack", model.stacks, frameLocations));
         promises.push(drawFrames("Heap", model.heaps, frameLocations));
+        promises.push(setClassStyle(model.stacks.length, model.heaps.length));
 
         Promise.all(promises).then(function () {
             resolve();
         });
     })
+}
+
+/**
+ * Sets width of the stack and heap class by the number of stack and heaps
+ * @param stacksLength the length of stacks
+ * @param heapsLength the length of heaps
+ * @returns {Promise} Promise to call actions when setting width is done
+ */
+function setClassStyle(stacksLength, heapsLength) {
+    return new Promise(function (resolve, reject) {
+        var totalWidth = (stacksLength + heapsLength);
+        var stackWidth;
+        var heapWidth;
+        if(totalWidth === 2){ stackWidth = 30; heapWidth = 70;}
+        else{ stackWidth = (100 / totalWidth); heapWidth = (100 / totalWidth);}
+
+        $(".Stack").css("width", "calc(" + stackWidth + "% - 2px)");
+        $(".Heap").css("width", "calc(" + heapWidth + "% - 2px)");
+
+        resolve();
+    });
 }
 
 /**
@@ -48,10 +70,12 @@ function drawMemoryModel(model, frameLocations) {
 
 function drawFrames(location, model, frameLocations) {
     return new Promise(function (resolve, reject) {
+        console.log("DRAWING FRAMES");
         var diagramContainer = $('#diagramContainer');
         var i = 1;
 
         model.forEach(function (frames) {
+
             diagramContainer.append("<div id='" + location + i + "' class='" + location + "'></div>");
 
 
@@ -85,7 +109,7 @@ function drawFrames(location, model, frameLocations) {
                     "</div>");
 
                 if (item.vars) drawVars('#' + item.id, item.vars);
-                if (item.funcs)drawFuncs('#' + item.id, item.funcs);
+                //if (item.funcs)drawFuncs('#' + item.id, item.funcs);
                 savePositionsOfframes(item.id);
 
             });
@@ -134,12 +158,13 @@ function drawFuncs(location, funcs) {
  * @returns {String|Number} value to be drawn inside the variable or function
  */
 function determineVar(variable) {
-    if (variable.reference) {
-        relations.push({source: variable.id, target: variable.reference});
+    if (variable.type === "reference") {
+        relations.push({source: variable.id, target: variable.value});
         return "";
     }
-    else if (variable.undefined) return "undefined";
-    else if (variable.value) return variable.value;
+    else if (variable.type === "undefined") return "undefined";
+    else if (variable.type === "string") return variable.value;
+    else if (variable.type === "number") return variable.value;
     else return "null"
 }
 
@@ -171,6 +196,7 @@ function initPlumb() {
         $(".frame").draggable({
             drag: function (e) {
                 jsPlumb.repaintEverything();
+                console.log("dragged");
             },
             containment: "parent",
             stop: function (event) {
@@ -191,7 +217,9 @@ function redrawPlumbing() {
     var common = {
         endpoint: "Blank",
         anchor: ["Left", "Right"],
-        overlays: [["Arrow", {width: 40, length: 20}]],
+        overlays: [["Arrow", {width: 40, length: 20, location: 1}]],
+        paintStyle:{ strokeStyle: 'grey',lineWidth:5 },
+        hoverPaintStyle:{ strokeStyle:"#752921" },
         isSource: true,
         isTarget: true
     };
@@ -242,7 +270,7 @@ var updatePositionFrames = function (frameId) {
         }
         i++;
     });
-    sendMessage({
+    percolatorSend({
         msgType: 'updateFramePositions',
         data: {
             frameIdEndPositions: frameIdEndPositions,
