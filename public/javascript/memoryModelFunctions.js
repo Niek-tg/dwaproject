@@ -196,6 +196,7 @@ function initPlumb() {
         $(".frame").draggable({
             drag: function (e) {
                 jsPlumb.repaintEverything();
+                console.log("dragged");
             },
             containment: "parent",
             stop: function (event) {
@@ -269,7 +270,7 @@ var updatePositionFrames = function (frameId) {
         }
         i++;
     });
-    sendMessage({
+    percolatorSend({
         msgType: 'updateFramePositions',
         data: {
             frameIdEndPositions: frameIdEndPositions,

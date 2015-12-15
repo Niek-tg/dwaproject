@@ -49,7 +49,9 @@ function startWebservers(){
 
         websocketId++;
         websocket.connectionInfo = {
-            id : websocketId
+            id : websocketId,
+            identity: null,
+            state: null
         };
 
 

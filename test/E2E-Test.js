@@ -125,61 +125,53 @@ describe("E2E test get homepage", function () {
             });
     });
 
+
     it("Should move a memory model frame across the screen and should be seen by all viewing browsers", function (done) {
-        var id = '#92524038-f0e2-4db2-ad01-321a9040df02';
-        var divToMove = "#6";
+        var id = '#1ee3f80e-c107-4fa2-9bc4-4f24887d1754';
+        var divToMove = "#7";
+        var divToMoveTo = "#9";
         first_browser
             .element(id)
             .click().then(function () {
                 second_browser
                     .element(id)
-                    .click().then(function(){
-                        first_browser
+                    .click().then(function () {
+                        second_browser
                             .waitForExist(".Heap", 2000)
                             .waitForExist(".Stack", 2000)
-                            .moveToObject(divToMove,0,0).then(function(){
-                                second_browser
+                            .waitForExist(divToMove, 2000)
+                            .waitForExist(divToMoveTo, 2000)
+                            .then(function () {
+                                first_browser
                                     .waitForExist(".Heap", 2000)
                                     .waitForExist(".Stack", 2000)
-                                    .then(function() {
-                                        first_browser.buttonDown()
-                                            .pause(50)
-                                            .then(function () {
-                                                first_browser.moveToObject(divToMove, 150, 0)
-                                                    .pause(50)
-                                                    .then(function () {
-                                                        first_browser.buttonUp().pause(50).then(function () {
-                                                            first_browser
-                                                                .pause(200)
-                                                                .getLocation(divToMove).then(function (firstbrowser_Location) {
-
-                                                                    second_browser
-                                                                        .pause(1000)
-                                                                        .getCssProperty(divToMove, 'left').then(function (leftLocation) {
-
-                                                                            second_browser
-                                                                                .pause(1000)
-                                                                                .getCssProperty(divToMove, 'top').then(function (topLocation) {
-                                                                                    console.log("left location", leftLocation.value);
-                                                                                    console.log("top location", topLocation.value);
-                                                                                    console.log("firstbrowser location x", firstbrowser_Location.x);
-                                                                                    console.log("firstbrowser location y", firstbrowser_Location.y);
-                                                                                    //expect(firstbrowser_Location.x).to.equal(leftLocation.value);
-                                                                                    //expect(firstbrowser_Location.y).to.equal(topLocation.value);
-                                                                                    console.log("equal check done");
-                                                                                    //done();
-                                                                                });
-                                                                        });
-                                                                })
-                                                        });
+                                    .waitForExist(divToMove, 2000)
+                                    .waitForExist(divToMoveTo, 2000)
+                                    .then(function(){
+                                        first_browser
+                                            //.moveToObject(divToMove, 5, 5)
+                                            .moveToObject(divToMove, 1, 1)
+                                            .buttonDown()
+                                            .moveToObject(divToMoveTo, 1, 1)
+                                            .buttonUp()
+                                            //.dragAndDrop(divToMove, divToMoveTo)
+                                            .getLocation(divToMove)
+                                            .then(function (firstbrowser_Location) {
+                                                second_browser
+                                                    .getLocation(divToMove)
+                                                    .then(function (secondbrowser_Location) {
+                                                        console.log(firstbrowser_Location, "first");
+                                                        console.log(secondbrowser_Location, "second");
+                                                        expect(firstbrowser_Location.x).to.equal(secondbrowser_Location.x);
+                                                        expect(firstbrowser_Location.y).to.equal(secondbrowser_Location.y);
+                                                        done();
                                                     });
                                             })
                                     })
-                            })
-                    })
-            });
-    });
-
+                            });
+                    });
+            })
+    })
 
 })
 ;
