@@ -109,7 +109,7 @@ function drawFrames(location, model, frameLocations) {
                     "</div>");
 
                 if (item.vars) drawVars('#' + item.id, item.vars);
-                if (item.funcs)drawFuncs('#' + item.id, item.funcs);
+                //if (item.funcs)drawFuncs('#' + item.id, item.funcs);
                 savePositionsOfframes(item.id);
 
             });
@@ -158,12 +158,13 @@ function drawFuncs(location, funcs) {
  * @returns {String|Number} value to be drawn inside the variable or function
  */
 function determineVar(variable) {
-    if (variable.reference) {
-        relations.push({source: variable.id, target: variable.reference});
+    if (variable.type === "reference") {
+        relations.push({source: variable.id, target: variable.value});
         return "";
     }
-    else if (variable.undefined) return "undefined";
-    else if (variable.value) return variable.value;
+    else if (variable.type === "undefined") return "undefined";
+    else if (variable.type === "string") return variable.value;
+    else if (variable.type === "number") return variable.value;
     else return "null"
 }
 
