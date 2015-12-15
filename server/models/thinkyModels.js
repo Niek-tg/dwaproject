@@ -11,21 +11,20 @@ var ModelInfo = thinky.createModel("ModelInfo", {
 
 var History = thinky.createModel("History", {
 
-    id: type.string(), // mag weg voor client (websocket houdt het bij)
-    mmid: type.string(), //mag weg voor client
+    id: type.string(),
+    mmid: type.string(),
     modelName: type.string(),
-    version: type.number(), //disable voor client
-    frameLocations: type.array(), // mag weg voor client, misschien apart houden voor stack en heap
+    version: type.number(),
+    frameLocations: type.array(),
     memoryModel: {
         stacks: [
             [
                 {
-                    id: type.number(),//disable voor client
+                    id: type.number(),
                     name: type.string(),
-                    //order: type.number(), //verwijderen
-                    vars: [ //properties value & type
+                    vars: [
                         {
-                            id: type.number(), //disable voor client
+                            id: type.number(),
                             name: type.string(),
                             value: type.mix(),
                             type: type.mix()
@@ -33,33 +32,18 @@ var History = thinky.createModel("History", {
                             //reference: type.number()
                         }
                     ]
-                    //funcs: [ // funcs verwijderen. op de heap is het alleen nodig met object en func
-                    //    {
-                    //        id: type.number(),
-                    //        name: type.string(),
-                    //        reference: type.number()
-                    //    }
-                    //]
                 }]
         ],
         heaps: [
             [{
                 id: type.number(),
                 name: type.string(),
-                //order: type.number(), //verwijderen
                 vars: [
                     {
                         id: type.number(),
                         name: type.string(),
                         value: type.string(),
                         undefined: type.boolean(),
-                        reference: type.number()
-                    }
-                ],
-                funcs: [
-                    {
-                        id: type.number(),
-                        name: type.string(),
                         reference: type.number()
                     }
                 ]

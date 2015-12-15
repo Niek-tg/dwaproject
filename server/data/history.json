@@ -64,6 +64,65 @@
             ],
             "funcs": null
           }
+        ],
+        [
+          {
+            "id": 900,
+            "name": "Tweede stack",
+            "order": 1,
+            "vars": [
+              {
+                "id": 901,
+                "name": "Family",
+                "value": null,
+                "undefined": false,
+                "reference": 7
+              },
+              {
+                "id": 902,
+                "name": "nullVar",
+                "value": null,
+                "undefined": false,
+                "reference": null
+              },
+              {
+                "id": 903,
+                "name": "undefinedVar",
+                "value": null,
+                "undefined": true,
+                "reference": null
+              }
+            ],
+            "funcs": [
+              {
+                "id": 904,
+                "name": "Person",
+                "reference": 16
+              }
+            ]
+          },
+          {
+            "id": 905,
+            "name": "setAge",
+            "order": 2,
+            "vars": [
+              {
+                "id": 906,
+                "name": "age",
+                "value": "25",
+                "undefined": false,
+                "reference": null
+              },
+              {
+                "id": 907,
+                "name": "this",
+                "value": null,
+                "undefined": null,
+                "reference": 27
+              }
+            ],
+            "funcs": null
+          }
         ]
       ],
       "heaps": [
@@ -396,6 +455,65 @@
               },
               {
                 "id": 907,
+                "name": "this",
+                "value": null,
+                "undefined": null,
+                "reference": 27
+              }
+            ],
+            "funcs": null
+          }
+        ],
+        [
+          {
+            "id": 800,
+            "name": "Derde stack",
+            "order": 1,
+            "vars": [
+              {
+                "id": 801,
+                "name": "Family",
+                "value": null,
+                "undefined": false,
+                "reference": 7
+              },
+              {
+                "id": 802,
+                "name": "nullVar",
+                "value": null,
+                "undefined": false,
+                "reference": null
+              },
+              {
+                "id": 803,
+                "name": "undefinedVar",
+                "value": null,
+                "undefined": true,
+                "reference": null
+              }
+            ],
+            "funcs": [
+              {
+                "id": 804,
+                "name": "Person",
+                "reference": 16
+              }
+            ]
+          },
+          {
+            "id": 805,
+            "name": "setAge",
+            "order": 2,
+            "vars": [
+              {
+                "id": 806,
+                "name": "age",
+                "value": "25",
+                "undefined": false,
+                "reference": null
+              },
+              {
+                "id": 807,
                 "name": "this",
                 "value": null,
                 "undefined": null,
