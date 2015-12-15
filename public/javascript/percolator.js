@@ -30,12 +30,10 @@ function getMemoryModels(memoryModels) {
     console.log("hallooooo memmorymodels " + memoryModels);
     sel.innerHTML = "";
     for (var i = 0; i < memoryModels.length; i++) {
-        console.log("Hij is in de lijstfunctie");
         $(sel).append("<li class='list-group-item'><a id='" + memoryModels[i].mmid + "'onclick='chooseMemoryModel(this, false, false)' data-value='" +
             memoryModels[i].mmid + "' data-version='" + memoryModels[i].version + "'  href='#'>" +
             memoryModels[i].modelName + "</a></li>")
     }
-
 }
 
 /**
@@ -46,6 +44,7 @@ function getMemoryModels(memoryModels) {
  * @param undo boolean determining whether the undo button has been pressed
  */
 function chooseMemoryModel(id, prevVersion, undo) {
+    $(".viewButtons").css("display", "block");
     enableDiagramView();
     var version = null;
 
@@ -59,7 +58,8 @@ function chooseMemoryModel(id, prevVersion, undo) {
             id = currentMemoryModel.mmid;
         }
     } else {
-        id = $(id).attr('data-value');
+        if (typeof id !== "string") id = $(id).attr('data-value');
+
         firstTime = true;
     }
     sendMessage({msgType: 'getModelById', id: id, version: version});
@@ -102,19 +102,24 @@ function setModelInfo() {
 
 /**
  * Determines and draws the list of versions available for the memory model
+ * @param update, if update is true decrease the highestVersion by one
  */
 function getVersionList(update) {
-    if (currentMemoryModel.version === highestVersion) $("#undoButton").css("display", "block");
+
+    if(update){highestVersion --;}
+
+    if(highestVersion > 1) $("#undoButton").css("display", "block");
     else $("#undoButton").css("display", "none");
 
     $("#labelVersionList").css("display", "block");
+
     var sel = document.getElementById('memoryModelVersionList');
-        $(sel).empty();
+    $(sel).empty();
+
         for (var i = 1; i < highestVersion + 1; i++) {
             $(sel).append("<li class='list-group-item'><a id='versionListItem" + i + "'  onclick='chooseMemoryModel(this , true, false)' data-value='" +
                 currentMemoryModel.mmid + "' data-version='" + i + "'  href='#'>  Version: " + i + "</a></li>")
         }
-
 }
 
 /**
