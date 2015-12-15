@@ -212,8 +212,8 @@ messageHandler.deleteModel = function (message, websocket, webSocketServer) {
             webSocketServer.clients.forEach(function (client) {
                 if (client != websocket) {
                     client.send(JSON.stringify({msgType: "removeLatestVersion"}))
-                }
-            });
+        }
+    });
         }
     });
 };
