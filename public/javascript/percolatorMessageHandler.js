@@ -21,6 +21,15 @@ connection.onopen = function() {
     console.log("getting memory models");
     connection.send(JSON.stringify({msgType: "getAllModels"}));
 };
+/**
+ * Triggered when the windows is closed. the current cursor is being unsubscribed to prevent server errors and eventually the websocket is closed
+ */
+window.onbeforeunload = function() {
+    connection.onclose = function () {}; // disable onclose handler first
+    sendMessage({msgType: "unsubscribeToCurrentCursor"});
+    connection.close()
+};
+
 
 /**
  * MessageListener for the client, runs when a new message is received.
@@ -30,6 +39,9 @@ connection.onmessage = function(message) {
     var data = JSON.parse(message.data);
     console.log(data);
     switch(data.msgType){
+        case "newData":
+            updateMemoryModel(data);
+            break;
         case "getAllModels":
             getMemoryModels(data.data);
             break;

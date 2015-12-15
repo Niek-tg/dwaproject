@@ -25,9 +25,9 @@ jsonEditorConnection.onopen = function() {
  * Triggered when the windows is closed. the current cursor is being unsubscribed to prevent server errors and eventually the websocket is closed
  */
 window.onbeforeunload = function() {
-    connection.onclose = function () {}; // disable onclose handler first
+    jsonEditorConnection.onclose = function () {}; // disable onclose handler first
     sendMessage({msgType: "unsubscribeToCurrentCursor"});
-    connection.close()
+    jsonEditorConnection.close()
 };
 
 /**
