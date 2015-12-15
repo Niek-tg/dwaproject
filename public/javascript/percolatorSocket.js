@@ -18,6 +18,7 @@ function sendMessage(data){
  * to get all memory models
  */
 connection.onopen = function() {
+    console.log("getting memory models");
     connection.send(JSON.stringify({msgType: "getAllModels"}));
 };
 

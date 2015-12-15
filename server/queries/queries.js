@@ -153,7 +153,7 @@ queries.deleteLatestversion = function (mmid, version, cb) {
 
 };
 
-queries.setModelPositions = function (positions, mmid, version, cb) {
+queries.updateFramePositions = function (positions, mmid, version, cb) {
     getConnection(function (err, conn) {
         if (err) return cb(err, null);
         r.db('percolatordb').table("History")

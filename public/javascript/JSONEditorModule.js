@@ -4,19 +4,6 @@
  */
 
 //var connection = new WebSocket("ws://localhost:3000");
-//
-//connection.onmessage = function (message) {
-//    var data = JSON.parse(message.data);
-//    console.log(data);
-//
-//    switch (data.msgType) {
-//        case "getModelById":
-//            setMemoryModel(data.data);
-//            console.log("komt in switch");
-//            break;
-//
-//    }
-//};
 
 
 /**
@@ -25,18 +12,16 @@
  *  When the "nieuw geheugenmodel" button is clicked it will create a new memorymodel.
  */
 
-//Boolean to make sure the event listener on keydown isn't created twice.
-var keydownExists = false;
-
+var keydownExists = false; //Boolean to make sure the event listener on keydown isn't created twice.
 
 function initJSONEditor() {
 
     var container = document.getElementById('jsoneditor');
-    var selectedMemoryModel = currentMemoryModel;
-    var editor = new JSONEditor(container, options, selectedMemoryModel );
+    var editor = new JSONEditor(container, options, currentMemoryModel );
     var newMemorymodelButton = $('<input/>').attr({type: 'button', id: 'setJSON', value: 'Nieuw geheugenmodel'});
+    var saveMemorymodelButton = $('<input/>').attr({type: 'button', id: 'getJSON', value: 'Opslaan'});
 
-    $("#JSONButtons").append(newMemorymodelButton);
+    $("#JSONButtons").append(newMemorymodelButton, saveMemorymodelButton);
 
     $("#setJSON").click(function newMemoryModel() {
             var modelInfo = {
@@ -95,17 +80,13 @@ function initJSONEditor() {
             editor.set(modelInfo);
         });
 
-        var saveMemorymodelButton = $('<input/>').attr({type: 'button', id: 'getJSON', value: 'Opslaan'});
-        $("#JSONButtons").append(saveMemorymodelButton);
-
     $("#getJSON").click(function saveMemoryModel() {
         var newMemoryModel = editor.get();
         sendMessage({msgType: 'updateMemoryModel', data: newMemoryModel});
-        alert('Memory model is updated');
     });
 
 
-if(keydownExists === false){
+if(!keydownExists){
     $(window).bind('keydown', function (event) {
         keydownExists = true;
         if ((event.ctrlKey || event.metaKey) && event.which == 83) {
@@ -121,7 +102,7 @@ if(keydownExists === false){
 }
 
 /**
- * Function to disable some fields en values in de JSON editor.
+ * Function to disable some fields or/and values in de JSON-editor. Setting it to true or false.
  * @type {{editable: Function}}
  */
 
@@ -132,8 +113,6 @@ var options = {
             case 'mmid':
             case 'id':
                 return true;
-            break;
-
             default:
                 return {
                     field: true,
