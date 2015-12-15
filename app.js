@@ -7,7 +7,6 @@ var memorymodelRoute = require('./server/routes/memorymodels.js');
 var queries = require('./server/queries/queries.js');
 var messageHandler = require('./server/messageHandler.js');
 
-console.log('==============', messageHandler);
 var config     = require('./config.js');
 
 const ONLYSEED = (process.argv.slice(2) == 'onlySeed');
@@ -47,7 +46,7 @@ function startWebservers(){
     webSocketServer.on('connection', function connection(websocket) {
 
         websocket.on('message', function incoming(message) {
-            console.log(message.msgType);
+            //console.log(message.msgType);
             messageHandler.identifyMessage(message, websocket, webSocketServer);
         });
 

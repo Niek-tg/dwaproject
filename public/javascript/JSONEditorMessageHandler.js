@@ -22,16 +22,40 @@ jsonEditorConnection.onopen = function() {
 };
 
 /**
+ * Triggered when the windows is closed. the current cursor is being unsubscribed to prevent server errors and eventually the websocket is closed
+ */
+window.onbeforeunload = function() {
+    jsonEditorConnection.onclose = function () {}; // disable onclose handler first
+    sendMessage({msgType: "unsubscribeToCurrentCursor"});
+    jsonEditorConnection.close()
+};
+
+/**
  * Listener to messages received by the websocket. Fired when a message is received.
  *
  * @param message contains the message received by the websocket
  */
 jsonEditorConnection.onmessage = function(message) {
     var data = JSON.parse(message.data);
-    console.log(data);
+    //console.log(data);
     switch(data.msgType){
+        case "newData":
+            updateMemoryModel(data);
+            break;
+        case "getAllModels":
+            getMemoryModels(data.data);
+            break;
+        case "getModelById":
+            getMemmoryModelById(data.data);
+            break;
+        case "positionsUpdated":
+            console.log(data.data);
+            break;
         case "updateMemoryModel":
             getMemoryModels(data.data);
+            break;
+        case "removeLatestVersion":
+            getVersionList(true);
             break;
         case "errorMsg":
             console.log(data.data);
