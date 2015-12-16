@@ -40,4 +40,4 @@ function messageHandlerClient(message){
             console.log('client messagehandler: unknown message received ' + data.msgType);
             break;
     }
-};
+}
