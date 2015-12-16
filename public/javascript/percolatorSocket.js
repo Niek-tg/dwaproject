@@ -31,7 +31,7 @@ percolatorSend = function (data) {
 window.onbeforeunload = function () {
     connection.onclose = function () {
     }; // disable onclose handler first
-    sendMessage({msgType: "unsubscribeToCurrentCursor"});
+    percolatorSend({msgType: "unsubscribeToCurrentCursor"});
     connection.close()
 };
 
