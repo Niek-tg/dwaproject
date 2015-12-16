@@ -26,9 +26,9 @@ function calculateDiagramContainerSize(){
     var count = $("#diagramContainer").children().length;
     size -= $("#allMemoryModels").outerWidth();
     size -= $("#memoryModelVersions").outerWidth();
-    console.log(size);
+    //console.log(size);
     $("#memoryModel").css({maxWidth : size - 23 + "px", "width": "100%"});
     $("#diagramContainer").css({maxWidth : size - 3 + "px", "width": "100%"});
     if(currentView === "diagramView" && count > 1) jsPlumb.repaintEverything();
-    console.log("calculated diagram container size")
+    //console.log("calculated diagram container size")
 }

@@ -9,21 +9,36 @@ var keydownExists = false; //Boolean to make sure the event listener on keydown 
 function initJSONEditor() {
 
     var container = document.getElementById('jsoneditor');
-    var editor = new JSONEditor(container, options, currentMemoryModel );
+    var editor = new JSONEditor(container, options, currentMemoryModel);
     var newMemorymodelButton = $('<input/>').attr({type: 'button', id: 'setJSON', value: 'Nieuw geheugenmodel'});
     var saveMemorymodelButton = $('<input/>').attr({type: 'button', id: 'getJSON', value: 'Opslaan'});
+    var savedFirstTime = true;
+    var counter = 0;
 
     $("#JSONButtons").append(newMemorymodelButton, saveMemorymodelButton);
 
     $("#setJSON").click(function newMemoryModel() {
-            var modelInfo = {
-                'language': '',
-                'owner': '',
-                'mmid': 21,
-                'modelName': '',
-                'version': 0,
-                'memoryModel': {
-                    stack: [{
+        var modelInfo = {
+            'language': '',
+            'owner': '',
+            'mmid': 21,
+            'modelName': '',
+            'version': 0,
+            'memoryModel': {
+                stack: [{
+                    id: '',
+                    name: '',
+                    vars: [
+                        {
+                            id: '',
+                            name: '',
+                            value: '',
+                            type: ''
+                        }
+                    ]
+                }],
+                heap: [
+                    {
                         id: '',
                         name: '',
                         vars: [
@@ -34,45 +49,36 @@ function initJSONEditor() {
                                 type: ''
                             }
                         ]
-                    }],
-                    heap: [
-                        {
-                            id: '',
-                            name: '',
-                            vars: [
-                                {
-                                    id: '',
-                                    name: '',
-                                    value: '',
-                                    type:''
-                                }
-                            ]
-                        }
-                    ]
-                }
-            };
-            editor.set(modelInfo);
-        });
+                    }
+                ]
+            }
+        };
+        editor.set(modelInfo);
+    });
 
     $("#getJSON").click(function saveMemoryModel() {
         var newMemoryModel = editor.get();
+        console.log("FIRSTTIME = ", savedFirstTime);
+        if (savedFirstTime) savedFirstTime = false;
+        else newMemoryModel.version += counter; counter ++; console.log(newMemoryModel.version);
         jsonEditorSendMessage({msgType: 'updateMemoryModel', data: newMemoryModel});
     });
 
 
-if(!keydownExists){
-    $(window).bind('keydown', function (event) {
-        keydownExists = true;
-        if ((event.ctrlKey || event.metaKey) && event.which == 83) {
-            switch (String.fromCharCode(event.which).toLowerCase()) {
-                case 's':
-                    event.preventDefault();
-                    var newMemoryModel = editor.get();
-                    jsonEditorSendMessage({msgType: 'updateMemoryModel', data: newMemoryModel});
-                    break;
+    if (!keydownExists) {
+        $(window).bind('keydown', function (event) {
+            keydownExists = true;
+            if ((event.ctrlKey || event.metaKey) && event.which == 83) {
+                switch (String.fromCharCode(event.which).toLowerCase()) {
+                    case 's':
+                        event.preventDefault();
+                        var newMemoryModel = editor.get();
+                        jsonEditorSendMessage({msgType: 'updateMemoryModel', data: newMemoryModel});
+                        break;
+                }
             }
-        }
-    })}
+        })
+    }
 }
 
 /**
