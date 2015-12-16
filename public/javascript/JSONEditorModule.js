@@ -56,7 +56,7 @@ function initJSONEditor() {
 
     $("#getJSON").click(function saveMemoryModel() {
         var newMemoryModel = editor.get();
-        jsonSendMessage({msgType: 'updateMemoryModel', data: newMemoryModel});
+        jsonEditorSendMessage({msgType: 'updateMemoryModel', data: newMemoryModel});
     });
 
 
@@ -68,7 +68,7 @@ if(!keydownExists){
                 case 's':
                     event.preventDefault();
                     var newMemoryModel = editor.get();
-                    jsonSendMessage({msgType: 'updateMemoryModel', data: newMemoryModel});
+                    jsonEditorSendMessage({msgType: 'updateMemoryModel', data: newMemoryModel});
                     break;
             }
         }
