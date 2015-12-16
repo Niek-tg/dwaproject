@@ -240,7 +240,6 @@ messageHandler.deleteModel = function (message, websocket, webSocketServer) {
  * @param message
  * @param websocket
  */
-
 messageHandler.updateFramePositions = function (message, websocket) {
     var positions = message.data.frameIdEndPositions;
     var mmid = message.data.mmid;
@@ -255,7 +254,6 @@ messageHandler.updateFramePositions = function (message, websocket) {
 
         return websocket.send(JSON.stringify({msgType: "positionsUpdated", data: "Positions updated completed"}));
     });
-
 };
 
 messageHandler.updateMemoryModel = function (message, websocket) {
