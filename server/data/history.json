@@ -55,6 +55,244 @@
               }
             ]
           }
+        ]
+      ],
+      "heaps": [
+        [
+          {
+            "id": 6,
+            "name": null,
+            "vars": [
+              {
+                "id": 7,
+                "name": "0",
+                "value": 8,
+                "type": "reference"
+              },
+              {
+                "id": 200,
+                "name": "1",
+                "value": 23,
+                "type": "reference"
+              },
+              {
+                "id": 120,
+                "name": "2",
+                "value": 27,
+                "type": "reference"
+              }
+            ]
+          },
+          {
+            "id": 8,
+            "name": null,
+            "vars": [
+              {
+                "id": 9,
+                "name": "Name",
+                "value": "Harry",
+                "type": "string"
+              },
+              {
+                "id": 10,
+                "name": "age",
+                "value": "96",
+                "type": "number"
+              },
+              {
+                "id": 11,
+                "name": "__proto__",
+                "value": "[Object]",
+                "type": "string"
+              }
+            ]
+          },
+          {
+            "id": 12,
+            "name": null,
+            "vars": [
+              {
+                "id": 13,
+                "name": "__proto__",
+                "value": "[Function]",
+                "type": "string"
+              }
+            ]
+          },
+          {
+            "id": 14,
+            "name": null,
+            "vars": [
+              {
+                "id": 15,
+                "name": "__proto__",
+                "value": "[Function]",
+                "type": "string"
+              }
+            ]
+          },
+          {
+            "id": 16,
+            "name": null,
+            "vars": [
+              {
+                "id": 17,
+                "name": "Name",
+                "value": "undefined",
+                "type": "undefined"
+              },
+              {
+                "id": 18,
+                "name": "Age",
+                "value": "undefined",
+                "type": "undefined"
+              },
+              {
+                "id": 19,
+                "name": "__proto__",
+                "value": "[Function]",
+                "type": "string"
+              },
+              {
+                "id": 20,
+                "name": "prototype",
+                "value": 31,
+                "type": "reference"
+              },
+              {
+                "id": 21,
+                "name": "setName",
+                "value": 12,
+                "type": "reference"
+              },
+              {
+                "id": 22,
+                "name": "setAge",
+                "value": 14,
+                "type": "reference"
+              }
+            ]
+          },
+          {
+            "id": 23,
+            "name": null,
+            "vars": [
+              {
+                "id": 24,
+                "name": "Name",
+                "value": "Jane",
+                "type": "string"
+              },
+              {
+                "id": 25,
+                "name": "Age",
+                "value": "50",
+                "type": "number"
+              },
+              {
+                "id": 26,
+                "name": "__proto__",
+                "value": 31,
+                "type": "reference"
+              }
+            ]
+          },
+          {
+            "id": 27,
+            "name": null,
+            "vars": [
+              {
+                "id": 28,
+                "name": "Name",
+                "value": "Shaun",
+                "type": "string"
+              },
+              {
+                "id": 29,
+                "name": "Age",
+                "value": "undefined",
+                "type": "undefined"
+              },
+              {
+                "id": 30,
+                "name": "__proto__",
+                "value": 31,
+                "type": "reference"
+              }
+            ]
+          },
+          {
+            "id": 31,
+            "name": null,
+            "vars": [
+              {
+                "id": 32,
+                "name": "__proto__",
+                "value": "[Object]",
+                "type": "string"
+              }
+            ]
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "mmid": "92524038-f0e2-4db2-ad01-321a9040df02",
+    "modelName": "Mijn tweede geheugenmodel",
+    "version": 2,
+    "frameLocations": [],
+    "memoryModel": {
+      "stacks": [
+        [
+          {
+            "id": 1,
+            "name": "Global",
+            "vars": [
+              {
+                "id": 2,
+                "name": "Family",
+                "value": 7,
+                "type": "reference"
+              },
+              {
+                "id": 3,
+                "name": "nullVar",
+                "value": null,
+                "type": "null"
+              },
+              {
+                "id": 4,
+                "name": "undefinedVar",
+                "value": "undefined",
+                "type": "undefined"
+              },
+              {
+                "id": 5,
+                "name": "Person",
+                "value": 16,
+                "type": "reference"
+              }
+            ]
+          },
+          {
+            "id": 32,
+            "name": "setAge",
+            "vars": [
+              {
+                "id": 33,
+                "name": "age",
+                "value": "25",
+                "type": "number"
+              },
+              {
+                "id": 34,
+                "name": "this",
+                "value": 27,
+                "type": "reference"
+              }
+            ]
+          }
         ],
         [
           {
@@ -286,4 +524,719 @@
         ]
       ]
     }
-  }]
+  },
+  {
+    "mmid": "1ee3f80e-c107-4fa2-9bc4-4f24887d1754",
+    "modelName": "Geheugenmodel van pietertje",
+    "version": 1,
+    "frameLocations": [],
+    "memoryModel": {
+      "stacks": [
+        [
+          {
+            "id": 1,
+            "name": "Geheugenmodel van pietertje",
+            "vars": [
+              {
+                "id": 2,
+                "name": "Pieters family",
+                "value": 7,
+                "type": "reference"
+              },
+              {
+                "id": 3,
+                "name": "nullVar",
+                "value": null,
+                "type": "null"
+              },
+              {
+                "id": 4,
+                "name": "undefinedVar",
+                "value": "undefined",
+                "type": "undefined"
+              },
+              {
+                "id": 5,
+                "name": "Person",
+                "value": 16,
+                "type": "reference"
+              }
+            ]
+          },
+          {
+            "id": 32,
+            "name": "setAge",
+            "vars": [
+              {
+                "id": 33,
+                "name": "age",
+                "value": "25",
+                "type": "number"
+              },
+              {
+                "id": 34,
+                "name": "this",
+                "value": 27,
+                "type": "reference"
+              }
+            ]
+          }
+        ]
+      ],
+      "heaps": [
+        [
+          {
+            "id": 6,
+            "name": null,
+            "vars": [
+              {
+                "id": 7,
+                "name": "0",
+                "value": 8,
+                "type": "reference"
+              },
+              {
+                "id": 200,
+                "name": "1",
+                "value": 23,
+                "type": "reference"
+              },
+              {
+                "id": 120,
+                "name": "2",
+                "value": 27,
+                "type": "reference"
+              }
+            ]
+          },
+          {
+            "id": 8,
+            "name": null,
+            "vars": [
+              {
+                "id": 9,
+                "name": "Name",
+                "value": "Harry",
+                "type": "string"
+              },
+              {
+                "id": 10,
+                "name": "age",
+                "value": "96",
+                "type": "number"
+              },
+              {
+                "id": 11,
+                "name": "__proto__",
+                "value": "[Object]",
+                "type": "string"
+              }
+            ]
+          },
+          {
+            "id": 12,
+            "name": null,
+            "vars": [
+              {
+                "id": 13,
+                "name": "__proto__",
+                "value": "[Function]",
+                "type": "string"
+              }
+            ]
+          },
+          {
+            "id": 14,
+            "name": null,
+            "vars": [
+              {
+                "id": 15,
+                "name": "__proto__",
+                "value": "[Function]",
+                "type": "string"
+              }
+            ]
+          },
+          {
+            "id": 16,
+            "name": null,
+            "vars": [
+              {
+                "id": 17,
+                "name": "Name",
+                "value": "undefined",
+                "type": "undefined"
+              },
+              {
+                "id": 18,
+                "name": "Age",
+                "value": "undefined",
+                "type": "undefined"
+              },
+              {
+                "id": 19,
+                "name": "__proto__",
+                "value": "[Function]",
+                "type": "string"
+              },
+              {
+                "id": 20,
+                "name": "prototype",
+                "value": 31,
+                "type": "reference"
+              },
+              {
+                "id": 21,
+                "name": "setName",
+                "value": 12,
+                "type": "reference"
+              },
+              {
+                "id": 22,
+                "name": "setAge",
+                "value": 14,
+                "type": "reference"
+              }
+            ]
+          },
+          {
+            "id": 23,
+            "name": null,
+            "vars": [
+              {
+                "id": 24,
+                "name": "Name",
+                "value": "Jane",
+                "type": "string"
+              },
+              {
+                "id": 25,
+                "name": "Age",
+                "value": "50",
+                "type": "number"
+              },
+              {
+                "id": 26,
+                "name": "__proto__",
+                "value": 31,
+                "type": "reference"
+              }
+            ]
+          },
+          {
+            "id": 27,
+            "name": null,
+            "vars": [
+              {
+                "id": 28,
+                "name": "Name",
+                "value": "Shaun",
+                "type": "string"
+              },
+              {
+                "id": 29,
+                "name": "Age",
+                "value": "undefined",
+                "type": "undefined"
+              },
+              {
+                "id": 30,
+                "name": "__proto__",
+                "value": 31,
+                "type": "reference"
+              }
+            ]
+          },
+          {
+            "id": 31,
+            "name": null,
+            "vars": [
+              {
+                "id": 32,
+                "name": "__proto__",
+                "value": "[Object]",
+                "type": "string"
+              }
+            ]
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "mmid": "1ee3f80e-c107-4fa2-9bc4-4f24887d1754",
+    "modelName": "Het tweede geheugenmodel van pietertje",
+    "version": 2,
+    "frameLocations": [],
+    "memoryModel": {
+      "stacks": [
+        [
+          {
+            "id": 1,
+            "name": "Tweede geheugenmodel van pietertje",
+            "vars": [
+              {
+                "id": 2,
+                "name": "Pieters family",
+                "value": 7,
+                "type": "reference"
+              },
+              {
+                "id": 3,
+                "name": "nullVar",
+                "value": null,
+                "type": "null"
+              },
+              {
+                "id": 4,
+                "name": "undefinedVar",
+                "value": "undefined",
+                "type": "undefined"
+              },
+              {
+                "id": 5,
+                "name": "Person",
+                "value": 16,
+                "type": "reference"
+              }
+            ]
+          },
+          {
+            "id": 32,
+            "name": "setAge",
+            "vars": [
+              {
+                "id": 33,
+                "name": "age",
+                "value": "25",
+                "type": "number"
+              },
+              {
+                "id": 34,
+                "name": "this",
+                "value": 27,
+                "type": "reference"
+              }
+            ]
+          }
+        ]
+      ],
+      "heaps": [
+        [
+          {
+            "id": 6,
+            "name": null,
+            "vars": [
+              {
+                "id": 7,
+                "name": "0",
+                "value": 8,
+                "type": "reference"
+              },
+              {
+                "id": 200,
+                "name": "1",
+                "value": 23,
+                "type": "reference"
+              },
+              {
+                "id": 120,
+                "name": "2",
+                "value": 27,
+                "type": "reference"
+              }
+            ]
+          },
+          {
+            "id": 8,
+            "name": null,
+            "vars": [
+              {
+                "id": 9,
+                "name": "Name",
+                "value": "Harry",
+                "type": "string"
+              },
+              {
+                "id": 10,
+                "name": "age",
+                "value": "96",
+                "type": "number"
+              },
+              {
+                "id": 11,
+                "name": "__proto__",
+                "value": "[Object]",
+                "type": "string"
+              }
+            ]
+          },
+          {
+            "id": 12,
+            "name": null,
+            "vars": [
+              {
+                "id": 13,
+                "name": "__proto__",
+                "value": "[Function]",
+                "type": "string"
+              }
+            ]
+          },
+          {
+            "id": 14,
+            "name": null,
+            "vars": [
+              {
+                "id": 15,
+                "name": "__proto__",
+                "value": "[Function]",
+                "type": "string"
+              }
+            ]
+          },
+          {
+            "id": 16,
+            "name": null,
+            "vars": [
+              {
+                "id": 17,
+                "name": "Name",
+                "value": "undefined",
+                "type": "undefined"
+              },
+              {
+                "id": 18,
+                "name": "Age",
+                "value": "undefined",
+                "type": "undefined"
+              },
+              {
+                "id": 19,
+                "name": "__proto__",
+                "value": "[Function]",
+                "type": "string"
+              },
+              {
+                "id": 20,
+                "name": "prototype",
+                "value": 31,
+                "type": "reference"
+              },
+              {
+                "id": 21,
+                "name": "setName",
+                "value": 12,
+                "type": "reference"
+              },
+              {
+                "id": 22,
+                "name": "setAge",
+                "value": 14,
+                "type": "reference"
+              }
+            ]
+          },
+          {
+            "id": 23,
+            "name": null,
+            "vars": [
+              {
+                "id": 24,
+                "name": "Name",
+                "value": "Jane",
+                "type": "string"
+              },
+              {
+                "id": 25,
+                "name": "Age",
+                "value": "50",
+                "type": "number"
+              },
+              {
+                "id": 26,
+                "name": "__proto__",
+                "value": 31,
+                "type": "reference"
+              }
+            ]
+          },
+          {
+            "id": 27,
+            "name": null,
+            "vars": [
+              {
+                "id": 28,
+                "name": "Name",
+                "value": "Shaun",
+                "type": "string"
+              },
+              {
+                "id": 29,
+                "name": "Age",
+                "value": "undefined",
+                "type": "undefined"
+              },
+              {
+                "id": 30,
+                "name": "__proto__",
+                "value": 31,
+                "type": "reference"
+              }
+            ]
+          },
+          {
+            "id": 31,
+            "name": null,
+            "vars": [
+              {
+                "id": 32,
+                "name": "__proto__",
+                "value": "[Object]",
+                "type": "string"
+              }
+            ]
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "mmid": "1ee3f80e-c107-4fa2-9bc4-4f24887d1754",
+    "modelName": "Het derde geheugenmodel van pietertje",
+    "version": 3,
+    "frameLocations": [],
+    "memoryModel": {
+      "stacks": [
+        [
+          {
+            "id": 1,
+            "name": "Derde geheugenmodel van pietertje",
+            "vars": [
+              {
+                "id": 2,
+                "name": "Pieters family",
+                "value": 7,
+                "type": "reference"
+              },
+              {
+                "id": 3,
+                "name": "nullVar",
+                "value": null,
+                "type": "null"
+              },
+              {
+                "id": 4,
+                "name": "undefinedVar",
+                "value": "undefined",
+                "type": "undefined"
+              },
+              {
+                "id": 5,
+                "name": "Person",
+                "value": 16,
+                "type": "reference"
+              }
+            ]
+          },
+          {
+            "id": 32,
+            "name": "setAge",
+            "vars": [
+              {
+                "id": 33,
+                "name": "age",
+                "value": "25",
+                "type": "number"
+              },
+              {
+                "id": 34,
+                "name": "this",
+                "value": 27,
+                "type": "reference"
+              }
+            ]
+          }
+        ]
+      ],
+      "heaps": [
+        [
+          {
+            "id": 6,
+            "name": null,
+            "vars": [
+              {
+                "id": 7,
+                "name": "0",
+                "value": 8,
+                "type": "reference"
+              },
+              {
+                "id": 200,
+                "name": "1",
+                "value": 23,
+                "type": "reference"
+              },
+              {
+                "id": 120,
+                "name": "2",
+                "value": 27,
+                "type": "reference"
+              }
+            ]
+          },
+          {
+            "id": 8,
+            "name": null,
+            "vars": [
+              {
+                "id": 9,
+                "name": "Name",
+                "value": "Harry",
+                "type": "string"
+              },
+              {
+                "id": 10,
+                "name": "age",
+                "value": "96",
+                "type": "number"
+              },
+              {
+                "id": 11,
+                "name": "__proto__",
+                "value": "[Object]",
+                "type": "string"
+              }
+            ]
+          },
+          {
+            "id": 12,
+            "name": null,
+            "vars": [
+              {
+                "id": 13,
+                "name": "__proto__",
+                "value": "[Function]",
+                "type": "string"
+              }
+            ]
+          },
+          {
+            "id": 14,
+            "name": null,
+            "vars": [
+              {
+                "id": 15,
+                "name": "__proto__",
+                "value": "[Function]",
+                "type": "string"
+              }
+            ]
+          },
+          {
+            "id": 16,
+            "name": null,
+            "vars": [
+              {
+                "id": 17,
+                "name": "Name",
+                "value": "undefined",
+                "type": "undefined"
+              },
+              {
+                "id": 18,
+                "name": "Age",
+                "value": "undefined",
+                "type": "undefined"
+              },
+              {
+                "id": 19,
+                "name": "__proto__",
+                "value": "[Function]",
+                "type": "string"
+              },
+              {
+                "id": 20,
+                "name": "prototype",
+                "value": 31,
+                "type": "reference"
+              },
+              {
+                "id": 21,
+                "name": "setName",
+                "value": 12,
+                "type": "reference"
+              },
+              {
+                "id": 22,
+                "name": "setAge",
+                "value": 14,
+                "type": "reference"
+              }
+            ]
+          },
+          {
+            "id": 23,
+            "name": null,
+            "vars": [
+              {
+                "id": 24,
+                "name": "Name",
+                "value": "Jane",
+                "type": "string"
+              },
+              {
+                "id": 25,
+                "name": "Age",
+                "value": "50",
+                "type": "number"
+              },
+              {
+                "id": 26,
+                "name": "__proto__",
+                "value": 31,
+                "type": "reference"
+              }
+            ]
+          },
+          {
+            "id": 27,
+            "name": null,
+            "vars": [
+              {
+                "id": 28,
+                "name": "Name",
+                "value": "Shaun",
+                "type": "string"
+              },
+              {
+                "id": 29,
+                "name": "Age",
+                "value": "undefined",
+                "type": "undefined"
+              },
+              {
+                "id": 30,
+                "name": "__proto__",
+                "value": 31,
+                "type": "reference"
+              }
+            ]
+          },
+          {
+            "id": 31,
+            "name": null,
+            "vars": [
+              {
+                "id": 32,
+                "name": "__proto__",
+                "value": "[Object]",
+                "type": "string"
+              }
+            ]
+          }
+        ]
+      ]
+    }
+  }
+]
