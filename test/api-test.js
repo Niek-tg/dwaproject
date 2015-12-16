@@ -1,31 +1,40 @@
 var should = require('chai').should();
 var expect = require('chai').expect;
-var supertest = require('supertest');
-var app = require('./../app.js');
-var api = supertest(app);
+var queries = require('../server/queries/queries.js');
 
-describe('API memorymodels unit test', function () {
 
-    it('Retrieve multiple versions of a memory model', function (done) {
-        api
-            .get('/api/memorymodels/92524038-f0e2-4db2-ad01-321a9040df02')
-            .set('Accept', 'application/json')
-            .end(function (err, res) {
-                if (err) return done(err);
-                api
-                    .get('/api/memoryModels/92524038-f0e2-4db2-ad01-321a9040df02/2')
-                    .set('Accept', 'application/json')
-                    .end(function (err2) {
-                        if (err2) return done(err2);
-                    });
-                done();
-            });
+
+
+describe('MessageHandler getAllMemoryModels', function () {
+    this.timeout(10000);
+
+    before(function(done){
+        require("./../server/seedScript").runSeed(done);
+    });
+
+    it('Should get all memory models', function (done) {
+        queries.getAll(function(err,res){
+            expect(res.length).to.equal(5);
+            expect(res[0]).to.have.property('id');
+            expect(res[0].id).to.not.equal(null);
+            expect(res[0]).to.have.property('language');
+            expect(res[0].language).to.not.equal(null);
+            expect(res[0]).to.have.property('mmid');
+            expect(res[0].mmid).to.not.equal(null);
+            expect(res[0]).to.have.property('modelName');
+            expect(res[0].modelName).to.not.equal(null);
+            expect(res[0]).to.have.property('owner');
+            expect(res[0].owner).to.not.equal(null);
+            expect(res[0]).to.have.property('version');
+            expect(res[0].version).to.not.equal(null);
+            done();
+        })
     });
 });
 
 /* POST Test */
 
-describe('API memorymodels POST', function () {
+xdescribe('API memorymodels POST', function () {
     it('Should return a 200 response', function (done) {
         api
             .get('/api/memorymodels')
@@ -53,7 +62,7 @@ describe('API memorymodels POST', function () {
 });
 
 /* GET TEST */
-describe('API memorymodels GET', function () {
+xdescribe('API memorymodels GET', function () {
 
     var mmid;
     it('Should return a 200 response', function (done) {
@@ -109,7 +118,7 @@ describe('API memorymodels GET', function () {
 });
 
 
-describe('API memorymodels ERROR handlasding', function () {
+xdescribe('API memorymodels ERROR handlasding', function () {
 
     it('API does not exist', function (done) {
         api
@@ -125,7 +134,7 @@ describe('API memorymodels ERROR handlasding', function () {
 
 /* Error handling */
 
-describe('API memorymodels ERROR handling', function () {
+xdescribe('API memorymodels ERROR handling', function () {
 
     it('API does not exist!', function (done) {
         api
