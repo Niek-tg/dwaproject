@@ -173,13 +173,10 @@ function determineVar(variable) {
  * @param data Data containing the memory model that has to be drawn
  */
 function updateMemoryModel(data) {
-    //console.log(data);
-    //console.log("update memory model called " + data.data);
 
     if (data.data.new_val) {
-        //console.log(data.data.new_val.memoryModel);
         drawMemoryModel(data.data.new_val.memoryModel, data.data.new_val.frameLocations).then(function () {
-            //redrawPlumbing();
+         //redrawPlumbing();
             initPlumb();
         });
     }
