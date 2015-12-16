@@ -26,7 +26,7 @@ var expect = require('chai').expect;
 var siteURL        = "http://localhost:3000/";
 var mainBrowser = 'chrome';
 
-xdescribe("E2E test get homepage", function () {
+describe("E2E test get homepage", function () {
 
     this.timeout(500000);
 
