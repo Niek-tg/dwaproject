@@ -23,7 +23,7 @@ connection.onopen = function () {
  */
 percolatorSend = function (data) {
     sendMessage(connection, data);
-}
+};
 
 /**
  * Triggered when the windows is closed. the current cursor is being unsubscribed to prevent server errors and eventually the websocket is closed

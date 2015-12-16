@@ -62,7 +62,7 @@ describe('query removeLatestVersion', function () {
           });
         })
     });
-
+//TODO add delete check for non existing memory model (versions)
     //it('Should return an error when deleting a non-existing version of a memory model', function(done){
     //    queries.deleteLatestversion('1ee3f80e-c107-4fa2-9bc4-4f24887d1754',55,function(err,res){
     //        console.log("err: ", err);
