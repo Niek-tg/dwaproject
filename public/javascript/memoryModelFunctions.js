@@ -248,7 +248,7 @@ var savePositionsOfframes = function (frameId) {
 
     frameIdEndPositions.push({id: frameId, top: top, left: left});
     currentMemoryModel.frameLocations.push({id: frameId, top: top, left: left});
-}
+};
 
 /**
  * When frames are dragged, the posistions of the frames wil be updated en send to the server by websocket.
@@ -281,5 +281,5 @@ var updatePositionFrames = function (frameId) {
             version: currentMemoryModel.version
         }
     });
-}
+};
 
