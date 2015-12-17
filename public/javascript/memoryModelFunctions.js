@@ -27,6 +27,7 @@ function drawMemoryModel(model, frameLocations) {
 
         jsPlumb.detachEveryConnection();
         frameIdEndPositions = [];
+        currentMemoryModel.frameLocations = [];
         relations = [];
         promises.push(drawFrames("Stack", model.stacks, frameLocations));
         promises.push(drawFrames("Heap", model.heaps, frameLocations));
@@ -173,13 +174,10 @@ function determineVar(variable) {
  * @param data Data containing the memory model that has to be drawn
  */
 function updateMemoryModel(data) {
-    //console.log(data);
-    //console.log("update memory model called " + data.data);
 
     if (data.data.new_val) {
-        //console.log(data.data.new_val.memoryModel);
         drawMemoryModel(data.data.new_val.memoryModel, data.data.new_val.frameLocations).then(function () {
-            //redrawPlumbing();
+         //redrawPlumbing();
             initPlumb();
         });
     }
@@ -249,6 +247,7 @@ var savePositionsOfframes = function (frameId) {
     var left = (100 / parent.outerWidth()) * (id.offset().left - id.parent().offset().left);
 
     frameIdEndPositions.push({id: frameId, top: top, left: left});
+    currentMemoryModel.frameLocations.push({id: frameId, top: top, left: left});
 }
 
 /**
@@ -269,6 +268,8 @@ var updatePositionFrames = function (frameId) {
     frameIdEndPositions.forEach(function (frame) {
         if (frameId === frame.id) {
             frameIdEndPositions[i] = {id: frame.id, top: top, left: left};
+            currentMemoryModel.frameLocations[i] = {id: frame.id, top: top, left: left};
+
         }
         i++;
     });

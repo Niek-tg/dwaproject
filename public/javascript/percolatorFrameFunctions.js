@@ -23,11 +23,12 @@ function toggleActive(me){
 
 function calculateDiagramContainerSize(){
     var size = $(window).width();
+    var count = $("#diagramContainer").children().length;
     size -= $("#allMemoryModels").outerWidth();
     size -= $("#memoryModelVersions").outerWidth();
-    console.log(size);
+    //console.log(size);
     $("#memoryModel").css({maxWidth : size - 23 + "px", "width": "100%"});
     $("#diagramContainer").css({maxWidth : size - 3 + "px", "width": "100%"});
-    jsPlumb.repaintEverything();
-    console.log("calculated diagram container size")
+    if(currentView === "diagramView" && count > 1) jsPlumb.repaintEverything();
+    //console.log("calculated diagram container size")
 }
