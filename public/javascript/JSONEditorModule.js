@@ -72,7 +72,6 @@ function initJSONEditor() {
                     case 's':
                         event.preventDefault();
                         var newMemoryModel = editor.get();
-                        console.log("SAVING TO DATABASE");
                         jsonEditorSendMessage({msgType: 'updateMemoryModel', data: newMemoryModel});
                         break;
                 }
