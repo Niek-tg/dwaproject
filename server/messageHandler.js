@@ -1,3 +1,7 @@
+/**
+ *  Requires the queries.js file
+ * @type {queries|exports|module.exports}
+ */
 var queries = require('./queries/queries.js');
 
 /**
@@ -59,13 +63,7 @@ messageHandler.identifyMessage = function (message, websocket, webSocketServer) 
         case "socketIdentifier":
                 websocket.connectionInfo.identity = message.identity;
                 websocket.connectionInfo.state = message.state;
-                console.log('dit zit er in de websocket data', websocket.connectionInfo.identity );
         break;
-
-        case "testCase":
-            console.log("Komt in testcaseKomt in testcaseKomt in testcaseKomt in testcaseKomt in testcaseKomt " +
-                "in testcaseKomt in testcaseKomt in testcaseKomt in testcaseKomt in testcaseKomt in testcase");
-            break;
 
         default :
             websocket.send(JSON.stringify({msgType: "errorMsg", data: "MessageHandler: unknown msgType received="}));
@@ -88,7 +86,7 @@ messageHandler.subscribeAfterUpdate = function(message, websocket, webSocketServ
             }
         }
     });
-}
+};
 
 /**
  * Subscribes to a memory model and sends new updates of the model to the client
@@ -107,7 +105,6 @@ messageHandler.subscribeToChanges = function (message, websocket) {
         cursorArray[socketID].each(
             function (err, row) {
                 if (err) throw err;
-                //console.log("IN CURSOREACH SUBSCRIBE");
                 websocket.send(JSON.stringify({msgType: "newData", data: row}))
             }
         );
@@ -119,15 +116,10 @@ messageHandler.subscribeToChanges = function (message, websocket) {
  */
 messageHandler.unsubscribeToChanges = function (websocket) {
     var id = websocket.connectionInfo.id;
-    console.log(websocket.connectionInfo.id);
-
-    console.log(id);
     var cursor = (cursorArray[id]) ? cursorArray[id] : null;
-    console.log(cursor);
     if (cursor) cursor.close();
     var cursor = (cursorArray[id])? cursorArray[id] : null;
     if(cursor) cursor.close();
-    console.log("unsubscribed to changes");
 };
 
 /**
@@ -173,7 +165,6 @@ messageHandler.getAllMemoryModels = function (message, websocket) {
  * @param websocket
  */
 messageHandler.getModelById = function (message, websocket) {
-    //console.log(message.id)
     var mmid = message.id;
     var version = (message.version) ? parseInt(message.version) : null;
 

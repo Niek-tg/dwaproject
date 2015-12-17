@@ -17,6 +17,7 @@ function toggleActive(me){
     if(isActive)$(me).removeClass("active");
     else $(me).addClass("active");
     $(me).html("<img src='./images/"+ image +"' />");
+
     calculateDiagramContainerSize()
 
 }
@@ -26,9 +27,7 @@ function calculateDiagramContainerSize(){
     var count = $("#diagramContainer").children().length;
     size -= $("#allMemoryModels").outerWidth();
     size -= $("#memoryModelVersions").outerWidth();
-    //console.log(size);
     $("#memoryModel").css({maxWidth : size - 23 + "px", "width": "100%"});
     $("#diagramContainer").css({maxWidth : size - 3 + "px", "width": "100%"});
     if(currentView === "diagramView" && count > 1) jsPlumb.repaintEverything();
-    //console.log("calculated diagram container size")
 }

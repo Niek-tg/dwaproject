@@ -6,8 +6,8 @@
 var connection = new WebSocket("ws://localhost:3000");
 
 /**
- * Send a websocket message to the server when connection is opened to identify the socket en the state of it.
- * Send a message to the server to get all memory models
+ * Sends a websocket message to the server when connection is opened to identify the socket and the state of it.
+ * Sends a message to the server to get all memory models
  */
 
 connection.onopen = function () {
@@ -17,7 +17,7 @@ connection.onopen = function () {
 
 
 /**
- * Send a percolator message to messageHandler with connection en data
+ * Sends a percolator message to messageHandler with connection and data
  * @param connection Contains the socketconnection
  * @param data Contains the data that needs to be send
  */
@@ -25,8 +25,10 @@ percolatorSend = function (data) {
     sendMessage(connection, data);
 };
 
+
 /**
- * Triggered when the windows is closed. the current cursor is being unsubscribed to prevent server errors and eventually the websocket is closed
+ * Triggered when the windows is closed. The current cursor is being unsubscribed to prevent server errors and
+ * eventually the websocket is closed
  */
 window.onbeforeunload = function () {
     percolatorSend({msgType: "unsubscribeToCurrentCursor"});
@@ -43,14 +45,14 @@ connection.onmessage = function (message) {
 };
 
 /**
- * Change the state of the json editor to non active
+ * Change the state of the JSON editor to non active
  */
 changeDiagramState = function () {
     percolatorSend({msgType: 'socketIdentifier', identity: 'visualView', state: 'notActive'})
 };
 
 /**
- * Change the state of the json editor to active
+ * Change the state of the JSON editor to active
  */
 activeDiagramState = function () {
     percolatorSend({msgType: 'socketIdentifier', identity: 'visualView', state: 'active'})
