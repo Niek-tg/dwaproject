@@ -1,6 +1,7 @@
 /**
  * Sends a JSON message to the server
  * @param data The data to send
+ * @socket checks which socket is sending data.
  */
 function sendMessage(socket, data){
     socket.send(JSON.stringify(data));
@@ -13,7 +14,6 @@ function sendMessage(socket, data){
 
 function messageHandlerClient(message){
     var data = JSON.parse(message.data);
-    console.log(data);
     switch(data.msgType){
         case "newData":
             updateMemoryModel(data);

@@ -10,6 +10,7 @@ function initJSONEditor() {
 
     var container = document.getElementById('jsoneditor');
     var editor = new JSONEditor(container, options, currentMemoryModel);
+    var oldMemoryModel = currentMemoryModel;
     var newMemorymodelButton = $('<input/>').attr({type: 'button', id: 'setJSON', value: 'Nieuw geheugenmodel'});
     var saveMemorymodelButton = $('<input/>').attr({type: 'button', id: 'getJSON', value: 'Opslaan'});
     var savedFirstTime = true;
@@ -59,8 +60,10 @@ function initJSONEditor() {
     $("#getJSON").click(function saveMemoryModel() {
         var newMemoryModel = editor.get();
         if (savedFirstTime) savedFirstTime = false;
-        else newMemoryModel.version += counter; counter ++; console.log(newMemoryModel.version);
-        jsonEditorSendMessage({msgType: 'updateMemoryModel', data: newMemoryModel});
+        else newMemoryModel.version += counter; counter ++;
+        jsonEditorSendMessage({msgType: 'updateMemoryModel', data: {newMemoryModel: newMemoryModel, oldMemoryModel:oldMemoryModel}});
+        oldMemoryModel = newMemoryModel;
+        //jsonEditorSendMessage({msgType: 'unsubscribeToCurrentCursor', data: newMemoryModel})
     });
 
 

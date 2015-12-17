@@ -1,3 +1,7 @@
+/**
+ *  Requires the queries.js file
+ * @type {queries|exports|module.exports}
+ */
 var queries = require('./queries/queries.js');
 
 /**
@@ -50,19 +54,16 @@ messageHandler.identifyMessage = function (message, websocket, webSocketServer) 
             messageHandler.updateMemoryModel(message, websocket, webSocketServer);
             break;
 
+        case "subscribeAfterUpdate":
+            messageHandler.subscribeAfterUpdate(message, websocket, webSocketServer);
+            break;
         case "unsubscribeToCurrentCursor":
             messageHandler.unsubscribeToChanges(websocket);
             break;
         case "socketIdentifier":
-            websocket.connectionInfo.identity = message.identity;
-            websocket.connectionInfo.state = message.state;
-                console.log('dit zit er in de websocket data', websocket.connectionInfo.identity );
+                websocket.connectionInfo.identity = message.identity;
+                websocket.connectionInfo.state = message.state;
         break;
-
-        case "testCase":
-            console.log("Komt in testcaseKomt in testcaseKomt in testcaseKomt in testcaseKomt in testcaseKomt " +
-                "in testcaseKomt in testcaseKomt in testcaseKomt in testcaseKomt in testcaseKomt in testcase");
-            break;
 
         default :
             websocket.send(JSON.stringify({msgType: "errorMsg", data: "MessageHandler: unknown msgType received="}));
@@ -77,15 +78,16 @@ messageHandler.identifyMessage = function (message, websocket, webSocketServer) 
  */
 messageHandler.subscribeToChanges = function (message, websocket) {
     console.log("subscribed to changes");
+
     websocket.currentID = message.data.id;
 
     queries.subscribeToChanges(message.data.id, function (err, curs) {
         var socketID = websocket.connectionInfo.id;
         cursorArray[socketID] = curs;
+
         cursorArray[socketID].each(
             function (err, row) {
                 if (err) throw err;
-                //console.log("IN CURSOREACH SUBSCRIBE");
                 websocket.send(JSON.stringify({msgType: "newData", data: row}))
             }
         );
@@ -97,15 +99,10 @@ messageHandler.subscribeToChanges = function (message, websocket) {
  */
 messageHandler.unsubscribeToChanges = function (websocket) {
     var id = websocket.connectionInfo.id;
-    console.log(websocket.connectionInfo.id);
-
-    console.log(id);
     var cursor = (cursorArray[id]) ? cursorArray[id] : null;
-    console.log(cursor);
     if (cursor) cursor.close();
     var cursor = (cursorArray[id])? cursorArray[id] : null;
     if(cursor) cursor.close();
-    console.log("unsubscribed to changes");
 };
 
 /**
@@ -225,7 +222,7 @@ messageHandler.deleteModel = function (message, websocket, webSocketServer) {
             webSocketServer.clients.forEach(function (client) {
                 if(websocket != client){
                     if (client.connectionInfo.state === 'active') {
-                        client.send(JSON.stringify({msgType: "removeLatestVersion"}));
+                        client.send(JSON.stringify({msgType: "removeLatestVersion"}))
                     }
                 }
             });
@@ -234,7 +231,7 @@ messageHandler.deleteModel = function (message, websocket, webSocketServer) {
 };
 
 /**
- * Update frame positions
+ *
  * @param message
  * @param websocket
  */
@@ -254,10 +251,11 @@ messageHandler.updateFramePositions = function (message, websocket) {
     });
 };
 
-messageHandler.updateMemoryModel = function (message, websocket) {
-    var memoryModel = message.data;
+messageHandler.updateMemoryModel = function (message, websocket, webSocketServer) {
+    var memoryModel = message.data.newMemoryModel;
+    var oldMemoryModel = message.data.oldMemoryModel;
 
-    queries.updateMemoryModel(memoryModel, function (err, result) {
+    queries.updateMemoryModel(memoryModel, oldMemoryModel, function (err, result) {
         if (err) {
             return websocket.send(JSON.stringify({
                 msgType: "errorMsg",

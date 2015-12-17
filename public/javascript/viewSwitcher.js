@@ -1,4 +1,3 @@
-
 /**
  * Holds the name of the current view
  * @type {string}
@@ -12,6 +11,10 @@ function getCurrentView(){
     return currentView;
 }
 
+/**
+ * Sets a currentview
+ * @param newView
+ */
 function setCurrentView(newView){
     currentView = newView;
 }

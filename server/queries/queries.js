@@ -1,9 +1,18 @@
+/**
+ * Require rethinkdb database and require config file for connection with the database
+ * @type {rethinkdb|exports|module.exports}
+ */
+
 var r = require("rethinkdb");
 var config = require('./../../config.js');
-
 var connection;
 var queries = {};
 
+
+/**
+ * Gets a connection with the rethinkDB by config.js
+ * @param cb callback for this function that returns an rethinkdb database connection
+ */
 function getConnection(cb) {
     if (connection) cb(null, connection);
     else r.connect(config.rethinkdb, function (err, conn) {
@@ -13,6 +22,10 @@ function getConnection(cb) {
     });
 }
 
+/**
+ * Query to get all memorymodels
+ * @param cb callback for this function
+ */
 queries.getAll = function (cb) {
     getConnection(function (err, conn) {
         if (err) return cb(err, null);
@@ -23,13 +36,19 @@ queries.getAll = function (cb) {
                 .table('History'),
             {index: 'mmid'})
             .zip() // merge the two fields into a single document.
-            .coerceTo('array') // making a array instead of object
+            .coerceTo('array') // making an array instead of object
             .run(conn, function (err, result) {
                 cb(err, result);
             })
     });
 };
 
+
+/**
+ * Query to get memorymodel on id
+ * @param mmid Memorymodel ID
+ * @param cb Callback for this function
+ */
 queries.getMemoryModelById = function (mmid, cb) {
     getConnection(function (err, conn) {
         if (err) return cb(err, null);
@@ -44,13 +63,19 @@ queries.getMemoryModelById = function (mmid, cb) {
             .filter(function (row) {
                 return row("mmid").eq(mmid);
             })
-            .coerceTo('array') // making a array instead of object
+            .coerceTo('array') // making an array instead of object
             .run(conn, function (err, result) {
                 cb(err, result);
             })
     });
 };
 
+/**
+ * Query to get memorymodel by ID and Version
+ * mmid Memorymodel ID
+ * @param cb Callback for this function
+ * @param version Memorymodel version
+ */
 queries.getMemoryModelByIdAndVersion = function (mmid, version, cb) {
     getConnection(function (err, conn) {
         if (err) return cb(err, null);
@@ -65,13 +90,18 @@ queries.getMemoryModelByIdAndVersion = function (mmid, version, cb) {
             .filter(function (row) {
                 return ( row("mmid").eq(mmid).and(row("version").eq(version)));
             })
-            .coerceTo('array') // making a array instead of object
+            .coerceTo('array') // making an array instead of object
             .run(conn, function (err, result) {
                 cb(err, result);
             })
     });
 };
 
+/**
+ * Query to create a new memorymodel
+ * @param data JSON object of the new memorymodel
+ * @param cb Callback of this function
+ */
 queries.createNewMemoryModel = function (data, cb) {
 
     var language = data.language;
@@ -125,10 +155,15 @@ queries.createNewMemoryModel = function (data, cb) {
         })
 };
 
+/**
+ * Query to check if the memorymodel has changed
+ * @param id ID of one model
+ * @param cb Callback of this function
+ */
+
 queries.subscribeToChanges = function (id, cb) {
     getConnection(function (err, conn) {
         if (err) return cb(err, null);
-
         r.db('percolatordb')
             .table('History')
             .get(id)
@@ -139,6 +174,12 @@ queries.subscribeToChanges = function (id, cb) {
     });
 };
 
+/**
+ * Query to delete latest version of the memorymodel
+ * @param mmid Memorymodel ID
+ * @param version Memorymodel version
+ * @param cb Callback of this function
+ */
 queries.deleteLatestversion = function (mmid, version, cb) {
         getConnection(function (err, conn) {
             if (err) return cb(err, null);
@@ -150,10 +191,17 @@ queries.deleteLatestversion = function (mmid, version, cb) {
                     cb(err, result);
                 });
         });
-
 };
 
+/**
+ * Query to update stack and heap frame positions
+ * @param positions Frame positions of the stack and heap frames
+ * @param mmid Memorymodel ID
+ * @param version Memorymodel version
+ * @param cb Callback of this function
+ */
 queries.updateFramePositions = function (positions, mmid, version, cb) {
+    console.log("IN QUERIES UPDATEFRAMEPOSITIONS");
     getConnection(function (err, conn) {
         if (err) return cb(err, null);
         r.db('percolatordb').table("History")
@@ -165,19 +213,32 @@ queries.updateFramePositions = function (positions, mmid, version, cb) {
     });
 };
 
-queries.updateMemoryModel = function (memoryModel, cb) {
+
+
+/**
+ * Query to update memorymodel
+ * @param memoryModel Memorymodel it self
+ * @param cb Callback of this function
+ */
+queries.updateMemoryModel = function (memoryModel, oldMemoryModel, cb) {
     var mmid = memoryModel.mmid;
     var version = memoryModel.version;
     var id = memoryModel.id;
+    console.log("oldMemoryModel.id");
+    //console.log(oldMemoryModel.id);
+    console.log(memoryModel);
+    console.log("oldMemoryModel.id");
+    console.log(oldMemoryModel);
 
     memoryModel.version += 1;
-    var history = {
-        mmid: memoryModel.mmid,
-        version: memoryModel.version,
-        memoryModel: memoryModel.memoryModel,
-        modelName: memoryModel.modelName,
-        frameLocations: memoryModel.frameLocations
-    };
+
+    var historyOldMemoryModel = {
+        mmid: oldMemoryModel.mmid,
+        version: oldMemoryModel.version,
+        memoryModel: oldMemoryModel.memoryModel,
+        modelName: oldMemoryModel.modelName,
+        frameLocations: oldMemoryModel.frameLocations};
+
     var modelInfo = {id: memoryModel.mmid, owner: memoryModel.owner, language: memoryModel.language};
 
 
@@ -198,7 +259,22 @@ queries.updateMemoryModel = function (memoryModel, cb) {
                 getConnection(function (err, conn) {
                     if (err) return cb(err, null);
                     r.db('percolatordb').table("History")
-                        .insert(history)
+                        .filter(r.row('mmid').eq(mmid).and(r.row('version').eq(version)))
+                        .update({"version": memoryModel.version, "memoryModel": memoryModel.memoryModel, "modelName": memoryModel.modelName, "frameLocations": memoryModel.frameLocations } )
+                        .run(conn, function (err, result) {
+                            if (err) reject(err);
+                            else resolve(result);
+
+                        });
+                });
+
+            });
+        }).then(function (data) {
+            return new Promise(function (resolve, reject) {
+                getConnection(function (err, conn) {
+                    if (err) return cb(err, null);
+                    r.db('percolatordb').table("History")
+                        .insert(historyOldMemoryModel)
                         .run(conn, function (err, result) {
                             if (err) reject(err);
                             else resolve(result);
@@ -217,5 +293,7 @@ queries.updateMemoryModel = function (memoryModel, cb) {
         })
 };
 
-
+/**
+ * Exports the queries for further use in different files.
+ */
 module.exports = queries;

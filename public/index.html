@@ -25,8 +25,10 @@
             <img src="./images/lg_percolator.png" class="img-responsive" alt="Responsive image">
         </div>
         <div class="col-md-offset-10 col-md-2 viewButtons">
-            <button onclick="enableCodeView()" title="Code view"><img src="./images/code_icon.png">Code view</button>
-            <button onclick="chooseMemoryModel(currentMemoryModel.mmid, false,false)" title="Diagram view"><img src="./images/diagram_icon.png">Diagram view</button>
+
+            <!-- Both diagram end json editor states are toggled so the server know if one is in use-->
+            <button onclick="enableCodeView(); changeDiagramState(); activeJsonEditorState()" title="Code view"><img src="./images/code_icon.png">Code view</button>
+            <button onclick="chooseMemoryModel(currentMemoryModel.mmid, false,false); changeJsonEditorState(); activeDiagramState()" title="Diagram view"><img src="./images/diagram_icon.png">Diagram view</button>
         </div>
 
         <!--Header Title: Owner & name of Memorymodel-->
@@ -83,6 +85,7 @@
 <!--<script src="./javascript/bootstrap.js"></script>-->
 <script src="javascript/percolatorFrameFunctions.js"></script>
 <script src="javascript/viewSwitcher.js"></script>
+
 
 <script src="javascript/messageHandler.js"></script>
 <script src="javascript/JSONEditorSocket.js"></script>
