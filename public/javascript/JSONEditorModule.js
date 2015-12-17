@@ -58,9 +58,8 @@ function initJSONEditor() {
 
     $("#getJSON").click(function saveMemoryModel() {
         var newMemoryModel = editor.get();
-        console.log("FIRSTTIME = ", savedFirstTime);
         if (savedFirstTime) savedFirstTime = false;
-        else newMemoryModel.version += counter; counter ++; console.log(newMemoryModel.version);
+        else newMemoryModel.version += counter; counter ++;
         jsonEditorSendMessage({msgType: 'updateMemoryModel', data: newMemoryModel});
     });
 
@@ -73,6 +72,7 @@ function initJSONEditor() {
                     case 's':
                         event.preventDefault();
                         var newMemoryModel = editor.get();
+                        console.log("SAVING TO DATABASE");
                         jsonEditorSendMessage({msgType: 'updateMemoryModel', data: newMemoryModel});
                         break;
                 }
