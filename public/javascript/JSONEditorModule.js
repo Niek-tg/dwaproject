@@ -61,6 +61,7 @@ function initJSONEditor() {
         if (savedFirstTime) savedFirstTime = false;
         else newMemoryModel.version += counter; counter ++;
         jsonEditorSendMessage({msgType: 'updateMemoryModel', data: newMemoryModel});
+        jsonEditorSendMessage({msgType: 'unsubscribeToCurrentCursor', data: newMemoryModel})
     });
 
 

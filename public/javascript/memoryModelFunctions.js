@@ -235,7 +235,8 @@ function redrawPlumbing() {
 
 
 /**
- * When frames are drawn it saves the positions of the frames in a array en send to the server by websocket..
+ * When frames are drawn it saves the positions of the frames in a array en send to the server by websocket.
+ * @param frameId id of the frame what needs to be updated
  */
 
 var savePositionsOfframes = function (frameId) {
@@ -251,6 +252,7 @@ var savePositionsOfframes = function (frameId) {
 
 /**
  * When frames are dragged, the posistions of the frames wil be updated en send to the server by websocket.
+ * @param frameId id of the frame what needs to be updated
  */
 
 var updatePositionFrames = function (frameId) {
