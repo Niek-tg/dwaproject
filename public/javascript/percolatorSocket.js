@@ -29,8 +29,6 @@ percolatorSend = function (data) {
  * Triggered when the windows is closed. the current cursor is being unsubscribed to prevent server errors and eventually the websocket is closed
  */
 window.onbeforeunload = function () {
-    connection.onclose = function () {
-    }; // disable onclose handler first
     percolatorSend({msgType: "unsubscribeToCurrentCursor"});
     connection.close()
 };
@@ -42,21 +40,21 @@ window.onbeforeunload = function () {
 
 connection.onmessage = function (message) {
     messageHandlerClient(message);
-}
+};
 
 /**
  * Change the state of the json editor to non active
  */
 changeDiagramState = function () {
     percolatorSend({msgType: 'socketIdentifier', identity: 'visualView', state: 'notActive'})
-}
+};
 
 /**
  * Change the state of the json editor to active
  */
 activeDiagramState = function () {
     percolatorSend({msgType: 'socketIdentifier', identity: 'visualView', state: 'active'})
-}
+};
 
 
 
