@@ -58,7 +58,6 @@ function initJSONEditor() {
 
     $("#getJSON").click(function saveMemoryModel() {
         var newMemoryModel = editor.get();
-        console.log("FIRSTTIME = ", savedFirstTime);
         if (savedFirstTime) savedFirstTime = false;
         else newMemoryModel.version += counter; counter ++; console.log(newMemoryModel.version);
         jsonEditorSendMessage({msgType: 'updateMemoryModel', data: newMemoryModel});
@@ -77,7 +76,11 @@ function initJSONEditor() {
                         break;
                 }
             }
-        })
+        });
+
+        $(window).bind('keyup', function (event) {
+            keydownExists = false;
+        });
     }
 }
 
