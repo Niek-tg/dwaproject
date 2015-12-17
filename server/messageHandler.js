@@ -278,9 +278,10 @@ messageHandler.updateFramePositions = function (message, websocket) {
 };
 
 messageHandler.updateMemoryModel = function (message, websocket, webSocketServer) {
-    var memoryModel = message.data;
+    var memoryModel = message.data.newMemoryModel;
+    var oldMemoryModel = message.data.oldMemoryModel;
 
-    queries.updateMemoryModel(memoryModel, function (err, result) {
+    queries.updateMemoryModel(memoryModel, oldMemoryModel, function (err, result) {
         if (err) {
             return websocket.send(JSON.stringify({
                 msgType: "errorMsg",
