@@ -8,6 +8,11 @@ var config = require(__dirname +'/../config.js');
 var ModelInfo = require('./models/thinkyModels.js').ModelInfo;
 var History = require('./models/thinkyModels.js').History;
 
+/**
+ * drops the entire database and rebuilds it in the correct order.
+ * Indexes are also defined in this script
+ * @param cb
+ */
 function runSeed(cb){
     var connection = null;
     console.log("seedScript started");
@@ -20,11 +25,10 @@ function runSeed(cb){
         if(nrdatabases > 0)
             return new Promise(function(resolve, reject){
                 databases.forEach(function(db){
-                    if(db != "rethinkdb"){    //some weird database, used by rethink.
+                    if(db == config.rethinkdb.database){    //some weird database, used by rethink.
                         r.dbDrop(db).run(connection, function(err){
                             if (err) reject(err);
-                            count++;
-                            if(count >= nrdatabases)resolve();
+                            resolve();
                         });
                     }
                 });

@@ -78,7 +78,7 @@ describe('query updateMemoryModel', function () {
        queries.getMemoryModelById('1ee3f80e-c107-4fa2-9bc4-4f24887d1754',function(err,res){
            res[0].owner = "TestName";
 
-           queries.updateMemoryModel(res[0],function(err,res2){
+           queries.updateMemoryModel(res[0], res[0],function(err,res2){
                queries.getMemoryModelById('1ee3f80e-c107-4fa2-9bc4-4f24887d1754',function(err,res2) {
                    expect(res2[0].owner).to.equal('TestName');
                });
