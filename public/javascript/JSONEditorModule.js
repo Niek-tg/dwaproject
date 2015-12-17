@@ -76,7 +76,11 @@ function initJSONEditor() {
                         break;
                 }
             }
-        })
+        });
+
+        $(window).bind('keyup', function (event) {
+            keydownExists = false;
+        });
     }
 }
 
