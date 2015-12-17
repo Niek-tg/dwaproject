@@ -30,8 +30,13 @@ function messageHandlerClient(message){
         case "updateMemoryModel":
             getMemoryModels(data.data);
             break;
+        case "updateVersionList":
+            getVersionList(false, true);
+            console.log('update new version');
+            break;
         case "removeLatestVersion":
-            getVersionList(true);
+            getVersionList(true, false);
+            console.log('remove latest version');
             break;
         case "errorMsg":
             console.log(data.data);

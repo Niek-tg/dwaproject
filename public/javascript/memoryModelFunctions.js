@@ -178,6 +178,7 @@ function updateMemoryModel(data) {
     if (data.data.new_val) {
         drawMemoryModel(data.data.new_val.memoryModel, data.data.new_val.frameLocations).then(function () {
          //redrawPlumbing();
+            getVersionList(false,true);
             initPlumb();
         });
     }

@@ -50,15 +50,12 @@ messageHandler.identifyMessage = function (message, websocket, webSocketServer) 
             messageHandler.updateMemoryModel(message, websocket, webSocketServer);
             break;
 
-        case "subscribeAfterUpdate":
-            messageHandler.subscribeAfterUpdate(message, websocket, webSocketServer);
-            break;
         case "unsubscribeToCurrentCursor":
             messageHandler.unsubscribeToChanges(websocket);
             break;
         case "socketIdentifier":
-                websocket.connectionInfo.identity = message.identity;
-                websocket.connectionInfo.state = message.state;
+            websocket.connectionInfo.identity = message.identity;
+            websocket.connectionInfo.state = message.state;
                 console.log('dit zit er in de websocket data', websocket.connectionInfo.identity );
         break;
 
@@ -73,23 +70,6 @@ messageHandler.identifyMessage = function (message, websocket, webSocketServer) 
     }
 };
 
-
-/**
-*
-*
-**/
-
-messageHandler.subscribeAfterUpdate = function(message, websocket, webSocketServer){
-    webSocketServer.clients.forEach(function (client) {
-        if(websocket != client){
-            if (client.connectionInfo.state === 'active') {
-                var id = message.data.id;
-                messageHandler.subscribeToChanges(websocket, {data: id});
-            }
-        }
-    });
-}
-
 /**
  * Subscribes to a memory model and sends new updates of the model to the client
  * @param message Message that has been received from client, has a mmid in this case
@@ -97,13 +77,11 @@ messageHandler.subscribeAfterUpdate = function(message, websocket, webSocketServ
  */
 messageHandler.subscribeToChanges = function (message, websocket) {
     console.log("subscribed to changes");
-
     websocket.currentID = message.data.id;
 
     queries.subscribeToChanges(message.data.id, function (err, curs) {
         var socketID = websocket.connectionInfo.id;
         cursorArray[socketID] = curs;
-
         cursorArray[socketID].each(
             function (err, row) {
                 if (err) throw err;
@@ -173,7 +151,6 @@ messageHandler.getAllMemoryModels = function (message, websocket) {
  * @param websocket
  */
 messageHandler.getModelById = function (message, websocket) {
-    //console.log(message.id)
     var mmid = message.id;
     var version = (message.version) ? parseInt(message.version) : null;
 
@@ -248,7 +225,7 @@ messageHandler.deleteModel = function (message, websocket, webSocketServer) {
             webSocketServer.clients.forEach(function (client) {
                 if(websocket != client){
                     if (client.connectionInfo.state === 'active') {
-                        client.send(JSON.stringify({msgType: "removeLatestVersion"}))
+                        client.send(JSON.stringify({msgType: "removeLatestVersion"}));
                     }
                 }
             });
@@ -257,7 +234,7 @@ messageHandler.deleteModel = function (message, websocket, webSocketServer) {
 };
 
 /**
- *
+ * Update frame positions
  * @param message
  * @param websocket
  */
@@ -277,7 +254,7 @@ messageHandler.updateFramePositions = function (message, websocket) {
     });
 };
 
-messageHandler.updateMemoryModel = function (message, websocket, webSocketServer) {
+messageHandler.updateMemoryModel = function (message, websocket) {
     var memoryModel = message.data;
 
     queries.updateMemoryModel(memoryModel, function (err, result) {
@@ -288,7 +265,6 @@ messageHandler.updateMemoryModel = function (message, websocket, webSocketServer
             }));
         }
         else {
-
             return messageHandler.getAllMemoryModels(message, websocket);
         }
     });

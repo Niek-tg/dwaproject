@@ -79,7 +79,7 @@ function getMemmoryModelById(memoryModel) {
 
     firstTime = false;
 
-    getVersionList();
+    getVersionList(false, false);
     setModelInfo();
 
     console.log(currentMemoryModel.modelName + " ID = " + currentMemoryModel.id);
@@ -103,11 +103,14 @@ function setModelInfo() {
 
 /**
  * Determines and draws the list of versions available for the memory model
- * @param update, if update is true decrease the highestVersion by one
+ * @param undo, if update is true decrease the highestVersion by one
  */
-function getVersionList(update) {
+function getVersionList(undo, addNewVersion) {
 
-    if(update){highestVersion --;}
+    if(addNewVersion){highestVersion ++;}
+
+    if(undo){highestVersion --;}
+
 
     if(highestVersion > 1) $("#undoButton").css("display", "block");
     else $("#undoButton").css("display", "none");

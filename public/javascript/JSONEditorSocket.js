@@ -23,7 +23,7 @@ jsonEditorSendMessage = function (data) {
 }
 
 /**
- * Sends a JSON message true messageHandler client to the server
+ * Sends a JSON message to messageHandler client to the server
  * @param data
  */
 jsonEditorConnection.onmessage = function (message) {
