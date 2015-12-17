@@ -47,9 +47,12 @@ messageHandler.identifyMessage = function (message, websocket, webSocketServer) 
             break;
 
         case "updateMemoryModel":
-            messageHandler.updateMemoryModel(message, websocket);
+            messageHandler.updateMemoryModel(message, websocket, webSocketServer);
             break;
 
+        case "subscribeAfterUpdate":
+            messageHandler.subscribeAfterUpdate(message, websocket, webSocketServer);
+            break;
         case "unsubscribeToCurrentCursor":
             messageHandler.unsubscribeToChanges(websocket);
             break;
@@ -70,6 +73,23 @@ messageHandler.identifyMessage = function (message, websocket, webSocketServer) 
     }
 };
 
+
+/**
+*
+*
+**/
+
+messageHandler.subscribeAfterUpdate = function(message, websocket, webSocketServer){
+    webSocketServer.clients.forEach(function (client) {
+        if(websocket != client){
+            if (client.connectionInfo.state === 'active') {
+                var id = message.data.id;
+                messageHandler.subscribeToChanges(websocket, {data: id});
+            }
+        }
+    });
+}
+
 /**
  * Subscribes to a memory model and sends new updates of the model to the client
  * @param message Message that has been received from client, has a mmid in this case
@@ -77,6 +97,7 @@ messageHandler.identifyMessage = function (message, websocket, webSocketServer) 
  */
 messageHandler.subscribeToChanges = function (message, websocket) {
     console.log("subscribed to changes");
+
     websocket.currentID = message.data.id;
 
     queries.subscribeToChanges(message.data.id, function (err, curs) {
@@ -256,7 +277,7 @@ messageHandler.updateFramePositions = function (message, websocket) {
     });
 };
 
-messageHandler.updateMemoryModel = function (message, websocket) {
+messageHandler.updateMemoryModel = function (message, websocket, webSocketServer) {
     var memoryModel = message.data;
 
     queries.updateMemoryModel(memoryModel, function (err, result) {
@@ -267,6 +288,7 @@ messageHandler.updateMemoryModel = function (message, websocket) {
             }));
         }
         else {
+
             return messageHandler.getAllMemoryModels(message, websocket);
         }
     });

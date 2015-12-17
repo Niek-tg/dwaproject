@@ -57,6 +57,7 @@ function initJSONEditor() {
     $("#getJSON").click(function saveMemoryModel() {
         var newMemoryModel = editor.get();
         jsonEditorSendMessage({msgType: 'updateMemoryModel', data: newMemoryModel});
+        jsonEditorSendMessage({msgType: 'unsubscribeToCurrentCursor', data: newMemoryModel})
     });
 
 
