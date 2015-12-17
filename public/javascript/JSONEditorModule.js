@@ -59,11 +59,11 @@ function initJSONEditor() {
 
     $("#getJSON").click(function saveMemoryModel() {
         var newMemoryModel = editor.get();
+        oldMemoryModel.version = newMemoryModel.version;
         if (savedFirstTime) savedFirstTime = false;
-        else newMemoryModel.version += counter; counter ++;
+        else newMemoryModel.version += counter; oldMemoryModel.version += counter; counter ++;
         jsonEditorSendMessage({msgType: 'updateMemoryModel', data: {newMemoryModel: newMemoryModel, oldMemoryModel:oldMemoryModel}});
         oldMemoryModel = newMemoryModel;
-        //jsonEditorSendMessage({msgType: 'unsubscribeToCurrentCursor', data: newMemoryModel})
     });
 
 
@@ -75,7 +75,11 @@ function initJSONEditor() {
                     case 's':
                         event.preventDefault();
                         var newMemoryModel = editor.get();
-                        jsonEditorSendMessage({msgType: 'updateMemoryModel', data: newMemoryModel});
+                        oldMemoryModel.version = newMemoryModel.version;
+                        if (savedFirstTime) savedFirstTime = false;
+                        else newMemoryModel.version += counter; oldMemoryModel.version += counter; counter ++;
+                        jsonEditorSendMessage({msgType: 'updateMemoryModel', data: {newMemoryModel: newMemoryModel, oldMemoryModel:oldMemoryModel}});
+                        oldMemoryModel = newMemoryModel;
                         break;
                 }
             }

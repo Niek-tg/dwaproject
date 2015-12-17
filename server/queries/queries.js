@@ -201,7 +201,6 @@ queries.deleteLatestversion = function (mmid, version, cb) {
  * @param cb Callback of this function
  */
 queries.updateFramePositions = function (positions, mmid, version, cb) {
-    console.log("IN QUERIES UPDATEFRAMEPOSITIONS");
     getConnection(function (err, conn) {
         if (err) return cb(err, null);
         r.db('percolatordb').table("History")
@@ -218,17 +217,14 @@ queries.updateFramePositions = function (positions, mmid, version, cb) {
 /**
  * Query to update memorymodel
  * @param memoryModel Memorymodel it self
+ * @param oldMemoryModel previous version of the current memorymodel
  * @param cb Callback of this function
  */
+
 queries.updateMemoryModel = function (memoryModel, oldMemoryModel, cb) {
     var mmid = memoryModel.mmid;
     var version = memoryModel.version;
     var id = memoryModel.id;
-    console.log("oldMemoryModel.id");
-    //console.log(oldMemoryModel.id);
-    console.log(memoryModel);
-    console.log("oldMemoryModel.id");
-    console.log(oldMemoryModel);
 
     memoryModel.version += 1;
 

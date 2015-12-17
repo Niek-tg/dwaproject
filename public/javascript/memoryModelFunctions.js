@@ -50,8 +50,14 @@ function setClassStyle(stacksLength, heapsLength) {
         var totalWidth = (stacksLength + heapsLength);
         var stackWidth;
         var heapWidth;
-        if(totalWidth === 2){ stackWidth = 30; heapWidth = 70;}
-        else{ stackWidth = (100 / totalWidth); heapWidth = (100 / totalWidth);}
+        if (totalWidth === 2) {
+            stackWidth = 30;
+            heapWidth = 70;
+        }
+        else {
+            stackWidth = (100 / totalWidth);
+            heapWidth = (100 / totalWidth);
+        }
 
         $(".Stack").css("width", "calc(" + stackWidth + "% - 2px)");
         $(".Heap").css("width", "calc(" + heapWidth + "% - 2px)");
@@ -83,9 +89,9 @@ function drawFrames(location, model, frameLocations) {
             $('#' + location + i).append(
                 "<div class='frameLabel'>" + location + "</div>"
             );
-            
-        frames.forEach(function (item) {
-            var top, left;
+
+            frames.forEach(function (item) {
+                var top, left;
 
                 frameLocations.forEach(function (frameLocation) {
                     if (item.id === parseInt(frameLocation.id)) {
@@ -97,10 +103,10 @@ function drawFrames(location, model, frameLocations) {
                 var name = (item.name) ? item.name : "";
                 var style;
 
-                if(top === undefined) {
+                if (top === undefined) {
                     style = "position:relative";
                 }
-                else{
+                else {
                     style = 'position: absolute; top: ' + top + "px; left: " + left + "%;"
                 }
 
@@ -176,9 +182,14 @@ function determineVar(variable) {
 function updateMemoryModel(data) {
 
     if (data.data.new_val) {
+        if (data.data.new_val.version > currentMemoryModel.version) {
+            getVersionList(false, true);
+            var owner = currentMemoryModel.owner;
+            currentMemoryModel = data.data.new_val;
+            currentMemoryModel.owner = owner;
+            setModelInfo();
+        }
         drawMemoryModel(data.data.new_val.memoryModel, data.data.new_val.frameLocations).then(function () {
-         //redrawPlumbing();
-            getVersionList(false,true);
             initPlumb();
         });
     }
@@ -188,7 +199,7 @@ function updateMemoryModel(data) {
  * Initializes the JSPlumb script
  */
 function initPlumb() {
-    jsPlumb.ready(function ()         {
+    jsPlumb.ready(function () {
 
         jsPlumb.Defaults.Container = $("#diagramContainer");
 
@@ -217,8 +228,8 @@ function redrawPlumbing() {
         endpoint: "Blank",
         anchor: ["Left", "Right"],
         overlays: [["Arrow", {width: 40, length: 20, location: 1}]],
-        paintStyle:{ strokeStyle: 'grey',lineWidth:5 },
-        hoverPaintStyle:{ strokeStyle:"#752921" },
+        paintStyle: {strokeStyle: 'grey', lineWidth: 5},
+        hoverPaintStyle: {strokeStyle: "#752921"},
         isSource: true,
         isTarget: true
     };
