@@ -5,7 +5,15 @@
 
 var r = require("rethinkdb");
 var config = require('./../../config.js');
+
+/**
+ * Holds an instance of the connection with the database
+ */
 var connection;
+
+/**
+ * Holds the object where all the queries are assigned to. Gets exported at the bottom of the code
+ */
 var queries = {};
 
 

@@ -54,16 +54,14 @@ messageHandler.identifyMessage = function (message, websocket, webSocketServer) 
             messageHandler.updateMemoryModel(message, websocket, webSocketServer);
             break;
 
-        case "subscribeAfterUpdate":
-            messageHandler.subscribeAfterUpdate(message, websocket, webSocketServer);
-            break;
         case "unsubscribeToCurrentCursor":
             messageHandler.unsubscribeToChanges(websocket);
             break;
+
         case "socketIdentifier":
                 websocket.connectionInfo.identity = message.identity;
                 websocket.connectionInfo.state = message.state;
-        break;
+            break;
 
         default :
             websocket.send(JSON.stringify({msgType: "errorMsg", data: "MessageHandler: unknown msgType received="}));
