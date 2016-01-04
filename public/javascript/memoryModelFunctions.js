@@ -11,6 +11,12 @@ var relations = [];
 var frameIdEndPositions = [];
 
 /**
+ * Contains a check if a user selected a memory model
+ * @type {Boolean}
+ */
+var memoryModelLoaded = false;
+
+/**
  * Draws the memory model
  *
  * @param model contains the data of the memory model
@@ -34,6 +40,7 @@ function drawMemoryModel(model, frameLocations) {
         promises.push(setClassStyle(model.stacks.length, model.heaps.length));
 
         Promise.all(promises).then(function () {
+            memoryModelLoaded = true;
             resolve();
         });
     })
@@ -294,4 +301,61 @@ var updatePositionFrames = function (frameId) {
         }
     });
 };
+
+//TODO usefull comments
+function addNewFrame(frameName, frameType) {
+
+    var obj = currentMemoryModel;
+    console.log('currentMemmoryModel' , currentMemoryModel);
+
+    if (memoryModelLoaded) {
+        if (frameType === 'stack') {
+            var i = 0;
+            for (var key in obj.memoryModel.stacks) {
+               i ++;
+                console.log(i);
+            }
+
+            var newValue = {
+                "id": 40,
+                "name": frameName
+            };
+            obj.memoryModel.stacks[0][i + 1] = newValue;
+
+            console.log('dit zit er in obj', obj);
+
+            percolatorSend({
+                msgType: 'updateMemoryModel',
+                data: {newMemoryModel: obj, oldMemoryModel: currentMemoryModel}
+            });
+        }
+
+        if (frameType === 'heap') {
+            var i = 0;
+            for (var key in obj.memoryModel.heaps) {
+                i ++;
+                console.log(i);
+            }
+
+            var newValue = {
+                "id": 90,
+                "name": frameName
+            };
+
+            obj.memoryModel.heaps[0][i + 1] = newValue;
+
+            console.log('dit zit er in obj', obj);
+
+            percolatorSend({
+                msgType: 'updateMemoryModel',
+                data: {newMemoryModel: obj, oldMemoryModel: currentMemoryModel}
+            });
+        }
+    }
+    else {
+        alert('select first a memorymodel so you can add frames or variables to it')
+    }
+
+    console.log("DIT IS HET CURRENT MEMORYMODEL", currentMemoryModel);
+}
 

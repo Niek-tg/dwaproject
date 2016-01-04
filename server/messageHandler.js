@@ -62,7 +62,6 @@ messageHandler.identifyMessage = function (message, websocket, webSocketServer) 
                 websocket.connectionInfo.identity = message.identity;
                 websocket.connectionInfo.state = message.state;
             break;
-
         default :
             websocket.send(JSON.stringify({msgType: "errorMsg", data: "MessageHandler: unknown msgType received="}));
             break;
