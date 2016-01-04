@@ -63,6 +63,7 @@ function chooseMemoryModel(id, prevVersion, undo) {
         firstTime = true;
     }
     percolatorSend({msgType: 'getModelById', id: id, version: version});
+
 }
 
 /**
@@ -106,12 +107,16 @@ function setModelInfo() {
  */
 function getVersionList(undo, addNewVersion) {
 
-    if(addNewVersion){highestVersion ++;}
+    if (addNewVersion) {
+        highestVersion++;
+    }
 
-    if(undo){highestVersion --;}
+    if (undo) {
+        highestVersion--;
+    }
 
 
-    if(highestVersion > 1) $("#undoButton").css("display", "block");
+    if (highestVersion > 1) $("#undoButton").css("display", "block");
     else $("#undoButton").css("display", "none");
 
     $("#labelVersionList").css("display", "block");
@@ -119,10 +124,10 @@ function getVersionList(undo, addNewVersion) {
     var sel = document.getElementById('memoryModelVersionList');
     $(sel).empty();
 
-        for (var i = 1; i < highestVersion + 1; i++) {
-            $(sel).append("<li class='list-group-item'><a id='versionListItem" + i + "'  onclick='chooseMemoryModel(this , true, false)' data-value='" +
-                currentMemoryModel.mmid + "' data-version='" + i + "'  href='#'>  Version: " + i + "</a></li>")
-        }
+    for (var i = 1; i < highestVersion + 1; i++) {
+        $(sel).append("<li class='list-group-item'><a id='versionListItem" + i + "'  onclick='chooseMemoryModel(this , true, false)' data-value='" +
+            currentMemoryModel.mmid + "' data-version='" + i + "'  href='#'>  Version: " + i + "</a></li>")
+    }
 }
 
 /**

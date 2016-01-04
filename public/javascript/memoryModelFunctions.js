@@ -34,6 +34,42 @@ function drawMemoryModel(model, frameLocations) {
         promises.push(setClassStyle(model.stacks.length, model.heaps.length));
 
         Promise.all(promises).then(function () {
+
+            var stack = $(".Stack");
+            var heap = $(".Heap");
+            var maxHeap;
+            var maxStack;
+            console.log($(".Stack"));
+            console.log($(".Heap"));
+            for (i = 0; i < stack.length; i++) {
+                console.log("Hij is in de stack for loop");
+                if (i === 0) {
+                    maxStack = stack[0].clientHeight;
+                }
+                if (stack[i].style.height > maxStack) {
+                    maxStack = stack[i].clientHeight;
+                }
+            }
+
+            for (j = 0; j < heap.length; j++) {
+                if (j === 0) {
+                    maxHeap = heap[0].clientHeight;
+                }
+
+                if (heap[j].style.height > maxHeap) {
+                    maxHeap = heap[j].clientHeight;
+                }
+
+            }
+            //console.log("maxheap:");
+            //console.log( $(".Stack").css("height"));
+            if(maxHeap > maxStack){
+                $(".Stack").css("height", maxHeap + "px");
+
+            }
+            else if(maxStack > maxHeap){
+                $(".Heap").css("height", maxStack + "px");
+            }
             resolve();
         });
     })
