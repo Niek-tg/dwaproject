@@ -7,7 +7,16 @@
 var keydownExists = false; //Boolean to make sure the event listener on keydown isn't created twice.
 
 function initJSONEditor() {
+    var JSONId = currentMemoryModel.id;
+    var JSONFrameLocations = currentMemoryModel.frameLocations;
+    var JSONMmid = currentMemoryModel.mmid;
+    var JSONVersion = currentMemoryModel.version;
+    var oldJSONVersion = currentMemoryModel.version;
 
+    delete currentMemoryModel.frameLocations;
+    delete currentMemoryModel['id'];
+    delete currentMemoryModel.mmid;
+    delete currentMemoryModel.version;
 
     var container = document.getElementById('jsoneditor');
     var editor = new JSONEditor(container, options, currentMemoryModel);
@@ -63,9 +72,11 @@ function initJSONEditor() {
         var newMemoryModel = editor.get();
         oldMemoryModel.version = newMemoryModel.version;
         if (savedFirstTime) savedFirstTime = false;
-        else newMemoryModel.version += counter; oldMemoryModel.version += counter; counter ++;
+        else JSONVersion += counter; oldJSONVersion += counter; counter ++;
+        setBackModelInfo(newMemoryModel, oldMemoryModel);
         jsonEditorSendMessage({msgType: 'updateMemoryModel', data: {newMemoryModel: newMemoryModel, oldMemoryModel:oldMemoryModel}});
         oldMemoryModel = newMemoryModel;
+        oldJSONVersion = JSONVersion;
     });
 
 
@@ -80,8 +91,10 @@ function initJSONEditor() {
                         oldMemoryModel.version = newMemoryModel.version;
                         if (savedFirstTime) savedFirstTime = false;
                         else newMemoryModel.version += counter; oldMemoryModel.version += counter; counter ++;
+                        setBackModelInfo(newMemoryModel, oldMemoryModel);
                         jsonEditorSendMessage({msgType: 'updateMemoryModel', data: {newMemoryModel: newMemoryModel, oldMemoryModel:oldMemoryModel}});
                         oldMemoryModel = newMemoryModel;
+                        oldJSONVersion = JSONVersion;
                         break;
                 }
             }
@@ -90,6 +103,19 @@ function initJSONEditor() {
         $(window).bind('keyup', function (event) {
             keydownExists = false;
         });
+    }
+
+    function setBackModelInfo(newMemoryModel, oldMemoryModel){
+        if(JSONFrameLocations) newMemoryModel.frameLocations = JSONFrameLocations;
+        newMemoryModel.id = JSONId;
+        newMemoryModel.mmid = JSONMmid;
+        newMemoryModel.version = JSONVersion;
+        currentMemoryModel = newMemoryModel;
+
+        oldMemoryModel.frameLocations = currentMemoryModel.frameLocations;
+        oldMemoryModel.id = currentMemoryModel.id;
+        oldMemoryModel.mmid = currentMemoryModel.mmid;
+        oldMemoryModel.version = oldJSONVersion;
     }
 }
 
@@ -115,6 +141,8 @@ var options = {
         }
     }
 };
+
+
 
 
 
