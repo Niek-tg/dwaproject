@@ -35,6 +35,10 @@
     border: 10px solid gray;
 }
 
+.frame:hover {
+    border-color: #752921;
+}
+
 .frameLabel {
     left: 50%;
     text-align: center;
