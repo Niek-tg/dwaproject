@@ -170,7 +170,7 @@ function determineVar(variable) {
         return "";
     }
     else if (variable.type === "undefined") return "undefined";
-    else if (variable.type === "string") return variable.value;
+    else if (variable.type === "string") return '"' + variable.value + '"';
     else if (variable.type === "number") return variable.value;
     else return "null"
 }
