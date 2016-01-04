@@ -48,10 +48,8 @@ function setStackHeapHeight(){
     var heap = $(".Heap");
     var maxHeap;
     var maxStack;
-    console.log($(".Stack"));
-    console.log($(".Heap"));
+
     for (i = 0; i < stack.length; i++) {
-        console.log("Hij is in de stack for loop");
         if (i === 0) {
             maxStack = stack[0].clientHeight;
         }
