@@ -10,7 +10,7 @@ var currentMemoryModel;
 var highestVersion;
 
 /**
- * Contains a boolean with a check if its the first time the memmory model is loaded
+ * Contains a boolean with a check if its the first time the memory model is loaded
  * @type {boolean}
  */
 var firstTime = false;
@@ -27,7 +27,6 @@ var frameIdEndPositions = [];
 function getMemoryModels(memoryModels) {
     // SET MEMORY MODELS IN SELECTBOX
     var sel = document.getElementById('memoryModelsList');
-    console.log("hallooooo memmorymodels " + memoryModels);
     sel.innerHTML = "";
     for (var i = 0; i < memoryModels.length; i++) {
         $(sel).append("<li class='list-group-item'><a id='" + memoryModels[i].mmid + "'onclick='chooseMemoryModel(this, false, false)' data-value='" +
@@ -37,7 +36,7 @@ function getMemoryModels(memoryModels) {
 }
 
 /**
- * Get versions of choosen memmory model.
+ * Get versions of choosen memory model.
  *
  * @param id identifier for the chosen memory model.
  * @param prevVersion boolean determining whether an older is chosen
