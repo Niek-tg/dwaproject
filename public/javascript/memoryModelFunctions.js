@@ -116,7 +116,6 @@ function drawFrames(location, model, frameLocations) {
                     "</div>");
 
                 if (item.vars) drawVars('#' + item.id, item.vars);
-                //if (item.funcs)drawFuncs('#' + item.id, item.funcs);
                 savePositionsOfframes(item.id);
 
             });
@@ -139,22 +138,6 @@ function drawVars(location, vars) {
             "<div class='variable'>" +
             "<div class='variableLabel'>" + variable.name + "</div>" +
             "<div id='" + variable.id + "' class='variableValue'>" + value + "</div>" +
-            "</div>");
-    });
-}
-
-/**
- * Draws the functions of the memory model.
- * @param location Location where the vars to be drawn in
- * @param funcs Data containing the vars to be drawn
- */
-function drawFuncs(location, funcs) {
-    funcs.forEach(function (variable) {
-        var value = determineVar(variable);
-        $(location).append(
-            "<div class='variable'>" +
-            "<div class='variableLabel'>" + variable.name + "</div>" +
-            "<div id='" + variable.id + "' class='variableValue pointer'>" + value + "</div>" +
             "</div>");
     });
 }
