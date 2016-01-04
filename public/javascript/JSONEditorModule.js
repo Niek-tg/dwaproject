@@ -8,6 +8,7 @@ var keydownExists = false; //Boolean to make sure the event listener on keydown 
 
 function initJSONEditor() {
 
+
     var container = document.getElementById('jsoneditor');
     var editor = new JSONEditor(container, options, currentMemoryModel);
     var oldMemoryModel = currentMemoryModel;
@@ -16,6 +17,7 @@ function initJSONEditor() {
     var savedFirstTime = true;
     var counter = 0;
 
+    document.getElementById("undoButton").disabled = true;
     $("#JSONButtons").append(newMemorymodelButton, saveMemorymodelButton);
 
     $("#setJSON").click(function newMemoryModel() {
