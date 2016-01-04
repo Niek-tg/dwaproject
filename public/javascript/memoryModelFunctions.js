@@ -11,6 +11,14 @@ var relations = [];
 var frameIdEndPositions = [];
 
 /**
+ * Contains the highest ID used in the memory model.
+ * Is used for determining new id's by adding them using the diagram view
+ * @type {number}
+ */
+var highestID = 0;
+
+
+/**
  * Draws the memory model
  *
  * @param model contains the data of the memory model
@@ -18,6 +26,7 @@ var frameIdEndPositions = [];
  * @returns {Promise} Promise to call actions when the drawing is done
  */
 function drawMemoryModel(model, frameLocations) {
+
     //console.log("drawing");
     return new Promise(function (resolve, reject) {
         var diagramContainer = $('#diagramContainer');
@@ -34,10 +43,62 @@ function drawMemoryModel(model, frameLocations) {
         promises.push(setClassStyle(model.stacks.length, model.heaps.length));
 
         Promise.all(promises).then(function () {
+            attachEventListeners();
             resolve();
         });
     })
 }
+
+function attachEventListeners(){
+    $(".variableValue").dblclick(function() {
+        openEditField(this);
+    });
+
+
+}
+
+function openEditField(me){
+    var val = me.innerText;
+    console.log(me);
+
+    var left =  $(me).offset().left;
+    var top =  $(me).offset().top;
+
+    var divName = "selectedInputField";
+
+    $("body").append("" +
+        "<div id='editValueField'>" +
+            "<input id='"+divName+"' class='' type='text' placeholder='value' value='"+val+"'>" +
+        "</div>" +
+        "");
+
+    $("#editValueField").css({
+        position: "absolute",
+        left: left + "px",
+        top: top + "px",
+        width: "300px",
+        margin: "0 0 0 -300px",
+        height: "300px",
+        zIndex: 500,
+        backgroundColor:"red"
+    });
+
+    $('#'+ divName).keypress(function (e) {
+        if (e.which == 13)saveNewValue($('#'+ divName).value);
+    }).blur(function() {
+        saveNewValue($('#'+ divName).value);
+    }).focus();
+
+
+}
+
+var saveNewValue = function(val){
+    console.log(val);
+
+    $("#editValueField").remove();
+    //currentMemoryModel.Memorymodel
+    //TODO add value to the memory model at the correct location
+};
 
 /**
  * Sets width of the stack and heap class by the number of stack and heaps
@@ -83,6 +144,7 @@ function drawFrames(location, model, frameLocations) {
 
         model.forEach(function (frames) {
 
+
             diagramContainer.append("<div id='" + location + i + "' class='" + location + "'></div>");
 
 
@@ -113,6 +175,7 @@ function drawFrames(location, model, frameLocations) {
                 $('#' + location + i).append(
                     "<div id='" + item.id + "' class='frame' style='" + style + "'> " +
                     "<div class='frameLabel'>" + name + "</div>" +
+                    "<div class='addVarToFrame'><a onclick='addVarToFrame($(this).parent().parent())'>+</a></div>" +
                     "</div>");
 
                 if (item.vars) drawVars('#' + item.id, item.vars);
@@ -124,6 +187,18 @@ function drawFrames(location, model, frameLocations) {
         });
         resolve();
     });
+}
+
+function addVarToFrame(me){
+    console.log(me);
+
+    highestID++;
+
+    $(me).append(
+        "<div class='variable'>" +
+        "<div class='variableLabel'>name</div>" +
+        "<div id='" + highestID + "' class='variableValue'>value</div>" +
+        "</div>");
 }
 
 /**
@@ -165,6 +240,9 @@ function drawFuncs(location, funcs) {
  * @returns {String|Number} value to be drawn inside the variable or function
  */
 function determineVar(variable) {
+
+    if(highestID < variable.id) highestID = variable.id;
+
     if (variable.type === "reference") {
         relations.push({source: variable.id, target: variable.value});
         return "";
@@ -217,6 +295,8 @@ function initPlumb() {
         });
         redrawPlumbing();
     });
+
+
 }
 
 /**
