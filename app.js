@@ -3,7 +3,6 @@ var ws = require('ws');
 var http = require('http');
 var path = require('path');
 var bodyParser = require('body-parser');
-var memorymodelRoute = require('./server/routes/memorymodels.js');
 var queries = require('./server/queries/queries.js');
 var messageHandler = require('./server/messageHandler.js');
 
@@ -41,7 +40,6 @@ function startWebservers(){
     theExpressApp.use(bodyParser.json());
 
     theExpressApp.use(express.static(path.join(__dirname, 'public')));
-    theExpressApp.use('/api/memorymodels', memorymodelRoute);
 
 
     var websocketId = 0;
