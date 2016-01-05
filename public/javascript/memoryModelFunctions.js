@@ -32,9 +32,10 @@ var memoryModelLoaded = false;
 
 function openEditField(me){
 
-    var divName = "editWrapper";
     assignValuesToEditFields(me);
-    $("#" + divName).slideToggle();
+
+    var divName = "#editWrapper";
+    if($(divName+ ":hidden")) $(divName).slideToggle();
     lastEditedDiv = $(me);
 
 }
@@ -54,8 +55,7 @@ function assignValuesToEditFields(origin){
 var updateValue = function(){
     console.log("hallo!");
     console.log(lastEditedDiv);
-    console.log($("#selectedInputField").value);
-    lastEditedDiv.innerHTML = $("#selectedInputField").value;
+    lastEditedDiv.innerHTML = $("#selectedInputField")[0].value;
 
     //TODO update value to the memory model at the correct location
 
@@ -87,6 +87,7 @@ function drawMemoryModel(model, frameLocations) {
 
         Promise.all(promises).then(function () {
             attachEventListeners();
+            memoryModelLoaded = true;
             resolve();
         });
     })
@@ -109,6 +110,13 @@ function attachEventListeners(){
 
     $(".variableValue").dblclick(function() {
         openEditField(this);
+    });
+
+    $('#addNewStackFrame').click(function(){
+        addNewFrame($("#frameLabel").val(), 'stack');
+    });
+    $('#addNewHeapFrame').click(function(){
+        addNewFrame($("#frameLabel").val(), 'heap');
     });
 
     function closeWrapper(){
@@ -373,60 +381,40 @@ var updatePositionFrames = function (frameId) {
     });
 };
 
-//TODO usefull comments
-function addNewFrame(frameName, frameType) {
+/**
+ * When a memort model is selected en a new frame is added (heap or stack), a message wil be send to the server by websocket.
+ * @param frameName is the Name of the frame
+ * @param frameType is the type of the container it needs to be put in (heap, stack)
+ */
 
+function addNewFrame(frameName, frameType) {
     var obj = currentMemoryModel;
-    console.log('currentMemmoryModel' , currentMemoryModel);
+
+    var newFrame = {
+        "id": highestID,
+        "name": frameName
+    };
+
+    highestID++;
 
     if (memoryModelLoaded) {
         if (frameType === 'stack') {
-            var i = 0;
-            for (var key in obj.memoryModel.stacks) {
-               i ++;
-                console.log(i);
-            }
+            var postitionStackFrame =  obj.memoryModel.stacks[0].length;
 
-            var newValue = {
-                "id": 40,
-                "name": frameName
-            };
-            obj.memoryModel.stacks[0][i + 1] = newValue;
-
-            console.log('dit zit er in obj', obj);
-
-            percolatorSend({
-                msgType: 'updateMemoryModel',
-                data: {newMemoryModel: obj, oldMemoryModel: currentMemoryModel}
-            });
+            obj.memoryModel.stacks[0][postitionStackFrame] = newFrame;
         }
 
         if (frameType === 'heap') {
-            var i = 0;
-            for (var key in obj.memoryModel.heaps) {
-                i ++;
-                console.log(i);
-            }
-
-            var newValue = {
-                "id": 90,
-                "name": frameName
-            };
-
-            obj.memoryModel.heaps[0][i + 1] = newValue;
-
-            console.log('dit zit er in obj', obj);
-
-            percolatorSend({
-                msgType: 'updateMemoryModel',
-                data: {newMemoryModel: obj, oldMemoryModel: currentMemoryModel}
-            });
+            var postitionHeapsFrame =  obj.memoryModel.heaps[0].length;
+            obj.memoryModel.heaps[0][postitionHeapsFrame] = newFrame;
         }
+
+        percolatorSend({
+            msgType: 'updateMemoryModel',
+            data: {newMemoryModel: obj, oldMemoryModel: currentMemoryModel}
+        });
     }
     else {
-        alert('select first a memorymodel so you can add frames or variables to it')
+        alert('select a memory model first so you can add frames or variables to it')
     }
-
-    console.log("DIT IS HET CURRENT MEMORYMODEL", currentMemoryModel);
 }
-
