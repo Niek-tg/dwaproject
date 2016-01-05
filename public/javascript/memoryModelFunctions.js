@@ -42,7 +42,8 @@ function drawMemoryModel(model, frameLocations) {
 /**
  * Set the stack or heap as high as the highest
  */
-function setStackHeapHeight() {
+function setStackHeapHeight(){
+
     var stack = $(".Stack");
     var heap = $(".Heap");
     var maxHeap;
@@ -59,12 +60,10 @@ function setStackHeapHeight() {
         }
     }
 
-    for (i = 0; i < heap.length; i++) {
-        var heapNodes = heap[i].childNodes;
-        for (j = 0; j < heapNodes.length; j++) {
-            var heapNodesTop = heapNodes[j].offsetTop;
-            var heapNodesHeight = heapNodes[j].offsetHeight;
-            var heapNodesBottom = heapNodesTop + heapNodesHeight;
+    for (j = 0; j < heap.length; j++) {
+        if (j === 0) {
+            maxHeap = heap[0].clientHeight;
+        }
 
             if (j === 0 && i === 0 || heapNodesBottom > maxHeap) maxHeap = heapNodesBottom;
         }
@@ -177,8 +176,8 @@ function drawVars(location, vars) {
 
         $(location).append(
             "<div class='variable'>" +
-            "<div class='variableLabel'>" + variable.name + "</div>" +
-            "<div id='" + variable.id + "' class='variableValue'>" + value + "</div>" +
+            "<div class='variableLabel'><p>" + variable.name + "</p></div>" +
+            "<div id='" + variable.id + "' class='variableValue'><p>" + value + "</p></div>" +
             "</div>");
     });
 }
@@ -236,6 +235,7 @@ function initPlumb() {
             stop: function (event) {
                 if ($(event.target).find('select').length == 0) {
                     updatePositionFrames(event.target.id);
+                    setStackHeapHeight();
                 }
             }
         });
