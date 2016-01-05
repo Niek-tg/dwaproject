@@ -50,7 +50,7 @@ function setStackHeapHeight(){
     var maxStack;
     console.log($(".Stack"));
     console.log($(".Heap"));
-    for (i = 0; i < stack.length; i++) {
+    for (var i = 0; i < stack.length; i++) {
         console.log("Hij is in de stack for loop");
         if (i === 0) {
             maxStack = stack[0].clientHeight;
@@ -60,7 +60,7 @@ function setStackHeapHeight(){
         }
     }
 
-    for (j = 0; j < heap.length; j++) {
+    for (var j = 0; j < heap.length; j++) {
         if (j === 0) {
             maxHeap = heap[0].clientHeight;
         }
@@ -176,8 +176,8 @@ function drawVars(location, vars) {
 
         $(location).append(
             "<div class='variable'>" +
-            "<div class='variableLabel'>" + variable.name + "</div>" +
-            "<div id='" + variable.id + "' class='variableValue'>" + value + "</div>" +
+            "<div class='variableLabel'><p>" + variable.name + "</p></div>" +
+            "<div id='" + variable.id + "' class='variableValue'><p>" + value + "</p></div>" +
             "</div>");
     });
 }
@@ -235,6 +235,7 @@ function initPlumb() {
             stop: function (event) {
                 if ($(event.target).find('select').length == 0) {
                     updatePositionFrames(event.target.id);
+                    setStackHeapHeight();
                 }
             }
         });

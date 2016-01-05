@@ -3,12 +3,10 @@
     padding: 0px;
     font-size: 20px;
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-
 }
 
 .Stack {
     position: relative;
-    margin: 0px;
     display: table;
     width: calc(30% - 2px);
     /*border: 1px solid gray;*/
@@ -19,7 +17,6 @@
     position: relative;
     float:left;
     width: calc(70% - 2px);
-    margin: 0px;
     display: table;
     /*border: 1px solid gray;*/
 }
@@ -29,12 +26,12 @@
 
 .frame {
     position: relative;
-    top: 0;
     display: table;
+    padding: 2%;
     /*height: 160px;*/
     max-width: 900px;
     width: calc(94% - 20px);
-    border: 10px solid gray;
+    border: 5px solid gray;
 }
 
 .frame:hover {
@@ -45,32 +42,44 @@
     left: 50%;
     text-align: center;
 }
-
 .variable {
     position: relative;
     float: left;
-    width: 96%;
-    padding: 0 2%;
+    padding: 2%;
+    /*width: 96%;*/
+    /*padding: 2%;*/
     height: 30px;
-    margin: 10px 0;
     clear: both;
-    min-width: 200px;
+    min-width: 18vw;
+    /*min-width: 200px;*/
     /*border: 1px solid blue;*/
 }
 
 .variableLabel {
     float: left;
-    margin: 5px;
+    /*margin: 0px;*/
     width: 50%;
-    max-width: 200px;
+    max-width: 50%;
+    /*padding: 5px;*/
 }
 
 .variableValue {
     position: relative;
     float: left;
-    right: 2%;
+    /*padding: 0 2px;*/
+    /*margin-left: 10px;*/
+    /*right: 2%;*/
+    padding: 1.2%;
     height: 30px;
     min-width: 30px;
     border: 1px solid gray;
     text-align: center;
+}
+
+.variableLabel p {
+    font-size: 1.5vw;
+}
+
+.variableValue p {
+    font-size: 1.5vw;
 }
