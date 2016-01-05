@@ -8,7 +8,12 @@ function toggleActive(me){
     var css;
     var grandparent = $(me).parent().parent();
     if((grandparent).attr('id') == "allMemoryModels") css = (isActive)? { width: '15%', minWidth: "300px"  } : { width: '50', minWidth: "0" };
-    else css = (isActive)? { width: '8%', minWidth: "150px"  } : { width: '50', minWidth: "0" };
+    else css = (isActive)? {
+        width: '8%',
+        minWidth: "150px"
+    } : {
+        width: '50',
+        minWidth: "0" };
 
     var notToHide = ".rotate270, .togglable";
 
@@ -26,7 +31,16 @@ function calculateDiagramContainerSize(){
     var count = $("#diagramContainer").children().length;
     size -= $("#allMemoryModels").outerWidth();
     size -= $("#memoryModelVersions").outerWidth();
-    $("#memoryModel").css({maxWidth : size - 23 + "px", "width": "100%"});
-    $("#diagramContainer").css({maxWidth : size - 3 + "px", "width": "100%"});
+    $("#memoryModel").css(
+        {
+            maxWidth : size - 23 + "px",
+            "width": "100%"
+        });
+    $("#diagramContainer").css(
+        {
+            maxWidth : size - 3 + "px",
+            "width": "100%"
+        });
     if(currentView === "diagramView" && count > 1) jsPlumb.repaintEverything();
+
 }

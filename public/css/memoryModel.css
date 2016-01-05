@@ -9,6 +9,7 @@
 .Stack {
     position: relative;
     margin: 0px;
+    display: table;
     width: calc(30% - 2px);
     /*border: 1px solid gray;*/
     float: left;
@@ -19,6 +20,7 @@
     float:left;
     width: calc(70% - 2px);
     margin: 0px;
+    display: table;
     /*border: 1px solid gray;*/
 }
     .Heap .frame {
@@ -33,6 +35,10 @@
     max-width: 900px;
     width: calc(94% - 20px);
     border: 10px solid gray;
+}
+
+.frame:hover {
+    border-color: #752921;
 }
 
 .frameLabel {

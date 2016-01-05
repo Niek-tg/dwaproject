@@ -41,6 +41,42 @@ function drawMemoryModel(model, frameLocations) {
 
         Promise.all(promises).then(function () {
             memoryModelLoaded = true;
+
+            var stack = $(".Stack");
+            var heap = $(".Heap");
+            var maxHeap;
+            var maxStack;
+            console.log($(".Stack"));
+            console.log($(".Heap"));
+            for (i = 0; i < stack.length; i++) {
+                console.log("Hij is in de stack for loop");
+                if (i === 0) {
+                    maxStack = stack[0].clientHeight;
+                }
+                if (stack[i].style.height > maxStack) {
+                    maxStack = stack[i].clientHeight;
+                }
+            }
+
+            for (j = 0; j < heap.length; j++) {
+                if (j === 0) {
+                    maxHeap = heap[0].clientHeight;
+                }
+
+                if (heap[j].style.height > maxHeap) {
+                    maxHeap = heap[j].clientHeight;
+                }
+
+            }
+            //console.log("maxheap:");
+            //console.log( $(".Stack").css("height"));
+            if(maxHeap > maxStack){
+                $(".Stack").css("height", maxHeap + "px");
+
+            }
+            else if(maxStack > maxHeap){
+                $(".Heap").css("height", maxStack + "px");
+            }
             resolve();
         });
     })
@@ -123,7 +159,6 @@ function drawFrames(location, model, frameLocations) {
                     "</div>");
 
                 if (item.vars) drawVars('#' + item.id, item.vars);
-                //if (item.funcs)drawFuncs('#' + item.id, item.funcs);
                 savePositionsOfframes(item.id);
 
             });
@@ -151,22 +186,6 @@ function drawVars(location, vars) {
 }
 
 /**
- * Draws the functions of the memory model.
- * @param location Location where the vars to be drawn in
- * @param funcs Data containing the vars to be drawn
- */
-function drawFuncs(location, funcs) {
-    funcs.forEach(function (variable) {
-        var value = determineVar(variable);
-        $(location).append(
-            "<div class='variable'>" +
-            "<div class='variableLabel'>" + variable.name + "</div>" +
-            "<div id='" + variable.id + "' class='variableValue pointer'>" + value + "</div>" +
-            "</div>");
-    });
-}
-
-/**
  * Looks of the variable is a pointer or a variable
  * @param variable Value to be converted to a variable, usable to draw with
  * @returns {String|Number} value to be drawn inside the variable or function
@@ -177,7 +196,7 @@ function determineVar(variable) {
         return "";
     }
     else if (variable.type === "undefined") return "undefined";
-    else if (variable.type === "string") return variable.value;
+    else if (variable.type === "string") return '"' + variable.value + '"';
     else if (variable.type === "number") return variable.value;
     else return "null"
 }
