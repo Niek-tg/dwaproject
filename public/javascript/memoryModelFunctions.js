@@ -17,6 +17,46 @@ var frameIdEndPositions = [];
  */
 var highestID = 0;
 
+/**
+ * Contains the last edited div, used by the edit fields
+ * @type {*|jQuery|HTMLElement}
+ */
+var lastEditedDiv;
+
+
+
+function openEditField(me){
+
+    var divName = "editWrapper";
+    assignValuesToEditFields(me);
+    $("#" + divName).slideToggle();
+    lastEditedDiv = $(me);
+
+}
+
+function assignValuesToEditFields(origin){
+
+    var value = origin.innerText;
+    $("#selectedInputField").val(value);
+
+    var activeType = ($(origin).hasClass("_jsPlumb_endpoint_anchor_")) ?
+        "#typeReference" :
+        (parseInt(value)) ? "#typeNumber" :"#typeString" ;
+
+    $(activeType).prop("checked", true);
+}
+
+var updateValue = function(){
+    console.log("hallo!");
+    console.log(lastEditedDiv);
+    console.log($("#selectedInputField").value);
+    lastEditedDiv.innerHTML = $("#selectedInputField").value;
+
+    //TODO update value to the memory model at the correct location
+
+};
+
+
 
 /**
  * Draws the memory model
@@ -49,56 +89,31 @@ function drawMemoryModel(model, frameLocations) {
     })
 }
 
+/**
+ * Attaches all the eventlisteners to their corresponding divs or attributes
+ */
 function attachEventListeners(){
+
+    $("#updateButton").click(function() {
+      // TODO save the values into the memory model and send to the server
+        updateValue();
+        closeWrapper();
+    });
+
+    $("#closeButton").click(function() {
+        closeWrapper();
+    });
+
     $(".variableValue").dblclick(function() {
         openEditField(this);
     });
 
+    function closeWrapper(){
+        var div = "#editWrapper";
+        if($(div+ ":hidden")) $(div).slideToggle();
+    }
 
 }
-
-function openEditField(me){
-    var val = me.innerText;
-    console.log(me);
-
-    var left =  $(me).offset().left;
-    var top =  $(me).offset().top;
-
-    var divName = "selectedInputField";
-
-    $("body").append("" +
-        "<div id='editValueField'>" +
-            "<input id='"+divName+"' class='' type='text' placeholder='value' value='"+val+"'>" +
-        "</div>" +
-        "");
-
-    $("#editValueField").css({
-        position: "absolute",
-        left: left + "px",
-        top: top + "px",
-        width: "300px",
-        margin: "0 0 0 -300px",
-        height: "300px",
-        zIndex: 500,
-        backgroundColor:"red"
-    });
-
-    $('#'+ divName).keypress(function (e) {
-        if (e.which == 13)saveNewValue($('#'+ divName).value);
-    }).blur(function() {
-        saveNewValue($('#'+ divName).value);
-    }).focus();
-
-
-}
-
-var saveNewValue = function(val){
-    console.log(val);
-
-    $("#editValueField").remove();
-    //currentMemoryModel.Memorymodel
-    //TODO add value to the memory model at the correct location
-};
 
 /**
  * Sets width of the stack and heap class by the number of stack and heaps
@@ -190,8 +205,6 @@ function drawFrames(location, model, frameLocations) {
 }
 
 function addVarToFrame(me){
-    console.log(me);
-
     highestID++;
 
     $(me).append(
@@ -199,6 +212,8 @@ function addVarToFrame(me){
         "<div class='variableLabel'>name</div>" +
         "<div id='" + highestID + "' class='variableValue'>value</div>" +
         "</div>");
+
+    attachEventListeners();
 }
 
 /**
