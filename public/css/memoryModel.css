@@ -12,6 +12,9 @@
     /*border: 1px solid gray;*/
     float: left;
 }
+.Stack:hover{
+    border-color: #752921;
+}
 
 .Heap {
     position: relative;
@@ -19,6 +22,9 @@
     width: calc(70% - 2px);
     display: table;
     /*border: 1px solid gray;*/
+}
+.Heap:hover{
+    border-color: #752921;
 }
     .Heap .frame {
         width: auto;
