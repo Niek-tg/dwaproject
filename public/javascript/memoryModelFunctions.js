@@ -56,7 +56,12 @@ var updateValue = function(){
     console.log("hallo!");
     console.log(lastEditedDiv);
     console.log($("#selectedInputField")[0].value);
+
+    var location =
     lastEditedDiv[0].innerText = ($("#selectedInputField")[0].value);
+
+
+    //memoryModel.stacks
 
     console.log(lastEditedDiv);
 
@@ -102,23 +107,29 @@ function drawMemoryModel(model, frameLocations) {
  */
 function attachEventListeners(){
 
+    $("#updateButton").unbind('click');
     $("#updateButton").click(function() {
       // TODO save the values into the memory model and send to the server
         updateValue();
         closeWrapper();
     });
 
+    $("#closeButton").unbind('click');
     $("#closeButton").click(function() {
         closeWrapper();
     });
 
+    $("#variableValue").unbind('dblclick');
     $(".variableValue").dblclick(function() {
         openEditField(this);
     });
 
+    $("#addNewStackFrame").unbind('click');
     $('#addNewStackFrame').click(function(){
         addNewFrame($("#frameLabel").val(), 'stack');
     });
+
+    $("#addNewHeapFrame").unbind('click');
     $('#addNewHeapFrame').click(function(){
         addNewFrame($("#frameLabel").val(), 'heap');
     });
@@ -299,7 +310,6 @@ function initPlumb() {
         $(".frame").draggable({
             drag: function (e) {
                 jsPlumb.repaintEverything();
-                console.log("dragged");
             },
             containment: "parent",
             stop: function (event) {
@@ -404,7 +414,7 @@ function addNewFrame(frameName, frameType) {
         "name": frameName
     };
 
-    console.log(newFrame);
+    //console.log(newFrame);
 
     if (memoryModelLoaded) {
         if (frameType === 'stack') {
