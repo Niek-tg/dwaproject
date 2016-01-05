@@ -42,37 +42,40 @@ function drawMemoryModel(model, frameLocations) {
 /**
  * Set the stack or heap as high as the highest
  */
-function setStackHeapHeight(){
-
+function setStackHeapHeight() {
     var stack = $(".Stack");
     var heap = $(".Heap");
     var maxHeap;
     var maxStack;
 
     for (i = 0; i < stack.length; i++) {
-        if (i === 0) {
-            maxStack = stack[0].clientHeight;
-        }
-        if (stack[i].style.height > maxStack) {
-            maxStack = stack[i].clientHeight;
+        var stackNodes = stack[i].childNodes;
+        for (j = 0; j < stackNodes.length; j++) {
+            var stackNodesTop = stackNodes[j].offsetTop;
+            var stackNodesHeight = stackNodes[j].offsetHeight;
+            var stackNodesBottom = stackNodesTop + stackNodesHeight;
+
+            if (j === 0 && i === 0 || stackNodesBottom > maxStack) maxStack = stackNodesBottom;
         }
     }
 
-    for (j = 0; j < heap.length; j++) {
-        if (j === 0) {
-            maxHeap = heap[0].clientHeight;
-        }
+    for (i = 0; i < heap.length; i++) {
+        var heapNodes = heap[i].childNodes;
+        for (j = 0; j < heapNodes.length; j++) {
+            var heapNodesTop = heapNodes[j].offsetTop;
+            var heapNodesHeight = heapNodes[j].offsetHeight;
+            var heapNodesBottom = heapNodesTop + heapNodesHeight;
 
-        if (heap[j].style.height > maxHeap) {
-            maxHeap = heap[j].clientHeight;
+            if (j === 0 && i === 0 || heapNodesBottom > maxHeap) maxHeap = heapNodesBottom;
         }
-
     }
-    if(maxHeap > maxStack){
+
+    if (maxHeap > maxStack) {
         $(".Stack").css("height", maxHeap + "px");
-
+        $(".Heap").css("height", maxHeap + "px");
     }
-    else if(maxStack > maxHeap){
+    else if (maxStack > maxHeap) {
+        $(".Stack").css("height", maxStack + "px");
         $(".Heap").css("height", maxStack + "px");
     }
 }
