@@ -60,14 +60,18 @@ function setStackHeapHeight(){
         }
     }
 
-    for (j = 0; j < heap.length; j++) {
-        if (j === 0) {
-            maxHeap = heap[0].clientHeight;
-        }
+    for (i = 0; i < heap.length; i++) {
+        var heapNodes = heap[i].childNodes;
+        for (j = 0; j < heapNodes.length; j++) {
+            var heapNodesTop = heapNodes[j].offsetTop;
+            var heapNodesHeight = heapNodes[j].offsetHeight;
+            var heapNodesBottom = heapNodesTop + heapNodesHeight;
 
             if (j === 0 && i === 0 || heapNodesBottom > maxHeap) maxHeap = heapNodesBottom;
         }
     }
+
+
 
     if (maxHeap > maxStack) {
         $(".Stack").css("height", maxHeap + "px");
