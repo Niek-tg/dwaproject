@@ -4,76 +4,6 @@
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/jsPlumb/1.4.1/jquery.jsPlumb-1.4.1-all-min.js"></script>
-    <style>
-        #diagramContainer {
-            padding: 0px;
-            width: 100%;
-            height: 100%;
-            border: 1px solid gray;
-            font-size: 20px;
-            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-        }
-
-        .stack {
-            position: absolute;
-            margin: 0px;
-            width: 50%;
-            height: 600px;
-            border: 1px solid gray;
-        }
-
-        .heap {
-            position: absolute;
-            left: 50%;
-            margin: 0px;
-            width: 50%;
-            height: 600px;
-            border: 1px solid blue;
-        }
-
-        .frame {
-            position: relative;
-            display: table;
-            margin: 3%;
-            height: 160px;
-            max-width: 300px;
-            width: calc(94% - 20px);
-            border: 10px solid gray;
-        }
-
-        .frameLabel {
-            left: 50%;
-            text-align: center;
-        }
-
-        .variable {
-            position: relative;
-            float: left;
-            width: 96%;
-            padding: 0 2%;
-            height: 30px;
-            margin: 10px 0;
-            /*border: 1px solid blue;*/
-        }
-
-        .variableLabel {
-            float: left;
-            margin: 5px;
-            width: 50%;
-            max-width: 200px;
-        }
-
-        .variableValue {
-            position: relative;
-            float: left;
-            right: 2%;
-            height: 30px;
-            min-width: 30px;
-            border: 1px solid gray;
-            text-align: center;
-        }
-
-    </style>
 </head>
 <body>
 
@@ -153,7 +83,6 @@
                 target: "var3pointer"
             }, common);
 
-//            jsPlumb.addEndpoint($(".pointer"), common);
         });
     });
     $(window).resize(function () {
