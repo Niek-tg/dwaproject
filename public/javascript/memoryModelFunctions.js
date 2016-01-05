@@ -11,10 +11,56 @@ var relations = [];
 var frameIdEndPositions = [];
 
 /**
+ * Contains the highest ID used in the memory model.
+ * Is used for determining new id's by adding them using the diagram view
+ * @type {number}
+ */
+var highestID = 0;
+
+/**
+ * Contains the last edited div, used by the edit fields
+ * @type {*|jQuery|HTMLElement}
+ */
+var lastEditedDiv;
+
+/**
  * Contains a check if a user selected a memory model
  * @type {Boolean}
  */
 var memoryModelLoaded = false;
+
+
+function openEditField(me){
+
+    var divName = "editWrapper";
+    assignValuesToEditFields(me);
+    $("#" + divName).slideToggle();
+    lastEditedDiv = $(me);
+
+}
+
+function assignValuesToEditFields(origin){
+
+    var value = origin.innerText;
+    $("#selectedInputField").val(value);
+
+    var activeType = ($(origin).hasClass("_jsPlumb_endpoint_anchor_")) ?
+        "#typeReference" :
+        (parseInt(value)) ? "#typeNumber" :"#typeString" ;
+
+    $(activeType).prop("checked", true);
+}
+
+var updateValue = function(){
+    console.log("hallo!");
+    console.log(lastEditedDiv);
+    console.log($("#selectedInputField").value);
+    lastEditedDiv.innerHTML = $("#selectedInputField").value;
+
+    //TODO update value to the memory model at the correct location
+
+};
+
 
 /**
  * Draws the memory model
@@ -40,46 +86,36 @@ function drawMemoryModel(model, frameLocations) {
         promises.push(setClassStyle(model.stacks.length, model.heaps.length));
 
         Promise.all(promises).then(function () {
-            memoryModelLoaded = true;
-
-            var stack = $(".Stack");
-            var heap = $(".Heap");
-            var maxHeap;
-            var maxStack;
-            console.log($(".Stack"));
-            console.log($(".Heap"));
-            for (i = 0; i < stack.length; i++) {
-                console.log("Hij is in de stack for loop");
-                if (i === 0) {
-                    maxStack = stack[0].clientHeight;
-                }
-                if (stack[i].style.height > maxStack) {
-                    maxStack = stack[i].clientHeight;
-                }
-            }
-
-            for (j = 0; j < heap.length; j++) {
-                if (j === 0) {
-                    maxHeap = heap[0].clientHeight;
-                }
-
-                if (heap[j].style.height > maxHeap) {
-                    maxHeap = heap[j].clientHeight;
-                }
-
-            }
-            //console.log("maxheap:");
-            //console.log( $(".Stack").css("height"));
-            if(maxHeap > maxStack){
-                $(".Stack").css("height", maxHeap + "px");
-
-            }
-            else if(maxStack > maxHeap){
-                $(".Heap").css("height", maxStack + "px");
-            }
+            attachEventListeners();
             resolve();
         });
     })
+}
+
+/**
+ * Attaches all the eventlisteners to their corresponding divs or attributes
+ */
+function attachEventListeners(){
+
+    $("#updateButton").click(function() {
+      // TODO save the values into the memory model and send to the server
+        updateValue();
+        closeWrapper();
+    });
+
+    $("#closeButton").click(function() {
+        closeWrapper();
+    });
+
+    $(".variableValue").dblclick(function() {
+        openEditField(this);
+    });
+
+    function closeWrapper(){
+        var div = "#editWrapper";
+        if($(div+ ":hidden")) $(div).slideToggle();
+    }
+
 }
 
 /**
@@ -156,6 +192,7 @@ function drawFrames(location, model, frameLocations) {
                 $('#' + location + i).append(
                     "<div id='" + item.id + "' class='frame' style='" + style + "'> " +
                     "<div class='frameLabel'>" + name + "</div>" +
+                    "<div class='addVarToFrame'><a onclick='addVarToFrame($(this).parent().parent())'>+</a></div>" +
                     "</div>");
 
                 if (item.vars) drawVars('#' + item.id, item.vars);
@@ -166,6 +203,18 @@ function drawFrames(location, model, frameLocations) {
         });
         resolve();
     });
+}
+
+function addVarToFrame(me){
+    highestID++;
+
+    $(me).append(
+        "<div class='variable'>" +
+        "<div class='variableLabel'>name</div>" +
+        "<div id='" + highestID + "' class='variableValue'>value</div>" +
+        "</div>");
+
+    attachEventListeners();
 }
 
 /**
@@ -191,6 +240,9 @@ function drawVars(location, vars) {
  * @returns {String|Number} value to be drawn inside the variable or function
  */
 function determineVar(variable) {
+
+    if(highestID < variable.id) highestID = variable.id;
+
     if (variable.type === "reference") {
         relations.push({source: variable.id, target: variable.value});
         return "";

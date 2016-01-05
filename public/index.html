@@ -72,10 +72,32 @@
     <div id="memoryModel" class="col-md-8 col-sm-8">
         <div id="diagramContainer">
 
-            <div class="clr"></div>
 
         </div>
     </div>
+
+
+<div id='editWrapper'>
+    <div>
+        <label for='selectedInputField'>Value</label>
+        <input id='selectedInputField' class='' type='text' placeholder='value' >
+    </div>
+    <div>
+        <input id="typeString" type="radio" name="type" value="string" checked>String
+        <br>
+        <input id="typeNumber" type="radio" name="type" value="number">Number
+        <br>
+        <input id="typeReference" type="radio" name="type" value="reference">Reference
+        <br>
+        <input id="typeNull" type="radio" name="type" value="reference">Null
+        <br>
+        <input id="typeUndefined" type="radio" name="type" value="reference">Undefined
+    </div>
+    <div>
+        <button id="updateButton">Save</button>
+        <button id="closeButton">Discard and close</button>
+    </div>
+</div>
 
 </div>
 </body>
