@@ -55,7 +55,11 @@ function assignValuesToEditFields(origin){
 var updateValue = function(){
     console.log("hallo!");
     console.log(lastEditedDiv);
-    lastEditedDiv.innerHTML = $("#selectedInputField")[0].value;
+    console.log($("#selectedInputField")[0].value);
+    lastEditedDiv[0].innerText = ($("#selectedInputField")[0].value);
+
+    console.log(lastEditedDiv);
+
 
     //TODO update value to the memory model at the correct location
 
@@ -271,8 +275,11 @@ function updateMemoryModel(data) {
         if (data.data.new_val.version > currentMemoryModel.version) {
             getVersionList(false, true);
             var owner = currentMemoryModel.owner;
+            var language = currentMemoryModel.language;
             currentMemoryModel = data.data.new_val;
             currentMemoryModel.owner = owner;
+            currentMemoryModel.language = language;
+
             setModelInfo();
         }
         drawMemoryModel(data.data.new_val.memoryModel, data.data.new_val.frameLocations).then(function () {
@@ -390,12 +397,14 @@ var updatePositionFrames = function (frameId) {
 function addNewFrame(frameName, frameType) {
     var obj = currentMemoryModel;
 
+    highestID++;
+
     var newFrame = {
         "id": highestID,
         "name": frameName
     };
 
-    highestID++;
+    console.log(newFrame);
 
     if (memoryModelLoaded) {
         if (frameType === 'stack') {
@@ -408,7 +417,7 @@ function addNewFrame(frameName, frameType) {
             var postitionHeapsFrame =  obj.memoryModel.heaps[0].length;
             obj.memoryModel.heaps[0][postitionHeapsFrame] = newFrame;
         }
-
+console.log( "data:", {newMemoryModel: obj, oldMemoryModel: currentMemoryModel});
         percolatorSend({
             msgType: 'updateMemoryModel',
             data: {newMemoryModel: obj, oldMemoryModel: currentMemoryModel}
