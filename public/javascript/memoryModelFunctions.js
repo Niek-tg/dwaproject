@@ -71,8 +71,6 @@ function setStackHeapHeight(){
         }
     }
 
-
-
     if (maxHeap > maxStack) {
         $(".Stack").css("height", maxHeap + "px");
         $(".Heap").css("height", maxHeap + "px");
