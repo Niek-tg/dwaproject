@@ -29,30 +29,38 @@ var lastEditedDiv;
  */
 var memoryModelLoaded = false;
 
+/**
+ * Contains a check if editing mode is reference or variable editing
+ * @type {Boolean}
+ */
+var toggleEditingMode = false;
 
-function openEditField(me){
+//TODO usefull comment
+function openEditField(me) {
 
     assignValuesToEditFields(me);
 
     var divName = "#editWrapper";
-    if($(divName+ ":hidden")) $(divName).slideToggle();
+    if ($(divName + ":hidden")) $(divName).slideToggle();
     lastEditedDiv = $(me);
 
 }
 
-function assignValuesToEditFields(origin){
+//TODO usefull comment
+function assignValuesToEditFields(origin) {
 
     var value = origin.innerText;
     $("#selectedInputField").val(value);
 
     var activeType = ($(origin).hasClass("_jsPlumb_endpoint_anchor_")) ?
         "#typeReference" :
-        (parseInt(value)) ? "#typeNumber" :"#typeString" ;
+        (parseInt(value)) ? "#typeNumber" : "#typeString";
 
     $(activeType).prop("checked", true);
 }
 
-var updateValue = function(){
+//TODO usefull comment
+var updateValue = function () {
 
     var oldMmModel = currentMemoryModel;
     var owner = currentMemoryModel.owner;
@@ -66,37 +74,37 @@ var updateValue = function(){
     var elementIndex = 0;
     var stackIndex = 0;
     var heapIndex = 0;
-    currentMemoryModel.memoryModel.stacks.forEach(function(stack){
+    currentMemoryModel.memoryModel.stacks.forEach(function (stack) {
 
-        loop(stack, function(){
-            currentMemoryModel.memoryModel.stacks[stackIndex][frameIndex].vars[elementIndex].value = newValue ;
-            currentMemoryModel.memoryModel.stacks[stackIndex][frameIndex].vars[elementIndex].type = newType ;
+        loop(stack, function () {
+            currentMemoryModel.memoryModel.stacks[stackIndex][frameIndex].vars[elementIndex].value = newValue;
+            currentMemoryModel.memoryModel.stacks[stackIndex][frameIndex].vars[elementIndex].type = newType;
 
             //TODO ALS TYPE NULL OF UNDEFINED IS EN OUDE TYPE WAS RELATION, VERWIJDEREN UIT DE LIJST
         });
         stackIndex++;
     });
 
-    if(!found) currentMemoryModel.memoryModel.heaps.forEach(function(heap){
+    if (!found) currentMemoryModel.memoryModel.heaps.forEach(function (heap) {
 
-        loop(heap, function(){
+        loop(heap, function () {
             //console.log(heapIndex);
-            currentMemoryModel.memoryModel.heaps[heapIndex][frameIndex].vars[elementIndex].value = newValue ;
-            currentMemoryModel.memoryModel.heaps[heapIndex][frameIndex].vars[elementIndex].type = newType ;
+            currentMemoryModel.memoryModel.heaps[heapIndex][frameIndex].vars[elementIndex].value = newValue;
+            currentMemoryModel.memoryModel.heaps[heapIndex][frameIndex].vars[elementIndex].type = newType;
         });
         heapIndex++;
     });
 
-    function loop(location, cb){
-        if(found) return true;
+    function loop(location, cb) {
+        if (found) return true;
         frameIndex = 0;
-        location.forEach(function(frame){
+        location.forEach(function (frame) {
             elementIndex = 0;
-            if(found) return true;
+            if (found) return true;
 
-            frame.vars.forEach(function(element){
-                if(found) return true;
-                if(element.id == lastEditedDiv[0].id){
+            frame.vars.forEach(function (element) {
+                if (found) return true;
+                if (element.id == lastEditedDiv[0].id) {
                     found = true;
                     cb();
                     currentMemoryModel.owner = owner;
@@ -108,7 +116,7 @@ var updateValue = function(){
         });
     }
 
-    if(found){
+    if (found) {
         percolatorSend({
             msgType: 'updateMemoryModel',
             data: {newMemoryModel: currentMemoryModel, oldMemoryModel: oldMmModel}
@@ -116,7 +124,6 @@ var updateValue = function(){
     } else {
         alert("NO RESULTS");
     }
-
 };
 
 
@@ -154,42 +161,61 @@ function drawMemoryModel(model, frameLocations) {
 /**
  * Attaches all the eventlisteners to their corresponding divs or attributes
  */
-function attachEventListeners(){
+function attachEventListeners() {
+
+    $("#addReference").unbind('click');
+    $("#addReference").click(function (e) {
+        toggleEditingMode = !toggleEditingMode;
+        redrawPlumbing();
+    });
 
     $("#updateButton").unbind('click');
-    $("#updateButton").click(function() {
-      // TODO save the values into the memory model and send to the server
+    $("#updateButton").click(function () {
+        // TODO save the values into the memory model and send to the server
         updateValue();
         //console.log(value);
         //saveValueToDataFormat()
         closeWrapper();
     });
 
+    //$('div').unbind('click');
+    //$('div').dblclick("click", function (e) {
+    //    newReference(e.target.id);
+    //    e.stopPropagation();
+    //});
+
+
     $("#closeButton").unbind('click');
-    $("#closeButton").click(function() {
+    $("#closeButton").click(function () {
         closeWrapper();
     });
 
     $("#variableValue").unbind('dblclick');
-    $(".variableValue").dblclick(function() {
+    $(".variableValue").dblclick(function () {
         openEditField(this);
     });
 
     $("#addNewStackFrame").unbind('click');
-    $('#addNewStackFrame').click(function(){
+    $('#addNewStackFrame').click(function () {
         addNewFrame($("#frameLabel").val(), 'stack');
     });
 
     $("#addNewHeapFrame").unbind('click');
-    $('#addNewHeapFrame').click(function(){
+    $('#addNewHeapFrame').click(function () {
         addNewFrame($("#frameLabel").val(), 'heap');
     });
 
-    function closeWrapper(){
-        var div = "#editWrapper";
-        if(!$(div).is(':hidden')) $(div).slideToggle();
-    }
+    $(".deleteFrame").unbind('click');
+    $(".deleteFrame").click(function () {
+        deleteFrame($(this).parent().attr("id"));
 
+    });
+
+    function closeWrapper() {
+        console.log(toggleEditingMode);
+        var div = "#editWrapper";
+        if (!$(div).is(':hidden')) $(div).slideToggle();
+    }
 }
 
 /**
@@ -265,13 +291,13 @@ function drawFrames(location, model, frameLocations) {
 
                 $('#' + location + i).append(
                     "<div id='" + item.id + "' class='frame' style='" + style + "'> " +
+                    "<div class='deleteFrame'>" + "</div>" +
                     "<div class='frameLabel'>" + name + "</div>" +
                     "<div class='addVarToFrame'><a onclick='addVarToFrame($(this).parent().parent())'>+</a></div>" +
                     "</div>");
 
                 if (item.vars) drawVars('#' + item.id, item.vars);
                 savePositionsOfframes(item.id);
-
             });
             i++;
         });
@@ -279,7 +305,7 @@ function drawFrames(location, model, frameLocations) {
     });
 }
 
-function addVarToFrame(me){
+function addVarToFrame(me) {
     highestID++;
 
     $(me).append(
@@ -304,6 +330,7 @@ function drawVars(location, vars) {
             "<div class='variable'>" +
             "<div class='variableLabel'>" + variable.name + "</div>" +
             "<div id='" + variable.id + "' class='variableValue'>" + value + "</div>" +
+            "<div class='deleteVar'>" + "</div>" +
             "</div>");
     });
 }
@@ -315,15 +342,25 @@ function drawVars(location, vars) {
  */
 function determineVar(variable) {
 
-    if(highestID < variable.id) highestID = variable.id;
+    if (highestID < variable.id) highestID = variable.id;
 
     if (variable.type === "reference") {
         relations.push({source: variable.id, target: variable.value});
+        originalEndpoints.push({source: variable.id, target: variable.value});
         return "";
     }
-    else if (variable.type === "undefined") return "undefined";
-    else if (variable.type === "string") return '"' + variable.value + '"';
-    else if (variable.type === "number") return variable.value;
+    else if (variable.type === "undefined") {
+        emtyConnections();
+        return "undefined"
+    }
+    else if (variable.type === "string") {
+        emtyConnections();
+        return '"' + variable.value + '"'
+    }
+    else if (variable.type === "number") {
+        emtyConnections();
+        return variable.value
+    }
     else return "null"
 }
 
@@ -364,7 +401,6 @@ function updateJSONEditor(){
  */
 function initPlumb() {
     jsPlumb.ready(function () {
-
         jsPlumb.Defaults.Container = $("#diagramContainer");
 
         $(".frame").draggable({
@@ -378,6 +414,18 @@ function initPlumb() {
                 }
             }
         });
+        jsPlumb.bind("connection", function(info){
+            var exists = false;
+            relations.forEach(function(relation){
+                console.log(info.sourceId , relation.source)
+                console.log(info.targetId , relation.target)
+                if(info.sourceId == relation.source && info.targetId == relation.target){
+                    exists = true;
+                    return;
+                }
+            });
+            if(!exists)newReference(info.sourceId, info.targetId)
+        });
         redrawPlumbing();
     });
 }
@@ -385,10 +433,11 @@ function initPlumb() {
 /**
  * Draws the connections between the frames and variables where needed.
  */
+
+var originalEndpoints = relations;
 function redrawPlumbing() {
 
     var common = {
-        endpoint: "Blank",
         anchor: ["Left", "Right"],
         overlays: [["Arrow", {width: 40, length: 20, location: 1}]],
         paintStyle: {strokeStyle: 'grey', lineWidth: 5},
@@ -397,15 +446,31 @@ function redrawPlumbing() {
         isTarget: true
     };
 
+    if (toggleEditingMode) common.endpoint ="Dot";
+    else common.endpoint = "Blank";
+
+    //jsPlumb.detachEveryConnection();
+    //jsPlumb.deleteEveryEndpoint();
+    //jsPlumb.deleteEndpoint($('.frame'))
+    //jsPlumb.deleteEndpoint($('.variableValue'))
+
+    jsPlumb.addEndpoint($('.frame'), common);
+
+
+    console.log(common);
+
     relations.forEach(function (relation) {
-        //console.log(relation);
-        jsPlumb.connect({
+        console.log(relation);
+        var sourceTarget = {
             source: relation.source.toString(),
             target: relation.target.toString()
-        }, common);
+        };
+        jsPlumb.addEndpoint($('#'+relation.source), common);
+        jsPlumb.addEndpoint($('#'+relation.target), common);
+        jsPlumb.detach(sourceTarget);
+        jsPlumb.connect(sourceTarget, common);
     });
 
-    relations = [];
 }
 
 
@@ -439,15 +504,14 @@ var updatePositionFrames = function (frameId) {
 
     var i = 0;
 
-
     frameIdEndPositions.forEach(function (frame) {
         if (frameId === frame.id) {
             frameIdEndPositions[i] = {id: frame.id, top: top, left: left};
             currentMemoryModel.frameLocations[i] = {id: frame.id, top: top, left: left};
-
         }
         i++;
     });
+
     percolatorSend({
         msgType: 'updateFramePositions',
         data: {
@@ -474,20 +538,17 @@ function addNewFrame(frameName, frameType) {
         "name": frameName
     };
 
-    //console.log(newFrame);
-
     if (memoryModelLoaded) {
         if (frameType === 'stack') {
-            var postitionStackFrame =  obj.memoryModel.stacks[0].length;
-
+            var postitionStackFrame = obj.memoryModel.stacks[0].length;
             obj.memoryModel.stacks[0][postitionStackFrame] = newFrame;
         }
 
         if (frameType === 'heap') {
-            var postitionHeapsFrame =  obj.memoryModel.heaps[0].length;
+            var postitionHeapsFrame = obj.memoryModel.heaps[0].length;
             obj.memoryModel.heaps[0][postitionHeapsFrame] = newFrame;
         }
-console.log( "data:", {newMemoryModel: obj, oldMemoryModel: currentMemoryModel});
+
         percolatorSend({
             msgType: 'updateMemoryModel',
             data: {newMemoryModel: obj, oldMemoryModel: currentMemoryModel}
@@ -497,3 +558,75 @@ console.log( "data:", {newMemoryModel: obj, oldMemoryModel: currentMemoryModel})
         alert('select a memory model first so you can add frames or variables to it')
     }
 }
+
+//TODO delete frames
+//TODO delete connections or variables
+
+function deleteFrame(log) {
+    var obj = currentMemoryModel;
+    var heaps = obj.memoryModel.heaps[0].length;
+    var stacks = obj.memoryModel.stacks[0].length;
+    var removeStacks = null;
+    var removeHeaps = null;
+
+    console.log('dit zit er parent id', log);
+    console.log('eerste heap', obj.memoryModel.heaps[0]);
+
+    for (var i = 0; i < heaps; i++) {
+        if (obj.memoryModel.heaps[0][i].id == log) {
+            if (obj.memoryModel.heaps[0][i].vars != null) {
+                for (var j = 0; j < obj.memoryModel.heaps[0][i].vars.length; j++) {
+                    obj.memoryModel.heaps[0][i].vars.splice(j, 1);
+                }
+            }
+            removeHeaps = i;
+        }
+    }
+
+    for (var i = 0; i < stacks; i++) {
+        if (obj.memoryModel.stacks[0][i].id == log) {
+            if (obj.memoryModel.stacks[0][i].vars != null) {
+                for (var j = 0; j < obj.memoryModel.stacks[0][i].vars.length; j++) {
+                    obj.memoryModel.stacks[0][i].vars.splice(j, 1);
+                }
+            }
+            removeStacks = i;
+        }
+    }
+
+    if (removeHeaps != null) {
+        obj.memoryModel.heaps[0].splice(removeHeaps, 1);
+    }
+
+    if (removeStacks != null) {
+        obj.memoryModel.stacks[0].splice(removeStacks, 1);
+    }
+    console.log('eerste heap', obj.memoryModel.heaps[0]);
+
+    percolatorSend({
+        msgType: 'updateMemoryModel',
+        data: {newMemoryModel: obj, oldMemoryModel: currentMemoryModel}
+    });
+}
+
+
+//TODO usefull comment
+//TODO send a scoket message to the server with the updated model
+//TODO first connection has to be a variabel field
+function newReference(source, target) {
+    if (toggleEditingMode === true) {
+            relations.push({source: source, target: target});
+            redrawPlumbing();
+            emtyConnections();
+    }
+}
+//TODO delete variables
+function deleteVariables() {
+    console.log('delete functie voor variabelen wordt aangeroepen');
+}
+
+//TODO usefull comment
+function isInteger(x) {
+    return x % 1 === 0;
+}
+
