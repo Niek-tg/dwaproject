@@ -24,6 +24,7 @@ function setCurrentView(newView){
  */
 function enableDiagramView(){
     $('#memoryModel').load('./../views/diagramview.html');
+    document.getElementById("undoButton").disabled = false;
     setCurrentView("diagramView");
     calculateDiagramContainerSize();
 }
