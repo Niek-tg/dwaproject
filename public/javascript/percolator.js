@@ -43,6 +43,7 @@ function getMemoryModels(memoryModels) {
  * @param undo boolean determining whether the undo button has been pressed
  */
 function chooseMemoryModel(id, prevVersion, undo) {
+    $(".newFrameButtons").css("display", "block");
     $(".viewButtons").css("display", "block");
     enableDiagramView();
     var version = null;

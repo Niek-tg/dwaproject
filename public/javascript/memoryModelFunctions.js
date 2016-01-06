@@ -380,10 +380,19 @@ function updateMemoryModel(data) {
             currentMemoryModel.language = language;
 
             setModelInfo();
+            updateJSONEditor();
         }
         drawMemoryModel(data.data.new_val.memoryModel, data.data.new_val.frameLocations).then(function () {
             initPlumb();
         });
+    }
+}
+
+function updateJSONEditor(){
+    if(currentView === "codeView") {
+        $( "#jsoneditor" ).empty();
+        $("#JSONButtons").empty();
+        initJSONEditor();
     }
 }
 

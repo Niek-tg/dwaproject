@@ -11,8 +11,8 @@
     <!--<link href="./css/bootstrap-theme.min.css" rel="stylesheet"/>-->
     <!--<link  href="css/svg.css" rel="stylesheet">-->
     <!--<link href="./css/custom.css" rel="stylesheet"/>-->
-    <link  href="./css/memoryModel.css" rel="stylesheet">
-    <link  href="./css/percolatorFrame.css" rel="stylesheet">
+    <link href="./css/memoryModel.css" rel="stylesheet">
+    <link href="./css/percolatorFrame.css" rel="stylesheet">
     <link rel="shortcut icon" type="image/png" href="./images/fav_percolator.png"/>
 
 </head>
@@ -21,17 +21,24 @@
     <!--Header-->
     <div id="header" class="col-md-12 col-sm-12">
         <!--Percolator Logo-->
-        <div id="logo" class="col-md-3 col-sm-3" >
+        <div id="logo" class="col-md-3 col-sm-3">
             <img src="./images/lg_percolator.png" class="img-responsive" alt="Responsive image">
         </div>
-        <button id="addNewStackFrame">add stackframe</button><input type="text" id='frameLabel' value="frame name">
-        <button id="addNewHeapFrame">add heapframe</button>
+        <div id="newFrameButtons" class="newFrameButtons">
+            <button id="addNewStackFrame">add stackframe</button>
+            <input type="text" id='frameLabel' value="frame name">
+            <button id="addNewHeapFrame">add heapframe</button>
+        </div>
         <div class="col-md-offset-10 col-md-2 viewButtons">
         <button id="addReference">toggle references</button>
 
             <!-- Both diagram end json editor states are toggled so the server know if one is in use-->
-            <button onclick="enableCodeView(); changeDiagramState(); activeJsonEditorState()" title="Code view"><img src="./images/code_icon.png">Code view</button>
-            <button onclick="chooseMemoryModel(currentMemoryModel.mmid, false,false); changeJsonEditorState(); activeDiagramState()" title="Diagram view"><img src="./images/diagram_icon.png">Diagram view</button>
+            <button onclick="enableCodeView(); changeDiagramState(); activeJsonEditorState()" title="Code view"><img
+                    src="./images/code_icon.png">Code view
+            </button>
+            <button onclick="chooseMemoryModel(currentMemoryModel.mmid, false,false); changeJsonEditorState(); activeDiagramState()"
+                    title="Diagram view"><img src="./images/diagram_icon.png">Diagram view
+            </button>
         </div>
 
         <!--Header Title: Owner & name of Memorymodel-->
@@ -45,19 +52,21 @@
     <!--List of all memorymodels-->
     <div id="allMemoryModels" class="col-md-2 col-sm-2">
         <div class="togglable">
-            <button onclick="toggleActive(this)" class="toggleButton right"><img src="./images/close-icon.png" alt="close"/> </button>
+            <button onclick="toggleActive(this)" class="toggleButton right"><img src="./images/close-icon.png"
+                                                                                 alt="close"/></button>
         </div>
 
         <div class="rotate270 rotatedTextPositioning all">All memory models</div>
 
-      <ul class="list-group" id="memoryModelsList"></ul>
+        <ul class="list-group" id="memoryModelsList"></ul>
 
     </div>
 
     <!--List of the memory versions-->
     <div id="memoryModelVersions" class="col-md-2 col-sm-2">
         <div class="togglable">
-            <button onclick="toggleActive(this)" class="toggleButton right"><img src="./images/close-icon.png" alt="close"/></button>
+            <button onclick="toggleActive(this)" class="toggleButton right"><img src="./images/close-icon.png"
+                                                                                 alt="close"/></button>
         </div>
 
         <div class="rotate270 rotatedTextPositioning version">Version list</div>
@@ -78,27 +87,27 @@
     </div>
 
 
-<div id='editWrapper'>
-    <div>
-        <label for='selectedInputField'>Value</label>
-        <input id='selectedInputField' class='' type='text' placeholder='value' >
+    <div id='editWrapper'>
+        <div>
+            <label for='selectedInputField'>Value</label>
+            <input id='selectedInputField' class='' type='text' placeholder='value'>
+        </div>
+        <div>
+            <input id="typeString" type="radio" name="type" value="string" checked>String
+            <br>
+            <input id="typeNumber" type="radio" name="type" value="number">Number
+            <br>
+            <input id="typeReference" type="radio" name="type" value="reference">Reference
+            <br>
+            <input id="typeNull" type="radio" name="type" value="reference">Null
+            <br>
+            <input id="typeUndefined" type="radio" name="type" value="reference">Undefined
+        </div>
+        <div>
+            <button id="updateButton">Save</button>
+            <button id="closeButton">Discard and close</button>
+        </div>
     </div>
-    <div>
-        <input id="typeString" type="radio" name="type" value="string" checked>String
-        <br>
-        <input id="typeNumber" type="radio" name="type" value="number">Number
-        <br>
-        <input id="typeReference" type="radio" name="type" value="reference">Reference
-        <br>
-        <input id="typeNull" type="radio" name="type" value="reference">Null
-        <br>
-        <input id="typeUndefined" type="radio" name="type" value="reference">Undefined
-    </div>
-    <div>
-        <button id="updateButton">Save</button>
-        <button id="closeButton">Discard and close</button>
-    </div>
-</div>
 
 </div>
 </body>
@@ -121,7 +130,7 @@
 <script src="javascript/JSONEditorModule.js"></script>
 
 <script>
-    $(document).ready(function(){
+    $(document).ready(function () {
         enableDiagramView();
 
     });
