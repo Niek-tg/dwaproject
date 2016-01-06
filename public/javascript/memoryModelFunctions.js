@@ -630,9 +630,3 @@ function isInteger(x) {
     return x % 1 === 0;
 }
 
-// TODO usefull comment
-
-function emtyConnections() {
-    startPoint = null;
-    endPoint = null;
-}
