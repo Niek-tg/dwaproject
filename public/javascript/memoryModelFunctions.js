@@ -53,20 +53,69 @@ function assignValuesToEditFields(origin){
 }
 
 var updateValue = function(){
-    console.log("hallo!");
-    console.log(lastEditedDiv);
-    console.log($("#selectedInputField")[0].value);
 
-    var location =
-    lastEditedDiv[0].innerText = ($("#selectedInputField")[0].value);
+    var oldMmModel = currentMemoryModel;
+    var owner = currentMemoryModel.owner;
+    var language = currentMemoryModel.language;
 
+    var newValue = $("#selectedInputField")[0].value;
+    var newType = $("input:radio[name='type']:checked")[0].value;
 
-    //memoryModel.stacks
+    var found = false;
+    var frameIndex = 0;
+    var elementIndex = 0;
+    var stackIndex = 0;
+    var heapIndex = 0;
+    currentMemoryModel.memoryModel.stacks.forEach(function(stack){
 
-    console.log(lastEditedDiv);
+        loop(stack, function(){
+            currentMemoryModel.memoryModel.stacks[stackIndex][frameIndex].vars[elementIndex].value = newValue ;
+            currentMemoryModel.memoryModel.stacks[stackIndex][frameIndex].vars[elementIndex].type = newType ;
 
+            //TODO ALS TYPE NULL OF UNDEFINED IS EN OUDE TYPE WAS RELATION, VERWIJDEREN UIT DE LIJST
+        });
+        stackIndex++;
+    });
 
-    //TODO update value to the memory model at the correct location
+    if(!found) currentMemoryModel.memoryModel.heaps.forEach(function(heap){
+
+        loop(heap, function(){
+            //console.log(heapIndex);
+            currentMemoryModel.memoryModel.heaps[heapIndex][frameIndex].vars[elementIndex].value = newValue ;
+            currentMemoryModel.memoryModel.heaps[heapIndex][frameIndex].vars[elementIndex].type = newType ;
+        });
+        heapIndex++;
+    });
+
+    function loop(location, cb){
+        if(found) return true;
+        frameIndex = 0;
+        location.forEach(function(frame){
+            elementIndex = 0;
+            if(found) return true;
+
+            frame.vars.forEach(function(element){
+                if(found) return true;
+                if(element.id == lastEditedDiv[0].id){
+                    found = true;
+                    cb();
+                    currentMemoryModel.owner = owner;
+                    currentMemoryModel.language = language;
+                }
+                elementIndex++;
+            });
+            frameIndex++;
+        });
+    }
+
+    if(found){
+        percolatorSend({
+            msgType: 'updateMemoryModel',
+            data: {newMemoryModel: currentMemoryModel, oldMemoryModel: oldMmModel}
+        });
+    } else {
+        alert("NO RESULTS");
+    }
 
 };
 
@@ -111,6 +160,8 @@ function attachEventListeners(){
     $("#updateButton").click(function() {
       // TODO save the values into the memory model and send to the server
         updateValue();
+        //console.log(value);
+        //saveValueToDataFormat()
         closeWrapper();
     });
 
@@ -136,7 +187,7 @@ function attachEventListeners(){
 
     function closeWrapper(){
         var div = "#editWrapper";
-        if($(div+ ":hidden")) $(div).slideToggle();
+        if(!$(div).is(':hidden')) $(div).slideToggle();
     }
 
 }
