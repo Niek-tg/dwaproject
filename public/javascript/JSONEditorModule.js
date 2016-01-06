@@ -7,6 +7,9 @@
 var keydownExists = false; //Boolean to make sure the event listener on keydown isn't created twice.
 
 function initJSONEditor() {
+    $(window).unbind('keydown');
+    keydownExists = false;
+
     var currentJSONMemoryModel = {
         language: currentMemoryModel.language,
         memoryModel: currentMemoryModel.memoryModel,
@@ -14,12 +17,9 @@ function initJSONEditor() {
         owner: currentMemoryModel.owner
     };
 
-    var JSONVersion = currentMemoryModel.version;
-    var oldJSONVersion = currentMemoryModel.version;
-
     var container = document.getElementById('jsoneditor');
     var editor = new JSONEditor(container, options, currentJSONMemoryModel);
-    var oldMemoryModel = currentJSONMemoryModel;
+    var oldMemoryModel = currentMemoryModel;
     var newMemorymodelButton = $('<input/>').attr({type: 'button', id: 'setJSON', value: 'Nieuw geheugenmodel'});
     var saveMemorymodelButton = $('<input/>').attr({type: 'button', id: 'getJSON', value: 'Opslaan'});
 
@@ -67,13 +67,11 @@ function initJSONEditor() {
 
     $("#getJSON").click(function saveMemoryModel() {
         var newMemoryModel = editor.get();
-        setBackModelInfo(newMemoryModel, oldMemoryModel);
+        setBackModelInfo(newMemoryModel);
         jsonEditorSendMessage({
             msgType: 'updateMemoryModel',
             data: {newMemoryModel: newMemoryModel, oldMemoryModel: oldMemoryModel}
         });
-        oldMemoryModel = newMemoryModel;
-        JSONVersion ++; oldJSONVersion ++;
     });
 
 
@@ -85,13 +83,11 @@ function initJSONEditor() {
                     case 's':
                         event.preventDefault();
                         var newMemoryModel = editor.get();
-                        setBackModelInfo(newMemoryModel, oldMemoryModel);
+                        setBackModelInfo(newMemoryModel);
                         jsonEditorSendMessage({
                             msgType: 'updateMemoryModel',
                             data: {newMemoryModel: newMemoryModel, oldMemoryModel: oldMemoryModel}
                         });
-                        oldMemoryModel = newMemoryModel;
-                        JSONVersion ++; oldJSONVersion ++;
                         break;
                 }
             }
@@ -102,17 +98,11 @@ function initJSONEditor() {
         });
     }
 
-    function setBackModelInfo(newMemoryModel, oldMemoryModel) {
+    function setBackModelInfo(newMemoryModel) {
         if (currentMemoryModel.frameLocations) newMemoryModel.frameLocations = currentMemoryModel.frameLocations;
         newMemoryModel.id = currentMemoryModel.id;
         newMemoryModel.mmid = currentMemoryModel.mmid;
-        newMemoryModel.version = JSONVersion;
-        currentMemoryModel = newMemoryModel;
-
-        oldMemoryModel.frameLocations = currentMemoryModel.frameLocations;
-        oldMemoryModel.id = currentMemoryModel.id;
-        oldMemoryModel.mmid = currentMemoryModel.mmid;
-        oldMemoryModel.version = oldJSONVersion;
+        newMemoryModel.version = currentMemoryModel.version;
     }
 }
 
