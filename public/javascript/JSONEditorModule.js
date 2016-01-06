@@ -21,52 +21,12 @@ function initJSONEditor() {
     var container = document.getElementById('jsoneditor');
     var editor = new JSONEditor(container, options, currentMemoryModel);
     var oldMemoryModel = currentMemoryModel;
-    var newMemorymodelButton = $('<input/>').attr({type: 'button', id: 'setJSON', value: 'Nieuw geheugenmodel'});
     var saveMemorymodelButton = $('<input/>').attr({type: 'button', id: 'getJSON', value: 'Opslaan'});
     var savedFirstTime = true;
     var counter = 0;
 
     document.getElementById("undoButton").disabled = true;
-    $("#JSONButtons").append(newMemorymodelButton, saveMemorymodelButton);
-
-    $("#setJSON").click(function newMemoryModel() {
-        var modelInfo = {
-            'language': '',
-            'owner': '',
-            'mmid': 21,
-            'modelName': '',
-            'version': 0,
-            'memoryModel': {
-                stack: [{
-                    id: '',
-                    name: '',
-                    vars: [
-                        {
-                            id: '',
-                            name: '',
-                            value: '',
-                            type: ''
-                        }
-                    ]
-                }],
-                heap: [
-                    {
-                        id: '',
-                        name: '',
-                        vars: [
-                            {
-                                id: '',
-                                name: '',
-                                value: '',
-                                type: ''
-                            }
-                        ]
-                    }
-                ]
-            }
-        };
-        editor.set(modelInfo);
-    });
+    $("#JSONButtons").append(saveMemorymodelButton);
 
     $("#getJSON").click(function saveMemoryModel() {
         var newMemoryModel = editor.get();
