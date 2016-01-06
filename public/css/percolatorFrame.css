@@ -73,6 +73,11 @@
         display: inline-block;
     }
 
+    .newFrameButtons{
+        float:right;
+        display: none;
+    }
+
 /*
    ALL MEMORY MODELS
 */
