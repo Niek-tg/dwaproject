@@ -32,6 +32,9 @@ var options = {
  *  When the "nieuw geheugenmodel" button is clicked it will create a new memorymodel.
  */
 function initJSONEditor() {
+    $(window).unbind('keydown');
+    keydownExists = false;
+
     var currentJSONMemoryModel = {
         language: currentMemoryModel.language,
         memoryModel: currentMemoryModel.memoryModel,
@@ -39,66 +42,21 @@ function initJSONEditor() {
         owner: currentMemoryModel.owner
     };
 
-    var JSONVersion = currentMemoryModel.version;
-    var oldJSONVersion = currentMemoryModel.version;
-
     var container = document.getElementById('jsoneditor');
     var editor = new JSONEditor(container, options, currentJSONMemoryModel);
-    var oldMemoryModel = currentJSONMemoryModel;
-    var newMemorymodelButton = $('<input/>').attr({type: 'button', id: 'setJSON', value: 'Nieuw geheugenmodel'});
+    var oldMemoryModel = currentMemoryModel;
     var saveMemorymodelButton = $('<input/>').attr({type: 'button', id: 'getJSON', value: 'Opslaan'});
 
     document.getElementById("undoButton").disabled = true;
-    $("#JSONButtons").append(newMemorymodelButton, saveMemorymodelButton);
-
-    $("#setJSON").click(function newMemoryModel() {
-        var modelInfo = {
-            'language': '',
-            'owner': '',
-            'mmid': 21,
-            'modelName': '',
-            'version': 0,
-            'memoryModel': {
-                stack: [{
-                    id: '',
-                    name: '',
-                    vars: [
-                        {
-                            id: '',
-                            name: '',
-                            value: '',
-                            type: ''
-                        }
-                    ]
-                }],
-                heap: [
-                    {
-                        id: '',
-                        name: '',
-                        vars: [
-                            {
-                                id: '',
-                                name: '',
-                                value: '',
-                                type: ''
-                            }
-                        ]
-                    }
-                ]
-            }
-        };
-        editor.set(modelInfo);
-    });
+    $("#JSONButtons").append(saveMemorymodelButton);
 
     $("#getJSON").click(function saveMemoryModel() {
         var newMemoryModel = editor.get();
-        setBackModelInfo(newMemoryModel, oldMemoryModel);
+        setBackModelInfo(newMemoryModel);
         jsonEditorSendMessage({
             msgType: 'updateMemoryModel',
             data: {newMemoryModel: newMemoryModel, oldMemoryModel: oldMemoryModel}
         });
-        oldMemoryModel = newMemoryModel;
-        JSONVersion ++; oldJSONVersion ++;
     });
 
     if (!keydownExists) {
@@ -109,13 +67,11 @@ function initJSONEditor() {
                     case 's':
                         event.preventDefault();
                         var newMemoryModel = editor.get();
-                        setBackModelInfo(newMemoryModel, oldMemoryModel);
+                        setBackModelInfo(newMemoryModel);
                         jsonEditorSendMessage({
                             msgType: 'updateMemoryModel',
                             data: {newMemoryModel: newMemoryModel, oldMemoryModel: oldMemoryModel}
                         });
-                        oldMemoryModel = newMemoryModel;
-                        JSONVersion ++; oldJSONVersion ++;
                         break;
                 }
             }
@@ -126,17 +82,11 @@ function initJSONEditor() {
         });
     }
 
-    function setBackModelInfo(newMemoryModel, oldMemoryModel) {
+    function setBackModelInfo(newMemoryModel) {
         if (currentMemoryModel.frameLocations) newMemoryModel.frameLocations = currentMemoryModel.frameLocations;
         newMemoryModel.id = currentMemoryModel.id;
         newMemoryModel.mmid = currentMemoryModel.mmid;
-        newMemoryModel.version = JSONVersion;
-        currentMemoryModel = newMemoryModel;
-
-        oldMemoryModel.frameLocations = currentMemoryModel.frameLocations;
-        oldMemoryModel.id = currentMemoryModel.id;
-        oldMemoryModel.mmid = currentMemoryModel.mmid;
-        oldMemoryModel.version = oldJSONVersion;
+        newMemoryModel.version = currentMemoryModel.version;
     }
 }
 

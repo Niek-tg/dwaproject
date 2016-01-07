@@ -22,8 +22,8 @@ var firstTime = false;
 var relations = [];
 
 /**
- * Used to check if plumb has been initialized, if not, it will be.
- * @type {boolean}
+ * Contains all the stack end heap frame id's end positions
+ * @type {Array}
  */
 var plumbInitialized = false;
 
@@ -113,7 +113,7 @@ function assignValuesToEditFields(origin) {
     $(activeType).prop("checked", true);
 }
 
-
+//TODO usefull comment
 var updateValue = function () {
 
     var oldMmModel = currentMemoryModel;
@@ -129,7 +129,7 @@ var updateValue = function () {
     var stackIndex = 0;
     var heapIndex = 0;
     currentMemoryModel.memoryModel.stacks.forEach(function (stack) {
-        console.log(stack);
+
         loop(stack, function () {
             currentMemoryModel.memoryModel.stacks[stackIndex][frameIndex].vars[elementIndex].value = newValue;
             currentMemoryModel.memoryModel.stacks[stackIndex][frameIndex].vars[elementIndex].type = newType;
