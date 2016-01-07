@@ -137,6 +137,7 @@ messageHandler.getAllMemoryModels = function (message, websocket) {
         });
         websocket.send(JSON.stringify({msgType: "getAllModels", data: resultsArray}));
     });
+    console.log("Hij komt in getAllMemoryModels")
 };
 
 /**
@@ -192,10 +193,10 @@ messageHandler.makeNewModel = function (message, websocket) {
             msgType: "errorMsg",
             data: "Something went wrong in query create NewMemorymodel " + err
         }));
-
-        websocket.send(JSON.stringify({msgType: "getAllModels", data: result}));
+        else messageHandler.getAllMemoryModels(message, websocket);
         console.log(JSON.stringify(result));
     });
+    websocket.send(JSON.stringify({msgType: "newMemoryModel", data: message}));
 };
 
 /**

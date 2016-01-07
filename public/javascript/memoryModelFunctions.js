@@ -128,8 +128,6 @@ var updateValue = function () {
     var elementIndex = 0;
     var stackIndex = 0;
     var heapIndex = 0;
-
-
     currentMemoryModel.memoryModel.stacks.forEach(function (stack) {
 
         loop(stack, function () {
@@ -200,7 +198,6 @@ function drawMemoryModel(memoryModel) {
     }
 
     $(diagramContainer).children().remove(); //remove old frames, if they exist
-
     relations = [];
     currentMemoryModel = memoryModel;
 
@@ -208,10 +205,57 @@ function drawMemoryModel(memoryModel) {
     if (memoryModel.memoryModel.heaps) drawFramesOnLocation("Heap", memoryModel.memoryModel.heaps, memoryModel.frameLocations);
     if(memoryModel.memoryModel.stacks || memoryModel.memoryModel.heaps)setClassStyle(memoryModel.memoryModel.stacks.length, memoryModel.memoryModel.heaps.length);
 
+    setClassStyle(memoryModel.memoryModel.stacks.length, memoryModel.memoryModel.heaps.length);
+    
     memoryModelLoaded = true;
     redrawPlumbing();
     attachEventListeners();
 }
+
+function addNewMemoryModel(){
+
+    //var user = prompt("Please enter your name", "Memory model owner");
+    //if (person != null) {
+    //    document.getElementById("demo").innerHTML =
+    //        "Hello " + person + "! How are you today?";
+    //}
+
+    var newMemoryModel = {
+            'language': 'Javascript',
+            'owner': 'Dick Curtis',
+            'mmid': 6666,
+            'modelName': 'New MemoryModel',
+            'version': 0,
+        "memoryModel": {
+            "stacks": [
+                [
+                    {
+                        "id": 1,
+                        "name": "Global",
+                        "vars": []
+                    }
+                ]
+            ],
+            "heaps": [
+                [
+                    {
+                        "id": 6,
+                        "name": "Global",
+                        "vars": []
+                    }
+
+                ]
+            ]
+        }
+    };
+
+    percolatorSend({
+        msgType: 'makeNewModel',
+        data: newMemoryModel
+    });
+}
+
+
 
 /**
  * Attaches all the eventlisteners to their corresponding divs or attributes
@@ -253,15 +297,23 @@ function attachEventListeners() {
         addNewFrame($("#frameLabel").val(), 'heap');
     });
 
-    $(".deleteFrame").unbind('click');
-    $(".deleteFrame").click(function () {
-        deleteFrameOrVar($(this).parent().attr("id"));
+
+    //New memorymodel, stack & heap
+    $("#addNewStack").unbind('click');
+    $('#addNewStack').click(function () {
+        console.log("Komt in addNewStack");
     });
 
-    //$(".deleteVar").unbind('click');
-    //$(".deleteVar").click(function () {
-    //    deleteVariables($(this).parent().attr("id"));
-    //});
+    $("#addNewHeap").unbind('click');
+    $('#addNewHeap').click(function () {
+        console.log("Komt in addNewHeap");
+    });
+
+    $("#addNewMemoryModel").unbind('click');
+    $('#addNewMemoryModel').click(function () {
+        console.log("Komt in addNewMemoryModel");
+        addNewMemoryModel();
+    });
 
     function closeWrapper() {
         var div = "#editWrapper";
@@ -270,145 +322,146 @@ function attachEventListeners() {
     }
 }
 
-/**
- * Sets width of the stack and heap class by the number of stack and heaps
- * @param stacksLength the length of stacks
- * @param heapsLength the length of heaps
- * @returns {Promise} Promise to call actions when setting width is done
- */
-function setClassStyle(numberOfStacks, numberOfHeaps) {
 
-    var totalNumber = numberOfStacks + numberOfHeaps;
-    var stackWidth;
-    var heapWidth;
-    if (totalNumber == 2) {
-        stackWidth = 30;
-        heapWidth = 70;
-    } else {
-        stackWidth = (100 / totalNumber);
-        heapWidth = (100 / totalNumber);
-    }
+    /**
+     * Sets width of the stack and heap class by the number of stack and heaps
+     * @param stacksLength the length of stacks
+     * @param heapsLength the length of heaps
+     * @returns {Promise} Promise to call actions when setting width is done
+     */
+    function setClassStyle(numberOfStacks, numberOfHeaps) {
 
-    $(".Stack").css("width", "calc(" + stackWidth + "% - 2px)");
-    $(".Heap").css("width", "calc(" + heapWidth + "% - 2px)");
-}
-
-/**
- * Draws the frames of the memory model.
- *
- * @param location Decides where the frames are drawn. Stack or Heap
- * @param model the data of the memory model
- * @param frameLocations contains the locations of the frames
- * @returns {Promise} Promise to call actions when the drawing is done
- */
-function drawFramesOnLocation(location, model, frameLocations) {
-
-    var identifier = 1;
-    model.forEach(function (frames) {
-        var html = "<div id='" + location + identifier + "' class='" + location + "'>" +
-            "<div class='frameLabel'>" + location + "</div>" +
-            "</div>";
-
-        appendHtmlToLocation(diagramContainer, html);
-
-        frames.forEach(function (item) {
-            var top = 0;
-            var left = 0;
-            var name = (item.name) ? item.name : "";
-            var style;
-
-            frameLocations.forEach(function (frameLocation) {
-                if (item.id === parseInt(frameLocation.id)) {
-                    if (frameLocation.top) top = frameLocation.top;
-                    if (frameLocation.left) left = frameLocation.left;
-                }
-            });
-
-            if (!top && !left) style = "position:relative";
-            else style = 'position: absolute; top: ' + top + "px; left: " + left + "%;";
-
-            var html = "<div id='" + item.id + "' class='frame' style='" + style + "'> " +
-                "<div class='deleteFrame'></div>" +
-                "<div class='frameLabel'>" + name + "</div>" +
-                "<div class='addVarToFrame'>" +
-                "<a onclick='addVarToFrame($(this).parent().parent())'>+</a>" +
-                "</div>" +
-                "</div>";
-            appendHtmlToLocation('#' + location + identifier, html);
-
-            if (item.vars) drawVars('#' + item.id, item.vars);
-        });
-        identifier++;
-    });
-}
-
-/**
- * Draws the variables of the memory model.
- * @param location Location where the vars to be drawn in
- * @param vars Data containing the vars to be drawn
- */
-function drawVars(location, vars) {
-    vars.forEach(function (variable) {
-        var value = determineVar(variable);
-
-        var html = "<div class='variable'>" +
-            "<div class='variableLabel'>" + variable.name + "</div>" +
-            "<div id='" + variable.id + "' class='variableValue'>" + value + "</div>" +
-            "<div class='deleteVar'><a onclick='deleteFrameOrVar($(this).parent().parent().parent()[0].id, $(this).parent().parent().children()[1].id)' class='deleteVariable'></a></div>" +
-            "</div>"
-        appendHtmlToLocation(location, html);
-    });
-}
-
-/**
- * Looks of the variable is a pointer or a variable
- * @param variable Value to be converted to a variable, usable to draw with
- * @returns {String|Number} value to be drawn inside the variable or function
- */
-function determineVar(variable) {
-
-    if (highestID < variable.id) highestID = variable.id;
-
-    switch (variable.type) {
-        case "reference":
-            relations.push({source: variable.id, target: variable.value});
-            return "";
-            break;
-        case "undefined":
-            return "undefined";
-            break;
-        case "string":
-            return '"' + variable.value + '"';
-            break;
-        case "number":
-            return variable.value;
-            break;
-        default:
-            return "null";
-            break;
-    }
-}
-
-/**
- * Updates the memory model. Redraws the entire memory model and the relations
- * @param data Data containing the memory model that has to be drawn
- */
-function updateMemoryModel(data) {
-    if (data.data.new_val) {
-        if (data.data.new_val.version > currentMemoryModel.version) {
-            getVersionList(false, true);
-            var owner = currentMemoryModel.owner;
-            var language = currentMemoryModel.language;
-            currentMemoryModel = data.data.new_val;
-            currentMemoryModel.owner = owner;
-            currentMemoryModel.language = language;
-
-            setModelInfo();
-            updateJSONEditor();
+        var totalNumber = numberOfStacks + numberOfHeaps;
+        var stackWidth;
+        var heapWidth;
+        if (totalNumber == 2) {
+            stackWidth = 30;
+            heapWidth = 70;
+        } else {
+            stackWidth = (100 / totalNumber);
+            heapWidth = (100 / totalNumber);
         }
-        drawMemoryModel(data.data.new_val);
+
+        $(".Stack").css("width", "calc(" + stackWidth + "% - 2px)");
+        $(".Heap").css("width", "calc(" + heapWidth + "% - 2px)");
     }
-}
+
+    /**
+     * Draws the frames of the memory model.
+     *
+     * @param location Decides where the frames are drawn. Stack or Heap
+     * @param model the data of the memory model
+     * @param frameLocations contains the locations of the frames
+     * @returns {Promise} Promise to call actions when the drawing is done
+     */
+    function drawFramesOnLocation(location, model, frameLocations) {
+
+        var identifier = 1;
+        model.forEach(function (frames) {
+            var html = "<div id='" + location + identifier + "' class='" + location + "'>" +
+                "<div class='frameLabel'>" + location + "</div>" +
+                "</div>";
+
+            appendHtmlToLocation(diagramContainer, html);
+
+            frames.forEach(function (item) {
+                var top = 0;
+                var left = 0;
+                var name = (item.name) ? item.name : "";
+                var style;
+
+                frameLocations.forEach(function (frameLocation) {
+                    if (item.id === parseInt(frameLocation.id)) {
+                        if (frameLocation.top) top = frameLocation.top;
+                        if (frameLocation.left) left = frameLocation.left;
+                    }
+                });
+
+                if (!top && !left) style = "position:relative";
+                else style = 'position: absolute; top: ' + top + "px; left: " + left + "%;";
+
+                var html = "<div id='" + item.id + "' class='frame' style='" + style + "'> " +
+                    "<div class='deleteFrame'></div>" +
+                    "<div class='frameLabel'>" + name + "</div>" +
+                    "<div class='addVarToFrame'>" +
+                    "<a onclick='addVarToFrame($(this).parent().parent())'>+</a>" +
+                    "</div>" +
+                    "</div>";
+                appendHtmlToLocation('#' + location + identifier, html);
+
+                if (item.vars) drawVars('#' + item.id, item.vars);
+            });
+            identifier++;
+        });
+    }
+
+    /**
+     * Draws the variables of the memory model.
+     * @param location Location where the vars to be drawn in
+     * @param vars Data containing the vars to be drawn
+     */
+    function drawVars(location, vars) {
+        vars.forEach(function (variable) {
+            var value = determineVar(variable);
+
+            var html = "<div class='variable'>" +
+                "<div class='variableLabel'>" + variable.name + "</div>" +
+                "<div id='" + variable.id + "' class='variableValue'>" + value + "</div>" +
+                "<div class='deleteVar'><a onclick='deleteFrameOrVar($(this).parent().parent().parent()[0].id, $(this).parent().parent().children()[1].id)' class='deleteVariable'></a></div>" +
+                "</div>"
+            appendHtmlToLocation(location, html);
+        });
+    }
+
+    /**
+     * Looks of the variable is a pointer or a variable
+     * @param variable Value to be converted to a variable, usable to draw with
+     * @returns {String|Number} value to be drawn inside the variable or function
+     */
+    function determineVar(variable) {
+
+        if (highestID < variable.id) highestID = variable.id;
+
+        switch (variable.type) {
+            case "reference":
+                relations.push({source: variable.id, target: variable.value});
+                return "";
+                break;
+            case "undefined":
+                return "undefined";
+                break;
+            case "string":
+                return '"' + variable.value + '"';
+                break;
+            case "number":
+                return variable.value;
+                break;
+            default:
+                return "null";
+                break;
+        }
+    }
+
+    /**
+     * Updates the memory model. Redraws the entire memory model and the relations
+     * @param data Data containing the memory model that has to be drawn
+     */
+    function updateMemoryModel(data) {
+        if (data.data.new_val) {
+            if (data.data.new_val.version > currentMemoryModel.version) {
+                getVersionList(false, true);
+                var owner = currentMemoryModel.owner;
+                var language = currentMemoryModel.language;
+                currentMemoryModel = data.data.new_val;
+                currentMemoryModel.owner = owner;
+                currentMemoryModel.language = language;
+
+                setModelInfo();
+                updateJSONEditor();
+            }
+            drawMemoryModel(data.data.new_val);
+        }
+    }
 
 /**
  * When frames are dragged, the posistions of the frames wil be updated en send to the server by websocket.
@@ -420,142 +473,144 @@ var updatePositionFrames = function (frameId) {
     var top = (id.offset().top - id.parent().offset().top);
     var left = (100 / parent.outerWidth()) * (id.offset().left - id.parent().offset().left);
 
-    var found = false;
-    currentMemoryModel.frameLocations.forEach(function (location) {
-        if (location.id == frameId) {
-            found = true;
-            location.top = top;
-            location.left = left;
-            return null;
-        }
-    });
+        var found = false;
+        currentMemoryModel.frameLocations.forEach(function (location) {
+            if (location.id == frameId) {
+                found = true;
+                location.top = top;
+                location.left = left;
+                return null;
+            }
+        });
 
-    if (!found) currentMemoryModel.frameLocations.push({id: frameId, top: top, left: left});
-
-    percolatorSend({
-        msgType: 'updateFrameLocations',
-        data: {
-            frameLocations: currentMemoryModel.frameLocations,
-            mmid: currentMemoryModel.mmid,
-            version: currentMemoryModel.version
-        }
-    });
-};
-
-/**
- * When a memort model is selected en a new frame is added (heap or stack), a message wil be send to the server by websocket.
- * @param frameName is the Name of the frame
- * @param frameType is the type of the container it needs to be put in (heap, stack)
- */
-function addNewFrame(frameName, frameType) {
-    highestID++;
-
-    var newFrame = {
-        "id": highestID,
-        "name": frameName,
-        "vars": []
-    };
-
-    if (memoryModelLoaded) {
-        if (frameType == 'stack') {
-            var postitionStackFrame = currentMemoryModel.memoryModel.stacks[0].length;
-            currentMemoryModel.memoryModel.stacks[0][postitionStackFrame] = newFrame;
-        }
-
-        if (frameType == 'heap') {
-            var postitionHeapsFrame = currentMemoryModel.memoryModel.heaps[0].length;
-            currentMemoryModel.memoryModel.heaps[0][postitionHeapsFrame] = newFrame;
-        }
+        if (!found) currentMemoryModel.frameLocations.push({id: frameId, top: top, left: left});
 
         percolatorSend({
-            msgType: 'updateMemoryModel',
-            data: {newMemoryModel: currentMemoryModel, oldMemoryModel: currentMemoryModel}
+            msgType: 'updateFrameLocations',
+            data: {
+                frameLocations: currentMemoryModel.frameLocations,
+                mmid: currentMemoryModel.mmid,
+                version: currentMemoryModel.version
+            }
         });
+    };
+
+    /**
+     * When a memort model is selected en a new frame is added (heap or stack), a message wil be send to the server by websocket.
+     * @param frameName is the Name of the frame
+     * @param frameType is the type of the container it needs to be put in (heap, stack)
+     */
+    function addNewFrame(frameName, frameType) {
+        highestID++;
+
+        var newFrame = {
+            "id": highestID,
+            "name": frameName,
+            "vars": []
+        };
+
+        if (memoryModelLoaded) {
+            if (frameType == 'stack') {
+                var postitionStackFrame = currentMemoryModel.memoryModel.stacks[0].length;
+                currentMemoryModel.memoryModel.stacks[0][postitionStackFrame] = newFrame;
+            }
+
+            if (frameType == 'heap') {
+                var postitionHeapsFrame = currentMemoryModel.memoryModel.heaps[0].length;
+                currentMemoryModel.memoryModel.heaps[0][postitionHeapsFrame] = newFrame;
+            }
+
+            console.log("data:", {newMemoryModel: obj, oldMemoryModel: currentMemoryModel});
+
+            percolatorSend({
+                msgType: 'updateMemoryModel',
+                data: {newMemoryModel: currentMemoryModel, oldMemoryModel: currentMemoryModel}
+            });
+        }
+        else {
+            alert('select a memory model first so you can add frames or variables to it')
+        }
     }
-    else {
-        alert('select a memory model first so you can add frames or variables to it')
-    }
-}
 
 //TODO delete frames
 //TODO delete connections or variables
 
-function deleteFrameOrVar(id) {
-    var obj = currentMemoryModel;
-    var heaps = obj.memoryModel.heaps[0].length;
-    var stacks = obj.memoryModel.stacks[0].length;
-    var removeStacks = null;
-    var removeHeaps = null;
-    var removeVariables = null;
-    var hasChild = false;
+    function deleteFrameOrVar(id) {
+        var obj = currentMemoryModel;
+        var heaps = obj.memoryModel.heaps[0].length;
+        var stacks = obj.memoryModel.stacks[0].length;
+        var removeStacks = null;
+        var removeHeaps = null;
+        var removeVariables = null;
+        var hasChild = false;
 
-    //console.log('dit zit er in parent id', parentId);
-    //console.log('dit zit er in chilId id', childId);
+        //console.log('dit zit er in parent id', parentId);
+        //console.log('dit zit er in chilId id', childId);
 
-    //console.log('eerste heap', obj.memoryModel.heaps[0]);
+        //console.log('eerste heap', obj.memoryModel.heaps[0]);
 
-    var found = false;
-    obj.memoryModel.heaps.forEach(function(heap){
-        heap.forEach(function(frame){
-           if(frame.id == id){
-               found=true;
-               if(frame.vars) hasChild = true;
-               if(!hasChild) heap.splice(indexOf(frame), 1);
-           }
-            console.log(frame)
-           if(hasChild)frame.vars.forEach(function(variable){
-               found=true;
-               if(variable.id == id){
-                   frame.vars.splice(indexOf(variable), 1);
-               }
-           })
-       })
-   });
+        var found = false;
+        obj.memoryModel.heaps.forEach(function (heap) {
+            heap.forEach(function (frame) {
+                if (frame.id == id) {
+                    found = true;
+                    if (frame.vars) hasChild = true;
+                    if (!hasChild) heap.splice(indexOf(frame), 1);
+                }
+                console.log(frame)
+                if (hasChild)frame.vars.forEach(function (variable) {
+                    found = true;
+                    if (variable.id == id) {
+                        frame.vars.splice(indexOf(variable), 1);
+                    }
+                })
+            })
+        });
 
-    console.log(found);
+        console.log(found);
 
 
-    //for (var i = 0; i < heaps; i++) {
-    //    if (obj.memoryModel.heaps[0][i].id == parentId) {
-    //        removeHeaps = i;
-    //        if (childId != null) {
-    //            for (var j = 0; j < obj.memoryModel.heaps[0][i].vars.length; j++) {
-    //                if (childId == obj.memoryModel.heaps[0][i].vars[j].id) {
-    //                    console.log(obj.memoryModel.heaps[0][i].vars[j].id);
-    //                    obj.memoryModel.heaps[0][i].vars.splice(j, 1);
-    //                }
-    //            }
-    //            removeHeaps = null;
-    //        }
-    //    }
-    //}
-    //
-    //for (var i = 0; i < stacks; i++) {
-    //    if (obj.memoryModel.stacks[0][i].id == parentId) {
-    //        if (obj.memoryModel.stacks[0][i].vars != null) {
-    //            for (var j = 0; j < obj.memoryModel.stacks[0][i].vars.length; j++) {
-    //                obj.memoryModel.stacks[0][i].vars.splice(j, 1);
-    //            }
-    //        }
-    //        removeStacks = i;
-    //    }
-    //}
-    //if (removeHeaps != null && obj.memoryModel.heaps[0][removeHeaps].vars.length == 0) {
-    //    obj.memoryModel.heaps[0].splice(removeHeaps, 1);
-    //}else{
-    //    console.log('Op dit moment bestaan er nog variabelen of referenties verwijder deze eerst voordat een frame verwijderd kan worden');
-    //}
-    //
-    //if (removeStacks != null) {
-    //    obj.memoryModel.stacks[0].splice(removeStacks, 1);
-    //}
-    //console.log('eerste heap', obj.memoryModel.heaps[0]);
+        //for (var i = 0; i < heaps; i++) {
+        //    if (obj.memoryModel.heaps[0][i].id == parentId) {
+        //        removeHeaps = i;
+        //        if (childId != null) {
+        //            for (var j = 0; j < obj.memoryModel.heaps[0][i].vars.length; j++) {
+        //                if (childId == obj.memoryModel.heaps[0][i].vars[j].id) {
+        //                    console.log(obj.memoryModel.heaps[0][i].vars[j].id);
+        //                    obj.memoryModel.heaps[0][i].vars.splice(j, 1);
+        //                }
+        //            }
+        //            removeHeaps = null;
+        //        }
+        //    }
+        //}
+        //
+        //for (var i = 0; i < stacks; i++) {
+        //    if (obj.memoryModel.stacks[0][i].id == parentId) {
+        //        if (obj.memoryModel.stacks[0][i].vars != null) {
+        //            for (var j = 0; j < obj.memoryModel.stacks[0][i].vars.length; j++) {
+        //                obj.memoryModel.stacks[0][i].vars.splice(j, 1);
+        //            }
+        //        }
+        //        removeStacks = i;
+        //    }
+        //}
+        //if (removeHeaps != null && obj.memoryModel.heaps[0][removeHeaps].vars.length == 0) {
+        //    obj.memoryModel.heaps[0].splice(removeHeaps, 1);
+        //}else{
+        //    console.log('Op dit moment bestaan er nog variabelen of referenties verwijder deze eerst voordat een frame verwijderd kan worden');
+        //}
+        //
+        //if (removeStacks != null) {
+        //    obj.memoryModel.stacks[0].splice(removeStacks, 1);
+        //}
+        //console.log('eerste heap', obj.memoryModel.heaps[0]);
 
-    percolatorSend({
-        msgType: 'updateMemoryModel',
-        data: {newMemoryModel: obj, oldMemoryModel: currentMemoryModel}
-    });
-}
+        percolatorSend({
+            msgType: 'updateMemoryModel',
+            data: {newMemoryModel: obj, oldMemoryModel: currentMemoryModel}
+        });
+    }
 
 //TODO usefull comment
 //TODO send a scoket message to the server with the updated model
@@ -570,52 +625,54 @@ function newReference(source, target) {
     }
 }
 
-/**
- * Appends the given HTML to the location
- * @param location Location where the HTML should be appended to
- * @param html Desired HTML to be added to the location
- */
-function appendHtmlToLocation(location, html) {
-    $(location).append(html);
-}
+    /**
+     * Appends the given HTML to the location
+     * @param location Location where the HTML should be appended to
+     * @param html Desired HTML to be added to the location
+     */
+    function appendHtmlToLocation(location, html) {
+        $(location).append(html);
+    }
 
 /**
  * Draws the connections between the frames and variables where needed.
  */
 function redrawPlumbing() {
+    
 
-    $(".frame").draggable({
-        drag: function (e) {
-            jsPlumb.repaintEverything();
-        },
-        containment: "parent",
-        stop: function (event) {
-            if ($(event.target).find('select').length == 0) {
-                updatePositionFrames(event.target.id);
-            }
-        }
-    });
-    jsPlumb.bind("connection", function(info){
-        var exists = false;
-        relations.forEach(function(relation){
-            if(info.sourceId == relation.source || info.targetId == relation.target){
-                exists = true;
-                return null;
+        $(".frame").draggable({
+            drag: function (e) {
+                jsPlumb.repaintEverything();
+            },
+            containment: "parent",
+            stop: function (event) {
+                if ($(event.target).find('select').length == 0) {
+                    updatePositionFrames(event.target.id);
+                }
             }
         });
-        if(!exists)newReference(info.sourceId, info.targetId)
-    });
+        jsPlumb.bind("connection", function (info) {
+            var exists = false;
+            relations.forEach(function (relation) {
+                if (info.sourceId == relation.source && info.targetId == relation.target) {
+                    exists = true;
+                    return null;
+                }
+            });
+            if (!exists)newReference(info.sourceId, info.targetId)
+        });
 
-    var common = {
-        anchor: ["Left", "Right"],
-        overlays: [["Arrow", {width: 40, length: 20, location: 1}]],
-        paintStyle: {strokeStyle: 'grey', lineWidth: 5},
-        hoverPaintStyle: {strokeStyle: "#752921"},
-        isSource: true,
-        isTarget: true
-    };
-    if (toggleEditingMode) common.endpoint ="Dot";
-    else common.endpoint = "Blank";
+        var common = {
+            anchor: ["Left", "Right"],
+            overlays: [["Arrow", {width: 40, length: 20, location: 1}]],
+            paintStyle: {strokeStyle: 'grey', lineWidth: 5},
+            hoverPaintStyle: {strokeStyle: "#752921"},
+            isSource: true,
+            isTarget: true
+        };
+
+        if (toggleEditingMode) common.endpoint = "Dot";
+        else common.endpoint = "Blank";
 
     jsPlumb.addEndpoint($('.frame'), common);
     jsPlumb.addEndpoint($('.variableValue'), common);
