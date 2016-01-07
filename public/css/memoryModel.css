@@ -124,7 +124,8 @@
     text-align: center;
 }
 
-.frame:hover > .addVarToFrame {
+.frame:hover > .addVarToFrame,
+.variable:hover > .deleteVariable {
     display:block;
 }
 
@@ -145,17 +146,29 @@
     .addVarToFrame a{
         line-height:12px;
     }
-
-.deleteVar{
+    
+    
+.deleteVariable{
     height: 15px;
     width: 15px;
     margin: 1px;
     background-image: url("../images/deleteFrame.png");
     background-size: 15px 15px;
     background-repeat: no-repeat;
-    top: 0px;
+    top: 5px;
     right: 0px;
     position: absolute;
+    display: block;
+}
+
+.deleteVar{
+    height: 15px;
+    width: 15px;
+    margin: 1px;
+    top: 5px;
+    right: 0px;
+    position: absolute;
+    display: block;
 }
 
 circle{

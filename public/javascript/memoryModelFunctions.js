@@ -178,13 +178,6 @@ function attachEventListeners() {
         closeWrapper();
     });
 
-    //$('div').unbind('click');
-    //$('div').dblclick("click", function (e) {
-    //    newReference(e.target.id);
-    //    e.stopPropagation();
-    //});
-
-
     $("#closeButton").unbind('click');
     $("#closeButton").click(function () {
         closeWrapper();
@@ -207,9 +200,13 @@ function attachEventListeners() {
 
     $(".deleteFrame").unbind('click');
     $(".deleteFrame").click(function () {
-        deleteFrame($(this).parent().attr("id"));
-
+        deleteFrameOrVar($(this).parent().attr("id"));
     });
+
+    //$(".deleteVar").unbind('click');
+    //$(".deleteVar").click(function () {
+    //    deleteVariables($(this).parent().attr("id"));
+    //});
 
     function closeWrapper() {
         console.log(toggleEditingMode);
@@ -330,7 +327,7 @@ function drawVars(location, vars) {
             "<div class='variable'>" +
             "<div class='variableLabel'>" + variable.name + "</div>" +
             "<div id='" + variable.id + "' class='variableValue'>" + value + "</div>" +
-            "<div class='deleteVar'>" + "</div>" +
+            "<div class='deleteVar'><a onclick='deleteFrameOrVar($(this).parent().parent().parent()[0].id, $(this).parent().parent().children()[1].id)' class='deleteVariable'></a></div>" +
             "</div>");
     });
 }
@@ -349,18 +346,9 @@ function determineVar(variable) {
         originalEndpoints.push({source: variable.id, target: variable.value});
         return "";
     }
-    else if (variable.type === "undefined") {
-        emtyConnections();
-        return "undefined"
-    }
-    else if (variable.type === "string") {
-        emtyConnections();
-        return '"' + variable.value + '"'
-    }
-    else if (variable.type === "number") {
-        emtyConnections();
-        return variable.value
-    }
+    else if (variable.type === "undefined") return "undefined"
+    else if (variable.type === "string") return '"' + variable.value + '"'
+    else if (variable.type === "number") return variable.value
     else return "null"
 }
 
@@ -388,9 +376,9 @@ function updateMemoryModel(data) {
     }
 }
 
-function updateJSONEditor(){
-    if(currentView === "codeView") {
-        $( "#jsoneditor" ).empty();
+function updateJSONEditor() {
+    if (currentView === "codeView") {
+        $("#jsoneditor").empty();
         $("#JSONButtons").empty();
         initJSONEditor();
     }
@@ -414,17 +402,17 @@ function initPlumb() {
                 }
             }
         });
-        jsPlumb.bind("connection", function(info){
+        jsPlumb.bind("connection", function (info) {
             var exists = false;
-            relations.forEach(function(relation){
-                console.log(info.sourceId , relation.source)
-                console.log(info.targetId , relation.target)
-                if(info.sourceId == relation.source && info.targetId == relation.target){
+            relations.forEach(function (relation) {
+                console.log(info.sourceId, relation.source)
+                console.log(info.targetId, relation.target)
+                if (info.sourceId == relation.source && info.targetId == relation.target) {
                     exists = true;
                     return;
                 }
             });
-            if(!exists)newReference(info.sourceId, info.targetId)
+            if (!exists)newReference(info.sourceId, info.targetId)
         });
         redrawPlumbing();
     });
@@ -446,7 +434,7 @@ function redrawPlumbing() {
         isTarget: true
     };
 
-    if (toggleEditingMode) common.endpoint ="Dot";
+    if (toggleEditingMode) common.endpoint = "Dot";
     else common.endpoint = "Blank";
 
     //jsPlumb.detachEveryConnection();
@@ -465,8 +453,8 @@ function redrawPlumbing() {
             source: relation.source.toString(),
             target: relation.target.toString()
         };
-        jsPlumb.addEndpoint($('#'+relation.source), common);
-        jsPlumb.addEndpoint($('#'+relation.target), common);
+        jsPlumb.addEndpoint($('#' + relation.source), common);
+        jsPlumb.addEndpoint($('#' + relation.target), common);
         jsPlumb.detach(sourceTarget);
         jsPlumb.connect(sourceTarget, common);
     });
@@ -562,29 +550,36 @@ function addNewFrame(frameName, frameType) {
 //TODO delete frames
 //TODO delete connections or variables
 
-function deleteFrame(log) {
+function deleteFrameOrVar(parentId, childId) {
     var obj = currentMemoryModel;
     var heaps = obj.memoryModel.heaps[0].length;
     var stacks = obj.memoryModel.stacks[0].length;
     var removeStacks = null;
     var removeHeaps = null;
+    var removeVariables = null;
 
-    console.log('dit zit er parent id', log);
+    console.log('dit zit er in parent id', parentId);
+    console.log('dit zit er in chilId id', childId);
+
     console.log('eerste heap', obj.memoryModel.heaps[0]);
 
     for (var i = 0; i < heaps; i++) {
-        if (obj.memoryModel.heaps[0][i].id == log) {
-            if (obj.memoryModel.heaps[0][i].vars != null) {
-                for (var j = 0; j < obj.memoryModel.heaps[0][i].vars.length; j++) {
-                    obj.memoryModel.heaps[0][i].vars.splice(j, 1);
-                }
-            }
+        if (obj.memoryModel.heaps[0][i].id == parentId) {
             removeHeaps = i;
+            if (childId != null) {
+                for (var j = 0; j < obj.memoryModel.heaps[0][i].vars.length; j++) {
+                    if (childId == obj.memoryModel.heaps[0][i].vars[j].id) {
+                        console.log(obj.memoryModel.heaps[0][i].vars[j].id);
+                        obj.memoryModel.heaps[0][i].vars.splice(j, 1);
+                    }
+                }
+                removeHeaps = null;
+            }
         }
     }
 
     for (var i = 0; i < stacks; i++) {
-        if (obj.memoryModel.stacks[0][i].id == log) {
+        if (obj.memoryModel.stacks[0][i].id == parentId) {
             if (obj.memoryModel.stacks[0][i].vars != null) {
                 for (var j = 0; j < obj.memoryModel.stacks[0][i].vars.length; j++) {
                     obj.memoryModel.stacks[0][i].vars.splice(j, 1);
@@ -593,9 +588,10 @@ function deleteFrame(log) {
             removeStacks = i;
         }
     }
-
-    if (removeHeaps != null) {
+    if (removeHeaps != null && obj.memoryModel.heaps[0][removeHeaps].vars.length == 0) {
         obj.memoryModel.heaps[0].splice(removeHeaps, 1);
+    }else{
+        console.log('Op dit moment bestaan er nog variabelen of referenties verwijder deze eerst voordat een frame verwijderd kan worden');
     }
 
     if (removeStacks != null) {
@@ -609,24 +605,14 @@ function deleteFrame(log) {
     });
 }
 
-
 //TODO usefull comment
 //TODO send a scoket message to the server with the updated model
 //TODO first connection has to be a variabel field
 function newReference(source, target) {
     if (toggleEditingMode === true) {
-            relations.push({source: source, target: target});
-            redrawPlumbing();
-            emtyConnections();
+        relations.push({source: source, target: target});
+        redrawPlumbing();
     }
 }
-//TODO delete variables
-function deleteVariables() {
-    console.log('delete functie voor variabelen wordt aangeroepen');
-}
 
-//TODO usefull comment
-function isInteger(x) {
-    return x % 1 === 0;
-}
 
