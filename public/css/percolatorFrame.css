@@ -73,9 +73,15 @@
         display: inline-block;
     }
 
-    .newFrameButtons{
-        float:right;
-        display: none;
+
+    .newFrameButtons {
+         float:right;
+         display: none;
+     }
+
+    #addNewMemoryModel{
+    display: block;
+    color: #2e6da4;
     }
 
 /*
