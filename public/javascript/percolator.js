@@ -102,7 +102,7 @@ function setModelInfo() {
 
 /**
  * Determines and draws the list of versions available for the memory model
- * @param undo, if update is true decrease the highestVersion by one
+ * @param undo, if update is true decrease the highestVersion by one.
  */
 function getVersionList(undo, addNewVersion) {
 
