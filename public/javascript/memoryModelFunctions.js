@@ -102,6 +102,26 @@ function drawMemoryModel(model, frameLocations) {
     })
 }
 
+function addNewMemoryModel(){
+    var newMemoryModel = {
+            'language': 'Javascript',
+            'owner': 'Dick Curtis',
+            'mmid': 6666,
+            'modelName': 'New MemoryModel',
+            'version': 0,
+            'memoryModel': {
+                stack: [],
+                heap: []
+            }
+        };
+    percolatorSend({
+        msgType: 'makeNewModel',
+        data: newMemoryModel
+    });
+}
+
+
+
 /**
  * Attaches all the eventlisteners to their corresponding divs or attributes
  */
@@ -132,6 +152,24 @@ function attachEventListeners(){
     $("#addNewHeapFrame").unbind('click');
     $('#addNewHeapFrame').click(function(){
         addNewFrame($("#frameLabel").val(), 'heap');
+    });
+
+
+    //New memorymodel, stack & heap
+    $("#addNewStack").unbind('click');
+    $('#addNewStack').click(function(){
+        console.log("Komt in addNewStack");
+    });
+
+    $("#addNewHeap").unbind('click');
+    $('#addNewHeap').click(function(){
+        console.log("Komt in addNewHeap");
+    });
+
+    $("#addNewMemoryModel").unbind('click');
+    $('#addNewMemoryModel').click(function(){
+        console.log("Komt in addNewMemoryModel");
+        addNewMemoryModel();
     });
 
     function closeWrapper(){
@@ -428,6 +466,7 @@ function addNewFrame(frameName, frameType) {
             obj.memoryModel.heaps[0][postitionHeapsFrame] = newFrame;
         }
 console.log( "data:", {newMemoryModel: obj, oldMemoryModel: currentMemoryModel});
+
         percolatorSend({
             msgType: 'updateMemoryModel',
             data: {newMemoryModel: obj, oldMemoryModel: currentMemoryModel}
