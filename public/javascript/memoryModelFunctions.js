@@ -22,8 +22,8 @@ var firstTime = false;
 var relations = [];
 
 /**
- * Contains all the stack end heap frame id's end positions
- * @type {Array}
+ * Contains a check to make sure JsPlumb is only initialized once
+ * @type {Boolean}
  */
 var plumbInitialized = false;
 
@@ -128,6 +128,8 @@ var updateValue = function () {
     var elementIndex = 0;
     var stackIndex = 0;
     var heapIndex = 0;
+
+
     currentMemoryModel.memoryModel.stacks.forEach(function (stack) {
 
         loop(stack, function () {
@@ -187,24 +189,28 @@ var updateValue = function () {
  */
 function drawMemoryModel(memoryModel) {
 
+    jsPlumb.reset();
+    jsPlumb.Defaults.Container = $("#diagramContainer");
+
     if (!plumbInitialized) {
-        initPlumb();
+        jsPlumb.ready(function () {
+            jsPlumb.Defaults.MaxConnections = 5;
+        });
         plumbInitialized = true;
     }
 
-    jsPlumb.detachEveryConnection();
-    jsPlumb.deleteEveryEndpoint();
     $(diagramContainer).children().remove(); //remove old frames, if they exist
+
     relations = [];
+    currentMemoryModel = memoryModel;
 
     if (memoryModel.memoryModel.stacks) drawFramesOnLocation("Stack", memoryModel.memoryModel.stacks, memoryModel.frameLocations);
     if (memoryModel.memoryModel.heaps) drawFramesOnLocation("Heap", memoryModel.memoryModel.heaps, memoryModel.frameLocations);
+    if(memoryModel.memoryModel.stacks || memoryModel.memoryModel.heaps)setClassStyle(memoryModel.memoryModel.stacks.length, memoryModel.memoryModel.heaps.length);
 
-    setClassStyle(memoryModel.memoryModel.stacks.length, memoryModel.memoryModel.heaps.length);
-
-    attachEventListeners();
     memoryModelLoaded = true;
     redrawPlumbing();
+    attachEventListeners();
 }
 
 /**
@@ -366,7 +372,6 @@ function determineVar(variable) {
     switch (variable.type) {
         case "reference":
             relations.push({source: variable.id, target: variable.value});
-            originalEndpoints.push({source: variable.id, target: variable.value});
             return "";
             break;
         case "undefined":
@@ -402,14 +407,6 @@ function updateMemoryModel(data) {
             updateJSONEditor();
         }
         drawMemoryModel(data.data.new_val);
-    }
-}
-
-function updateJSONEditor() {
-    if (currentView === "codeView") {
-        $("#jsoneditor").empty();
-        $("#JSONButtons").empty();
-        initJSONEditor();
     }
 }
 
@@ -567,6 +564,9 @@ function newReference(source, target) {
     if (toggleEditingMode === true) {
         relations.push({source: source, target: target});
         redrawPlumbing();
+
+        //TODO SAVE TO SERVER
+
     }
 }
 
@@ -579,25 +579,9 @@ function appendHtmlToLocation(location, html) {
     $(location).append(html);
 }
 
-
-/**
- * Initializes the JSPlumb script
- */
-function initPlumb() {
-    jsPlumb.ready(function () {
-        jsPlumb.Defaults.Container = $("#diagramContainer");
-        jsPlumb.Defaults.MaxConnections = 5;
-        $(document).ready (function(){
-            redrawPlumbing();
-        });
-    });
-}
-
 /**
  * Draws the connections between the frames and variables where needed.
  */
-
-var originalEndpoints = relations;
 function redrawPlumbing() {
 
     $(".frame").draggable({
@@ -614,7 +598,7 @@ function redrawPlumbing() {
     jsPlumb.bind("connection", function(info){
         var exists = false;
         relations.forEach(function(relation){
-            if(info.sourceId == relation.source && info.targetId == relation.target){
+            if(info.sourceId == relation.source || info.targetId == relation.target){
                 exists = true;
                 return null;
             }
@@ -630,26 +614,16 @@ function redrawPlumbing() {
         isSource: true,
         isTarget: true
     };
-
     if (toggleEditingMode) common.endpoint ="Dot";
     else common.endpoint = "Blank";
 
-    //jsPlumb.detachEveryConnection();
-    //jsPlumb.deleteEveryEndpoint();
-    //jsPlumb.deleteEndpoint($('.frame'))
-    //jsPlumb.deleteEndpoint($('.variableValue'))
-
     jsPlumb.addEndpoint($('.frame'), common);
+    jsPlumb.addEndpoint($('.variableValue'), common);
     relations.forEach(function (relation) {
         var sourceTarget = {
             source: relation.source.toString(),
             target: relation.target.toString()
         };
-        jsPlumb.addEndpoint($('#'+relation.source), common);
-        jsPlumb.addEndpoint($('#'+relation.target), common);
-        jsPlumb.detach(sourceTarget);
-
         jsPlumb.connect(sourceTarget, common);
     });
-
 }
