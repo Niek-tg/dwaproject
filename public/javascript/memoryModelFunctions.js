@@ -455,7 +455,8 @@ function addNewFrame(frameName, frameType) {
 
     var newFrame = {
         "id": highestID,
-        "name": frameName
+        "name": frameName,
+        "vars": []
     };
 
     if (memoryModelLoaded) {
@@ -482,54 +483,76 @@ function addNewFrame(frameName, frameType) {
 //TODO delete frames
 //TODO delete connections or variables
 
-function deleteFrameOrVar(parentId, childId) {
+function deleteFrameOrVar(id) {
     var obj = currentMemoryModel;
     var heaps = obj.memoryModel.heaps[0].length;
     var stacks = obj.memoryModel.stacks[0].length;
     var removeStacks = null;
     var removeHeaps = null;
     var removeVariables = null;
+    var hasChild = false;
 
-    console.log('dit zit er in parent id', parentId);
-    console.log('dit zit er in chilId id', childId);
+    //console.log('dit zit er in parent id', parentId);
+    //console.log('dit zit er in chilId id', childId);
 
-    console.log('eerste heap', obj.memoryModel.heaps[0]);
+    //console.log('eerste heap', obj.memoryModel.heaps[0]);
 
-    for (var i = 0; i < heaps; i++) {
-        if (obj.memoryModel.heaps[0][i].id == parentId) {
-            removeHeaps = i;
-            if (childId != null) {
-                for (var j = 0; j < obj.memoryModel.heaps[0][i].vars.length; j++) {
-                    if (childId == obj.memoryModel.heaps[0][i].vars[j].id) {
-                        console.log(obj.memoryModel.heaps[0][i].vars[j].id);
-                        obj.memoryModel.heaps[0][i].vars.splice(j, 1);
-                    }
-                }
-                removeHeaps = null;
-            }
-        }
-    }
+    var found = false;
+    obj.memoryModel.heaps.forEach(function(heap){
+        heap.forEach(function(frame){
+           if(frame.id == id){
+               found=true;
+               if(frame.vars) hasChild = true;
+               if(!hasChild) heap.splice(indexOf(frame), 1);
+           }
+            console.log(frame)
+           if(hasChild)frame.vars.forEach(function(variable){
+               found=true;
+               if(variable.id == id){
+                   frame.vars.splice(indexOf(variable), 1);
+               }
+           })
+       })
+   });
 
-    for (var i = 0; i < stacks; i++) {
-        if (obj.memoryModel.stacks[0][i].id == parentId) {
-            if (obj.memoryModel.stacks[0][i].vars != null) {
-                for (var j = 0; j < obj.memoryModel.stacks[0][i].vars.length; j++) {
-                    obj.memoryModel.stacks[0][i].vars.splice(j, 1);
-                }
-            }
-            removeStacks = i;
-        }
-    }
-    if (removeHeaps != null && obj.memoryModel.heaps[0][removeHeaps].vars.length == 0) {
-        obj.memoryModel.heaps[0].splice(removeHeaps, 1);
-    }else{
-        console.log('Op dit moment bestaan er nog variabelen of referenties verwijder deze eerst voordat een frame verwijderd kan worden');
-    }
+    console.log(found);
 
-    if (removeStacks != null) {
-        obj.memoryModel.stacks[0].splice(removeStacks, 1);
-    }
-    console.log('eerste heap', obj.memoryModel.heaps[0]);
+
+    //for (var i = 0; i < heaps; i++) {
+    //    if (obj.memoryModel.heaps[0][i].id == parentId) {
+    //        removeHeaps = i;
+    //        if (childId != null) {
+    //            for (var j = 0; j < obj.memoryModel.heaps[0][i].vars.length; j++) {
+    //                if (childId == obj.memoryModel.heaps[0][i].vars[j].id) {
+    //                    console.log(obj.memoryModel.heaps[0][i].vars[j].id);
+    //                    obj.memoryModel.heaps[0][i].vars.splice(j, 1);
+    //                }
+    //            }
+    //            removeHeaps = null;
+    //        }
+    //    }
+    //}
+    //
+    //for (var i = 0; i < stacks; i++) {
+    //    if (obj.memoryModel.stacks[0][i].id == parentId) {
+    //        if (obj.memoryModel.stacks[0][i].vars != null) {
+    //            for (var j = 0; j < obj.memoryModel.stacks[0][i].vars.length; j++) {
+    //                obj.memoryModel.stacks[0][i].vars.splice(j, 1);
+    //            }
+    //        }
+    //        removeStacks = i;
+    //    }
+    //}
+    //if (removeHeaps != null && obj.memoryModel.heaps[0][removeHeaps].vars.length == 0) {
+    //    obj.memoryModel.heaps[0].splice(removeHeaps, 1);
+    //}else{
+    //    console.log('Op dit moment bestaan er nog variabelen of referenties verwijder deze eerst voordat een frame verwijderd kan worden');
+    //}
+    //
+    //if (removeStacks != null) {
+    //    obj.memoryModel.stacks[0].splice(removeStacks, 1);
+    //}
+    //console.log('eerste heap', obj.memoryModel.heaps[0]);
 
     percolatorSend({
         msgType: 'updateMemoryModel',
