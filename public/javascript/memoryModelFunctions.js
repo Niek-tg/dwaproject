@@ -520,7 +520,7 @@ var updatePositionFrames = function (frameId) {
                 currentMemoryModel.memoryModel.heaps[0][postitionHeapsFrame] = newFrame;
             }
 
-            console.log("data:", {newMemoryModel: obj, oldMemoryModel: currentMemoryModel});
+            console.log("data:", {newMemoryModel: currentMemoryModel, oldMemoryModel: currentMemoryModel});
 
             percolatorSend({
                 msgType: 'updateMemoryModel',
