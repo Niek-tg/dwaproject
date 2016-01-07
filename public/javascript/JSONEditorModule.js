@@ -1,11 +1,36 @@
 /**
+ * Boolean to make sure the event listener on keydown isn't created twice
+ * @type {boolean}
+ */
+var keydownExists = false;
+
+/**
+ * Options used by the JSON editor
+ * @type {{editable: Function}}
+ */
+var options = {
+    editable: function (object) {
+        console.log(object);
+        switch (object.field) {
+            case 'mmid':
+            case 'id':
+            case 'version':
+            case 'frameLocations':
+                return false;
+            default:
+                return {
+                    field: true,
+                    value: true
+                };
+        }
+    }
+};
+
+/**
  *  Adds a JSON editor on the page and fills it with data selected from the Memorymodel list.
  *  When the "opslaan" button is clicked it will be saved to the database.
  *  When the "nieuw geheugenmodel" button is clicked it will create a new memorymodel.
  */
-
-var keydownExists = false; //Boolean to make sure the event listener on keydown isn't created twice.
-
 function initJSONEditor() {
     var currentJSONMemoryModel = {
         language: currentMemoryModel.language,
@@ -76,7 +101,6 @@ function initJSONEditor() {
         JSONVersion ++; oldJSONVersion ++;
     });
 
-
     if (!keydownExists) {
         $(window).bind('keydown', function (event) {
             keydownExists = true;
@@ -97,7 +121,7 @@ function initJSONEditor() {
             }
         });
 
-        $(window).bind('keyup', function (event) {
+        $(window).bind('keyup', function () {
             keydownExists = false;
         });
     }
@@ -117,27 +141,16 @@ function initJSONEditor() {
 }
 
 /**
- * Function to disable some fields or/and values in de JSON-editor. Setting it to true or false.
- * @type {{editable: Function}}
+ * TODO ADD USEFUL COMMENT
  */
-
-var options = {
-    editable: function (object) {
-        console.log(object);
-        switch (object.field) {
-            case 'mmid':
-            case 'id':
-            case 'version':
-            case 'frameLocations':
-                return false;
-            default:
-                return {
-                    field: true,
-                    value: true
-                };
-        }
+function updateJSONEditor(){
+    if(currentView === "codeView") {
+        $( "#jsoneditor" ).empty();
+        $("#JSONButtons").empty();
+        initJSONEditor();
     }
-};
+}
+
 
 
 
