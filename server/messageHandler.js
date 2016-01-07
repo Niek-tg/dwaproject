@@ -46,8 +46,8 @@ messageHandler.identifyMessage = function (message, websocket, webSocketServer) 
             messageHandler.deleteModel(message, websocket, webSocketServer);
             break;
 
-        case "updateFramePositions":
-            messageHandler.updateFramePositions(message, websocket);
+        case "updateFrameLocations":
+            messageHandler.updateFrameLocations(message, websocket);
             break;
 
         case "updateMemoryModel":
@@ -232,16 +232,16 @@ messageHandler.deleteModel = function (message, websocket, webSocketServer) {
  * @param message
  * @param websocket
  */
-messageHandler.updateFramePositions = function (message, websocket) {
-    var positions = message.data.frameIdEndPositions;
+messageHandler.updateFrameLocations = function (message, websocket) {
+    var positions = message.data.frameLocations;
     var mmid = message.data.mmid;
     var version = message.data.version;
 
-    queries.updateFramePositions(positions, mmid, version, function (err, result) {
+    queries.updateFrameLocations(positions, mmid, version, function (err, result) {
         if (err)
             return websocket.send(JSON.stringify({
                 msgType: "errorMsg",
-                data: "Something went wrong in the updateFramePositions query " + err
+                data: "Something went wrong in the updateFrameLocations query " + err
             }));
 
         return websocket.send(JSON.stringify({msgType: "positionsUpdated", data: "Positions updated completed"}));
