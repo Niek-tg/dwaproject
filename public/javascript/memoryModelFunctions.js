@@ -208,17 +208,42 @@ function drawMemoryModel(memoryModel) {
 }
 
 function addNewMemoryModel(){
+
+    //var user = prompt("Please enter your name", "Memory model owner");
+    //if (person != null) {
+    //    document.getElementById("demo").innerHTML =
+    //        "Hello " + person + "! How are you today?";
+    //}
+
     var newMemoryModel = {
             'language': 'Javascript',
             'owner': 'Dick Curtis',
             'mmid': 6666,
             'modelName': 'New MemoryModel',
             'version': 0,
-            'memoryModel': {
-                stack: [],
-                heap: []
-            }
-        };
+        "memoryModel": {
+            "stacks": [
+                [
+                    {
+                        "id": 1,
+                        "name": "Global",
+                        "vars": []
+                    }
+                ]
+            ],
+            "heaps": [
+                [
+                    {
+                        "id": 6,
+                        "name": "Global",
+                        "vars": []
+                    }
+
+                ]
+            ]
+        }
+    };
+
     percolatorSend({
         msgType: 'makeNewModel',
         data: newMemoryModel
