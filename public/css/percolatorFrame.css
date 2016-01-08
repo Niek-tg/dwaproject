@@ -79,8 +79,13 @@
          display: none;
      }
 
+    #heapLabel{
+        width: 120px;
+    }
 
-
+    #stackLabel{
+        width: 120px;
+    }
 /*
    ALL MEMORY MODELS
 */

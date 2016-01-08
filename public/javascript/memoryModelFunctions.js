@@ -289,12 +289,12 @@ function attachEventListeners() {
 
     $("#addNewStackFrame").unbind('click');
     $('#addNewStackFrame').click(function () {
-        addNewFrame($("#frameLabel").val(), 'stack');
+        addNewFrame($("#stackLabel").val(), 'stack');
     });
 
     $("#addNewHeapFrame").unbind('click');
     $('#addNewHeapFrame').click(function () {
-        addNewFrame($("#frameLabel").val(), 'heap');
+        addNewFrame($("#heapLabel").val(), 'heap');
     });
 
 
