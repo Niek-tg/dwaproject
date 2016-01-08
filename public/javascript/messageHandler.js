@@ -19,6 +19,9 @@ function messageHandlerClient(message){
             console.log(data);
             updateMemoryModel(data);
             break;
+        case "newAllModelsData":
+            percolatorSend({msgType: "getAllModels"});
+            break;
         case "getAllModels":
             getMemoryModels(data.data);
             break;
