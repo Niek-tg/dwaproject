@@ -208,7 +208,7 @@ queries.deleteLatestversion = function (mmid, version, cb) {
  * @param version Memorymodel version
  * @param cb Callback of this function
  */
-queries.updateFramePositions = function (positions, mmid, version, cb) {
+queries.updateFrameLocations = function (positions, mmid, version, cb) {
     getConnection(function (err, conn) {
         if (err) return cb(err, null);
         r.db('percolatordb').table("History")

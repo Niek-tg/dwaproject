@@ -24,7 +24,6 @@ function toggleActive(me){
     $(me).html("<img src='./images/"+ image +"' />");
 
     calculateDiagramContainerSize()
-
 }
 
 function calculateDiagramContainerSize(){

@@ -11,6 +11,7 @@ var connection = new WebSocket("ws://localhost:3000");
  */
 
 connection.onopen = function () {
+    attachEventListeners();
     percolatorSend({msgType: 'socketIdentifier', identity: 'visualView', state: 'active'});
     percolatorSend({msgType: "getAllModels"});
 };

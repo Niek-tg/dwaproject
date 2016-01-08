@@ -1,25 +1,3 @@
-/**
- *  Holds the current memory model which is displayed on the webpage
- */
-var currentMemoryModel;
-
-/**
- *  Holds the highest version available of the current memory model
- *  @type (number)
- */
-var highestVersion;
-
-/**
- * Contains a boolean with a check if its the first time the memory model is loaded
- * @type {boolean}
- */
-var firstTime = false;
-
-/**
- * Contains all the stack end heap frame id's end positions
- * @type {Array}
- */
-var frameIdEndPositions = [];
 
 /**
  * Get a list of all memory models.
@@ -43,6 +21,7 @@ function getMemoryModels(memoryModels) {
  * @param undo boolean determining whether the undo button has been pressed
  */
 function chooseMemoryModel(id, prevVersion, undo) {
+    $(".newFrameButtons").css("display", "block");
     $(".viewButtons").css("display", "block");
     enableDiagramView();
     var version = null;
@@ -70,25 +49,18 @@ function chooseMemoryModel(id, prevVersion, undo) {
  *
  * @param memoryModel contains response of socket message getModelById
  */
-function getMemmoryModelById(memoryModel) {
+function getMemoryModelById(memoryModel) {
 
-    currentMemoryModel = memoryModel;
-    frameIdEndPositions = [];
-    if (firstTime) highestVersion = currentMemoryModel.version;
+    if (firstTime) highestVersion = memoryModel.version;
 
     firstTime = false;
 
+    console.log(memoryModel)
+    drawMemoryModel(memoryModel);
     getVersionList(false, false);
     setModelInfo();
+    percolatorSend({msgType: "subscribeToChanges", data: {id: currentMemoryModel.id}});
 
-    console.log(currentMemoryModel.modelName + " ID = " + currentMemoryModel.id);
-    console.log("CURRENTMEMORYMODEL= ");
-    console.log(currentMemoryModel);
-    // SET MEMORY MODEL ON SCREEN
-    drawMemoryModel(memoryModel.memoryModel, memoryModel.frameLocations).then(function () {
-        initPlumb();
-        percolatorSend({msgType: "subscribeToChanges", data: {id: currentMemoryModel.id}});
-    });
 }
 
 /**
@@ -107,10 +79,9 @@ function setModelInfo() {
 function getVersionList(undo, addNewVersion) {
 
     if(addNewVersion){highestVersion ++;}
-
     if(undo){highestVersion --;}
 
-
+    console.log(currentMemoryModel)
     if(currentMemoryModel.version === highestVersion) $("#undoButton").css("display", "block");
     else $("#undoButton").css("display", "none");
 

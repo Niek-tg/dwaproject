@@ -46,8 +46,8 @@ messageHandler.identifyMessage = function (message, websocket, webSocketServer) 
             messageHandler.deleteModel(message, websocket, webSocketServer);
             break;
 
-        case "updateFramePositions":
-            messageHandler.updateFramePositions(message, websocket);
+        case "updateFrameLocations":
+            messageHandler.updateFrameLocations(message, websocket);
             break;
 
         case "updateMemoryModel":
@@ -62,7 +62,6 @@ messageHandler.identifyMessage = function (message, websocket, webSocketServer) 
                 websocket.connectionInfo.identity = message.identity;
                 websocket.connectionInfo.state = message.state;
             break;
-
         default :
             websocket.send(JSON.stringify({msgType: "errorMsg", data: "MessageHandler: unknown msgType received="}));
             break;
@@ -138,6 +137,7 @@ messageHandler.getAllMemoryModels = function (message, websocket) {
         });
         websocket.send(JSON.stringify({msgType: "getAllModels", data: resultsArray}));
     });
+    console.log("Hij komt in getAllMemoryModels")
 };
 
 /**
@@ -193,10 +193,10 @@ messageHandler.makeNewModel = function (message, websocket) {
             msgType: "errorMsg",
             data: "Something went wrong in query create NewMemorymodel " + err
         }));
-
-        websocket.send(JSON.stringify({msgType: "getAllModels", data: result}));
+        else messageHandler.getAllMemoryModels(message, websocket);
         console.log(JSON.stringify(result));
     });
+    websocket.send(JSON.stringify({msgType: "newMemoryModel", data: message}));
 };
 
 /**
@@ -233,16 +233,16 @@ messageHandler.deleteModel = function (message, websocket, webSocketServer) {
  * @param message
  * @param websocket
  */
-messageHandler.updateFramePositions = function (message, websocket) {
-    var positions = message.data.frameIdEndPositions;
+messageHandler.updateFrameLocations = function (message, websocket) {
+    var positions = message.data.frameLocations;
     var mmid = message.data.mmid;
     var version = message.data.version;
 
-    queries.updateFramePositions(positions, mmid, version, function (err, result) {
+    queries.updateFrameLocations(positions, mmid, version, function (err, result) {
         if (err)
             return websocket.send(JSON.stringify({
                 msgType: "errorMsg",
-                data: "Something went wrong in the updateFramePositions query " + err
+                data: "Something went wrong in the updateFrameLocations query " + err
             }));
 
         return websocket.send(JSON.stringify({msgType: "positionsUpdated", data: "Positions updated completed"}));
