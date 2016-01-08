@@ -22,8 +22,8 @@ var firstTime = false;
 var relations = [];
 
 /**
- * Contains all the stack end heap frame id's end positions
- * @type {Array}
+ * Contains a check to make sure JsPlumb is only initialized once
+ * @type {Boolean}
  */
 var plumbInitialized = false;
 
@@ -187,38 +187,68 @@ var updateValue = function () {
  */
 function drawMemoryModel(memoryModel) {
 
+    jsPlumb.reset();
+    jsPlumb.Defaults.Container = $("#diagramContainer");
+
     if (!plumbInitialized) {
-        initPlumb();
+        jsPlumb.ready(function () {
+            jsPlumb.Defaults.MaxConnections = 5;
+        });
         plumbInitialized = true;
     }
 
-    jsPlumb.detachEveryConnection();
-    jsPlumb.deleteEveryEndpoint();
     $(diagramContainer).children().remove(); //remove old frames, if they exist
     relations = [];
+    currentMemoryModel = memoryModel;
 
     if (memoryModel.memoryModel.stacks) drawFramesOnLocation("Stack", memoryModel.memoryModel.stacks, memoryModel.frameLocations);
     if (memoryModel.memoryModel.heaps) drawFramesOnLocation("Heap", memoryModel.memoryModel.heaps, memoryModel.frameLocations);
+    if(memoryModel.memoryModel.stacks || memoryModel.memoryModel.heaps)setClassStyle(memoryModel.memoryModel.stacks.length, memoryModel.memoryModel.heaps.length);
 
     setClassStyle(memoryModel.memoryModel.stacks.length, memoryModel.memoryModel.heaps.length);
-
-    attachEventListeners();
+    
     memoryModelLoaded = true;
     redrawPlumbing();
+    attachEventListeners();
 }
 
 function addNewMemoryModel(){
+
+    //var user = prompt("Please enter your name", "Memory model owner");
+    //if (person != null) {
+    //    document.getElementById("demo").innerHTML =
+    //        "Hello " + person + "! How are you today?";
+    //}
+
     var newMemoryModel = {
             'language': 'Javascript',
             'owner': 'Dick Curtis',
             'mmid': 6666,
             'modelName': 'New MemoryModel',
             'version': 0,
-            'memoryModel': {
-                stack: [],
-                heap: []
-            }
-        };
+        "memoryModel": {
+            "stacks": [
+                [
+                    {
+                        "id": 1,
+                        "name": "Global",
+                        "vars": []
+                    }
+                ]
+            ],
+            "heaps": [
+                [
+                    {
+                        "id": 6,
+                        "name": "Global",
+                        "vars": []
+                    }
+
+                ]
+            ]
+        }
+    };
+
     percolatorSend({
         msgType: 'makeNewModel',
         data: newMemoryModel
@@ -286,23 +316,12 @@ function attachEventListeners() {
     });
 
     function closeWrapper() {
-        $(".deleteFrame").unbind('click');
-        $(".deleteFrame").click(function () {
-            deleteFrameOrVar($(this).parent().attr("id"));
-        });
-
-        //$(".deleteVar").unbind('click');
-        //$(".deleteVar").click(function () {
-        //    deleteVariables($(this).parent().attr("id"));
-        //});
-
-        function closeWrapper() {
-            var div = "#editWrapper";
-            // TODO fix this one to prevent opening when already closed!
-            if (!$(div).is(':hidden')) $(div).slideToggle();
-        }
+        var div = "#editWrapper";
+        // TODO fix this one to prevent opening when already closed!
+        if (!$(div).is(':hidden')) $(div).slideToggle();
+    }
 }
-}
+
 
     /**
      * Sets width of the stack and heap class by the number of stack and heaps
@@ -406,7 +425,6 @@ function attachEventListeners() {
         switch (variable.type) {
             case "reference":
                 relations.push({source: variable.id, target: variable.value});
-                originalEndpoints.push({source: variable.id, target: variable.value});
                 return "";
                 break;
             case "undefined":
@@ -445,23 +463,15 @@ function attachEventListeners() {
         }
     }
 
-    function updateJSONEditor() {
-        if (currentView === "codeView") {
-            $("#jsoneditor").empty();
-            $("#JSONButtons").empty();
-            initJSONEditor();
-        }
-    }
-
-    /**
-     * When frames are dragged, the posistions of the frames wil be updated en send to the server by websocket.
-     * @param frameId id of the frame what needs to be updated
-     */
-    var updatePositionFrames = function (frameId) {
-        var id = $('#' + frameId);
-        var parent = $(id).parent();
-        var top = (id.offset().top - id.parent().offset().top);
-        var left = (100 / parent.outerWidth()) * (id.offset().left - id.parent().offset().left);
+/**
+ * When frames are dragged, the posistions of the frames wil be updated en send to the server by websocket.
+ * @param frameId id of the frame what needs to be updated
+ */
+var updatePositionFrames = function (frameId) {
+    var id = $('#' + frameId);
+    var parent = $(id).parent();
+    var top = (id.offset().top - id.parent().offset().top);
+    var left = (100 / parent.outerWidth()) * (id.offset().left - id.parent().offset().left);
 
         var found = false;
         currentMemoryModel.frameLocations.forEach(function (location) {
@@ -510,7 +520,7 @@ function attachEventListeners() {
                 currentMemoryModel.memoryModel.heaps[0][postitionHeapsFrame] = newFrame;
             }
 
-            console.log("data:", {newMemoryModel: obj, oldMemoryModel: currentMemoryModel});
+            console.log("data:", {newMemoryModel: currentMemoryModel, oldMemoryModel: currentMemoryModel});
 
             percolatorSend({
                 msgType: 'updateMemoryModel',
@@ -605,12 +615,15 @@ function attachEventListeners() {
 //TODO usefull comment
 //TODO send a scoket message to the server with the updated model
 //TODO first connection has to be a variabel field
-    function newReference(source, target) {
-        if (toggleEditingMode === true) {
-            relations.push({source: source, target: target});
-            redrawPlumbing();
-        }
+function newReference(source, target) {
+    if (toggleEditingMode === true) {
+        relations.push({source: source, target: target});
+        redrawPlumbing();
+
+        //TODO SAVE TO SERVER
+
     }
+}
 
     /**
      * Appends the given HTML to the location
@@ -621,27 +634,11 @@ function attachEventListeners() {
         $(location).append(html);
     }
 
-
-    /**
-     * Initializes the JSPlumb script
-     */
-    function initPlumb() {
-        jsPlumb.ready(function () {
-            jsPlumb.Defaults.Container = $("#diagramContainer");
-            jsPlumb.Defaults.MaxConnections = 5;
-            $(document).ready(function () {
-                redrawPlumbing();
-            });
-        });
-    }
-
-    /**
-     * Draws the connections between the frames and variables where needed.
-     */
-
-    var originalEndpoints = relations;
-
-    function redrawPlumbing() {
+/**
+ * Draws the connections between the frames and variables where needed.
+ */
+function redrawPlumbing() {
+    
 
         $(".frame").draggable({
             drag: function (e) {
@@ -677,22 +674,13 @@ function attachEventListeners() {
         if (toggleEditingMode) common.endpoint = "Dot";
         else common.endpoint = "Blank";
 
-        //jsPlumb.detachEveryConnection();
-        //jsPlumb.deleteEveryEndpoint();
-        //jsPlumb.deleteEndpoint($('.frame'))
-        //jsPlumb.deleteEndpoint($('.variableValue'))
-
-        jsPlumb.addEndpoint($('.frame'), common);
-        relations.forEach(function (relation) {
-            var sourceTarget = {
-                source: relation.source.toString(),
-                target: relation.target.toString()
-            };
-            jsPlumb.addEndpoint($('#' + relation.source), common);
-            jsPlumb.addEndpoint($('#' + relation.target), common);
-            jsPlumb.detach(sourceTarget);
-
-            jsPlumb.connect(sourceTarget, common);
-        });
-
+    jsPlumb.addEndpoint($('.frame'), common);
+    jsPlumb.addEndpoint($('.variableValue'), common);
+    relations.forEach(function (relation) {
+        var sourceTarget = {
+            source: relation.source.toString(),
+            target: relation.target.toString()
+        };
+        jsPlumb.connect(sourceTarget, common);
+    });
 }

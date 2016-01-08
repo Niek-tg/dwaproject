@@ -22,16 +22,6 @@
 
 }
 
-
-#diagramContainer:after,
-.Stack:after,
-.Heap:after
-{
-    content:'';
-    display:block;
-    clear: both;
-}
-
 .Stack {
     position: relative;
     margin: 0px;
