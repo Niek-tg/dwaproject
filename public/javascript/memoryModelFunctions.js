@@ -120,8 +120,11 @@ function openEditField(me) {
  */
 function assignValuesToEditFields(origin) {
 
-    var value = origin.innerText;
+    var value = $(origin).children()[1].innerText;
     $("#selectedInputField").val(value);
+
+    var name = $(origin).children()[0].innerText;
+    $("#selectedNameField").val(name);
 
     var activeType = ($(origin).hasClass("_jsPlumb_endpoint_anchor_")) ?
         "#typeReference" :
@@ -134,23 +137,30 @@ var updateValue = function () {
 
     var oldMmModel = currentMemoryModel;
 
+    console.log(currentMemoryModel);
     var newValue = $("#selectedInputField")[0].value;
+    var newName = $("#selectedNameField")[0].value;
     var newType = $("input:radio[name='type']:checked")[0].value;
 
-    console.log(newValue)
-    console.log(newType)
+    console.log(newValue);
+    console.log(newType);
+    console.log(newName);
 
-   lookForFrameOrVar(lastEditedDiv[0].id, function(indexList){
+    var idToFind = $(lastEditedDiv).children()[1].id;
+   lookForFrameOrVar(idToFind, function(indexList){
         if(indexList.location == "heap"){
             currentMemoryModel.memoryModel.heaps[indexList.heapIndex][indexList.frameIndex].vars[indexList.elementIndex].value = newValue;
             currentMemoryModel.memoryModel.heaps[indexList.heapIndex][indexList.frameIndex].vars[indexList.elementIndex].type = newType;
+            currentMemoryModel.memoryModel.heaps[indexList.heapIndex][indexList.frameIndex].vars[indexList.elementIndex].name = newName;
         } else{
             currentMemoryModel.memoryModel.stacks[indexList.stackIndex][indexList.frameIndex].vars[indexList.elementIndex].value = newValue;
             currentMemoryModel.memoryModel.stacks[indexList.stackIndex][indexList.frameIndex].vars[indexList.elementIndex].type = newType;
+            currentMemoryModel.memoryModel.stacks[indexList.stackIndex][indexList.frameIndex].vars[indexList.elementIndex].name = newName;
         }
     });
 
     if (!$.isEmptyObject(location)) {
+        console.log(currentMemoryModel);
         percolatorSend({
             msgType: 'updateMemoryModel',
             data: {newMemoryModel: currentMemoryModel, oldMemoryModel: oldMmModel}
@@ -239,7 +249,13 @@ function drawMemoryModel(memoryModel) {
 
     $(diagramContainer).children().remove(); //remove old frames, if they exist
     relations = [];
+    if(currentMemoryModel){
+        var owner = currentMemoryModel.owner;
+        var language = currentMemoryModel.language;
+    }
     currentMemoryModel = memoryModel;
+    currentMemoryModel.language = (language) ? language : currentMemoryModel.language;
+    currentMemoryModel.owner = (owner) ? owner : currentMemoryModel.owner;
 
     if (memoryModel.memoryModel.stacks) drawFramesOnLocation("Stack", memoryModel.memoryModel.stacks, memoryModel.frameLocations);
     if (memoryModel.memoryModel.heaps) drawFramesOnLocation("Heap", memoryModel.memoryModel.heaps, memoryModel.frameLocations);
@@ -356,8 +372,8 @@ function attachEventListeners() {
         closeWrapper();
     });
 
-    $("#variableValue").unbind('dblclick');
-    $(".variableValue").dblclick(function () {
+    $(".variable").unbind('dblclick');
+    $(".variable").dblclick(function () {
         openEditField(this);
     });
 
@@ -525,12 +541,6 @@ function attachEventListeners() {
         if (data.data.new_val) {
             if (data.data.new_val.version > currentMemoryModel.version) {
                 getVersionList(false, true);
-                var owner = currentMemoryModel.owner;
-                var language = currentMemoryModel.language;
-                currentMemoryModel = data.data.new_val;
-                currentMemoryModel.owner = owner;
-                currentMemoryModel.language = language;
-
                 setModelInfo();
                 updateJSONEditor();
             }
