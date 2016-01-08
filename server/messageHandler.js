@@ -29,6 +29,9 @@ messageHandler.identifyMessage = function (message, websocket, webSocketServer) 
         case "subscribeToChanges":
             messageHandler.subscribeToChanges(message, websocket);
             break;
+        case "subscribeToAllModels":
+            messageHandler.subscribeToAllModels(message, websocket);
+            break;
 
         case "getAllModels":
             messageHandler.getAllMemoryModels(message, websocket);
@@ -88,6 +91,24 @@ messageHandler.subscribeToChanges = function (message, websocket) {
                 websocket.send(JSON.stringify({msgType: "newData", data: row}))
             }
         );
+    });
+};
+/**
+ * Subscribes to all memory models
+ * @param message
+ * @param websocket
+ */
+messageHandler.subscribeToAllModels = function (message, websocket) {
+    console.log("subscribed to all models");
+
+    queries.subscribeToAllModels(function (err, curs) {
+        curs.each(
+            function(err, row) {
+                if (err) throw err;
+                websocket.send(JSON.stringify({msgType: "newAllModelsData", data: row}))
+            }
+        );
+
     });
 };
 
