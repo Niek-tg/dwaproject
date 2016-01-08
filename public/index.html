@@ -25,11 +25,8 @@
             <img src="./images/lg_percolator.png" class="img-responsive" alt="Responsive image">
         </div>
         <div id="newFrameButtons" class="newFrameButtons">
-            <button id="addNewStackFrame">add stackframe</button>
-            <input type="text" id='frameLabel' value="frame name">
-            <button id="addNewHeapFrame">add heapframe</button>
+            <button id="addNewHeapFrame">add heapframe</button><input type="text" id='heapLabel' value="heap name">
             <button id="addNewStackFrame">add stackframe</button><input type="text" id='frameLabel' value="frame name">
-            <button id="addNewHeapFrame">add heapframe</button>
             <button id="addNewStack">add Stack</button>
             <button id="addNewHeap">add Heap</button>
         </div>
@@ -47,9 +44,13 @@
             </button>
         </div>
 
-        <div id="newMemoryModel">
-            <button id="addNewMemoryModel">New MemoryModel</button>
+        <!-- Buttons to edit the memory model -->
+        <div class="col-md-2 viewButtons">
+                <button id="addNewMemoryModel">New MemoryModel</button>
+                <button id="testButton">TestButton</button>
         </div>
+
+
 
         <!--Header Title: Owner & name of Memorymodel-->
         <div id="headerTitle" class="col-md-9 col-sm-9">
