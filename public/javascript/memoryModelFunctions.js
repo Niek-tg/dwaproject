@@ -540,11 +540,13 @@ function attachEventListeners() {
     function updateMemoryModel(data) {
         if (data.data.new_val) {
             if (data.data.new_val.version > currentMemoryModel.version) {
+                drawMemoryModel(data.data.new_val);
                 getVersionList(false, true);
                 setModelInfo();
                 updateJSONEditor();
+
             }
-            drawMemoryModel(data.data.new_val);
+            else drawMemoryModel(data.data.new_val);
         }
     }
 
