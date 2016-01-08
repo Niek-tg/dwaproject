@@ -450,6 +450,9 @@ function attachEventListeners() {
         model.forEach(function (frames) {
             var html = "<div id='" + location + identifier + "' class='" + location + "'>" +
                 "<div class='frameLabel'>" + location + "</div>" +
+                "<div class='expandDiv'>" +
+                "<a onclick='expandDiv($(this).parent().parent())'>+</a>" +
+                "</div>" +
                 "</div>";
 
             appendHtmlToLocation(diagramContainer, html);
@@ -483,6 +486,13 @@ function attachEventListeners() {
             });
             identifier++;
         });
+    }
+
+    function expandDiv(stackOrHeap){
+        stackOrHeap = stackOrHeap[0].id;
+        var oldHeight = $('#'+ stackOrHeap)[0].clientHeight;
+        var newHeight = oldHeight + 100;
+        $('#'+ stackOrHeap).css("height", newHeight + "px");
     }
 
     /**

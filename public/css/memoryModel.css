@@ -25,7 +25,7 @@
     position: relative;
     display: table;
     width: calc(30% - 2px);
-    /*border: 1px solid gray;*/
+    border: 1px solid gray;
     float: left;
 }
 .Stack:hover{
@@ -37,7 +37,7 @@
     float:left;
     width: calc(70% - 2px);
     display: table;
-    /*border: 1px solid gray;*/
+    border: 1px solid gray;
 }
 .Heap:hover{
     border-color: #752921;
@@ -130,7 +130,21 @@
 .variable:hover > .deleteVariable {
     display:block;
 }
-
+.expandDiv{
+    bottom: -15px;
+    right: 50%;
+    position: absolute;
+    background: #752921;
+    border: 1px solid #000;
+    height: 14px;
+    line-height: 14px;
+    /*color: #4B1D15;*/
+    font-size: 14px;
+    color: white;
+    width: 8px;
+    padding: 0 1px;
+    display:block;
+}
 .addVarToFrame {
     bottom: -13px;
     right: 15px;
@@ -148,8 +162,8 @@
     .addVarToFrame a{
         line-height:12px;
     }
-    
-    
+
+
 .deleteVariable{
     height: 15px;
     width: 15px;
