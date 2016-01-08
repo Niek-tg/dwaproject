@@ -109,7 +109,7 @@ function openEditField(me) {
     assignValuesToEditFields(me);
 
     var divName = "#editWrapper";
-    if ($(divName + ":hidden")) $(divName).slideToggle();
+    if ($(divName).css("display", "none")) $(divName).slideToggle();
     lastEditedDiv = $(me);
 
 }
