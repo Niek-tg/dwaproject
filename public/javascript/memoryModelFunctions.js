@@ -65,17 +65,33 @@ var diagramContainer = '#diagramContainer';
 function addVarToFrame(frame) {
     highestID++;
 
+    var newVariableName = "myVar";
+    var newVariableValue = "myValue";
+    var newVariableType = "string";
+    var oldMmModel = currentMemoryModel;
+
     $(frame).append(
         "<div class='variable'>" +
-        "<div class='variableLabel'>name</div>" +
-        "<div id='" + highestID + "' class='variableValue'>value</div>" +
+        "<div class='variableLabel'>"+newVariableName+"</div>" +
+        "<div id='" + highestID + "' class='variableValue'>"+newVariableValue+"</div>" +
         "</div>");
+
+    console.log(frame);
 
     attachEventListeners();
 
-    // TODO ADD TO CURRENT MEMORY MODEL
+    var newVariable = {
+        id: highestID,
+        name: newVariableName,
+        value: newVariableValue,
+        type: newVariableType
+    };
 
-
+    lookForFrameOrVar(frame[0].id, function(indexList){
+        if(indexList.location == "heap")
+            currentMemoryModel.memoryModel.heaps[indexList.heapIndex][indexList.frameIndex].vars.push(newVariable);
+        else currentMemoryModel.memoryModel.stacks[indexList.stackIndex][indexList.frameIndex].vars.push(newVariable);
+    });
 
     percolatorSend({
         msgType: 'updateMemoryModel',
@@ -117,59 +133,24 @@ function assignValuesToEditFields(origin) {
 var updateValue = function () {
 
     var oldMmModel = currentMemoryModel;
-    var owner = currentMemoryModel.owner;
-    var language = currentMemoryModel.language;
 
     var newValue = $("#selectedInputField")[0].value;
     var newType = $("input:radio[name='type']:checked")[0].value;
 
-    var found = false;
-    var frameIndex = 0;
-    var elementIndex = 0;
-    var stackIndex = 0;
-    var heapIndex = 0;
-    currentMemoryModel.memoryModel.stacks.forEach(function (stack) {
+    console.log(newValue)
+    console.log(newType)
 
-        loop(stack, function () {
-            currentMemoryModel.memoryModel.stacks[stackIndex][frameIndex].vars[elementIndex].value = newValue;
-            currentMemoryModel.memoryModel.stacks[stackIndex][frameIndex].vars[elementIndex].type = newType;
-
-            //TODO ALS TYPE NULL OF UNDEFINED IS EN OUDE TYPE WAS RELATION, VERWIJDEREN UIT DE LIJST
-        });
-        stackIndex++;
+   lookForFrameOrVar(lastEditedDiv[0].id, function(indexList){
+        if(indexList.location == "heap"){
+            currentMemoryModel.memoryModel.heaps[indexList.heapIndex][indexList.frameIndex].vars[indexList.elementIndex].value = newValue;
+            currentMemoryModel.memoryModel.heaps[indexList.heapIndex][indexList.frameIndex].vars[indexList.elementIndex].type = newType;
+        } else{
+            currentMemoryModel.memoryModel.stacks[indexList.stackIndex][indexList.frameIndex].vars[indexList.elementIndex].value = newValue;
+            currentMemoryModel.memoryModel.stacks[indexList.stackIndex][indexList.frameIndex].vars[indexList.elementIndex].type = newType;
+        }
     });
 
-    if (!found) currentMemoryModel.memoryModel.heaps.forEach(function (heap) {
-        loop(heap, function () {
-            //console.log(heapIndex);
-            currentMemoryModel.memoryModel.heaps[heapIndex][frameIndex].vars[elementIndex].value = newValue;
-            currentMemoryModel.memoryModel.heaps[heapIndex][frameIndex].vars[elementIndex].type = newType;
-        });
-        heapIndex++;
-    });
-
-    function loop(location, cb) {
-        if (found) return true;
-        frameIndex = 0;
-        location.forEach(function (frame) {
-            elementIndex = 0;
-            if (found) return true;
-
-            frame.vars.forEach(function (element) {
-                if (found) return true;
-                if (element.id == lastEditedDiv[0].id) {
-                    found = true;
-                    cb();
-                    currentMemoryModel.owner = owner;
-                    currentMemoryModel.language = language;
-                }
-                elementIndex++;
-            });
-            frameIndex++;
-        });
-    }
-
-    if (found) {
+    if (!$.isEmptyObject(location)) {
         percolatorSend({
             msgType: 'updateMemoryModel',
             data: {newMemoryModel: currentMemoryModel, oldMemoryModel: oldMmModel}
@@ -178,6 +159,65 @@ var updateValue = function () {
         alert("NO RESULTS");
     }
 };
+
+
+function lookForFrameOrVar(idToFind, actionWhenFound){
+
+    var found = false;
+    var frameIndex = 0;
+    var elementIndex = 0;
+    var stackIndex = 0;
+    var heapIndex = 0;
+    var placeInModel;
+
+    var indexList = {};
+    function declareIndexList() {
+        if (placeInModel == "heap") indexList.heapIndex = heapIndex;
+        else indexList.stackIndex = stackIndex;
+        indexList.frameIndex = frameIndex;
+        indexList.location = placeInModel;
+        indexList.elementIndex = elementIndex;
+        found = true;
+
+        if(actionWhenFound)actionWhenFound(indexList);
+        return indexList;
+    }
+
+    currentMemoryModel.memoryModel.stacks.forEach(function (stack) {
+        if(!$.isEmptyObject(indexList))return null;
+        placeInModel = "stack";
+        loop(stack);
+        stackIndex++;
+    });
+
+    if (!found) currentMemoryModel.memoryModel.heaps.forEach(function (heap) {
+        if(!$.isEmptyObject(indexList)) return null;
+        placeInModel = "heap";
+        loop(heap);
+        heapIndex++;
+    });
+
+    function loop(location) {
+        if(!$.isEmptyObject(indexList)) return null;
+        frameIndex = 0;
+
+        location.forEach(function (frame) {
+            if(!$.isEmptyObject(indexList)) return null;
+            elementIndex = 0;
+            if(idToFind == frame.id) {
+                console.log("found!");
+                return declareIndexList();
+            }
+
+            frame.vars.forEach(function (element) {
+                if(idToFind == element.id) return declareIndexList();
+                elementIndex++;
+            });
+            frameIndex++;
+        });
+    }
+    return indexList;
+}
 
 
 /**
@@ -256,13 +296,6 @@ function setStackHeapHeight(){
 }
 
 function addNewMemoryModel(){
-
-    //var user = prompt("Please enter your name", "Memory model owner");
-    //if (person != null) {
-    //    document.getElementById("demo").innerHTML =
-    //        "Hello " + person + "! How are you today?";
-    //}
-
     var newMemoryModel = {
             'language': 'Javascript',
             'owner': 'Dick Curtis',
