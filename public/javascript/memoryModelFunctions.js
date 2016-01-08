@@ -737,7 +737,10 @@ function redrawPlumbing() {
         if (toggleEditingMode) common.endpoint = "Dot";
         else common.endpoint = "Blank";
 
-    jsPlumb.addEndpoint($('.frame'), common);
+    jsPlumb.deleteEveryEndpoint();
+    jsPlumb.removeAllEndpoints();
+    console.log(common);
+    jsPlumb.addEndpoint($('.Heap .frame'), common);
     jsPlumb.addEndpoint($('.variableValue'), common);
     relations.forEach(function (relation) {
 

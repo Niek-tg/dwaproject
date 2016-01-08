@@ -187,6 +187,6 @@
     display: block;
 }
 
-circle{
-    z-index:9999;
+svg {
+    z-index:50;
 }
