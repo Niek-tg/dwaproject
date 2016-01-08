@@ -498,6 +498,7 @@ function attachEventListeners() {
         var oldHeight = $('#'+ stackOrHeap)[0].clientHeight;
         var newHeight = oldHeight + 100;
         $('#'+ stackOrHeap).css("height", newHeight + "px");
+        setStackHeapHeight();
     }
 
     /**
