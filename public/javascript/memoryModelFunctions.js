@@ -262,7 +262,14 @@ function drawMemoryModel(memoryModel) {
     if(memoryModel.memoryModel.stacks || memoryModel.memoryModel.heaps)setClassStyle(memoryModel.memoryModel.stacks.length, memoryModel.memoryModel.heaps.length);
 
     setClassStyle(memoryModel.memoryModel.stacks.length, memoryModel.memoryModel.heaps.length);
-    
+
+    //var options = $("#stackDropDown");
+    var options = [];
+    memoryModel.memoryModel.stacks.forEach(function(item){
+        options.push('stack' + 1);
+    })
+    $("#stackDropDown").append(options);
+
     memoryModelLoaded = true;
     redrawPlumbing();
     attachEventListeners();
@@ -347,6 +354,29 @@ function addNewMemoryModel(){
         data: newMemoryModel
     });
 }
+
+
+/**
+ * create new stack or heap
+ */
+
+function addStackOrHeap(type){
+    var oldMem = currentMemoryModel;
+
+    if(type == "stack"){
+        currentMemoryModel.memoryModel.stacks.push([])
+        console.log('dit is een test met stacks' , currentMemoryModel.memoryModel.stacks)
+    }else{
+        currentMemoryModel.memoryModel.heaps.push([])
+        console.log('dit is een test met stacks' , currentMemoryModel.memoryModel.heaps)
+    }
+
+    percolatorSend({
+        msgType: 'updateMemoryModel',
+        data: {newMemoryModel: currentMemoryModel, oldMemoryModel: oldMem}
+    });
+}
+
 /**
  * Attaches all the eventlisteners to their corresponding divs or attributes
  */
@@ -392,11 +422,13 @@ function attachEventListeners() {
     $("#addNewStack").unbind('click');
     $('#addNewStack').click(function () {
         console.log("Komt in addNewStack");
+        addStackOrHeap('stack');
     });
 
     $("#addNewHeap").unbind('click');
     $('#addNewHeap').click(function () {
         console.log("Komt in addNewHeap");
+        addStackOrHeap('heap');
     });
 
     $("#addNewMemoryModel").unbind('click');

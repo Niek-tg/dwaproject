@@ -40,6 +40,7 @@ function chooseMemoryModel(id, prevVersion, undo) {
         if (typeof id !== "string") id = $(id).attr('data-value');
         firstTime = true;
     }
+
     percolatorSend({msgType: 'getModelById', id: id, version: version});
 }
 
