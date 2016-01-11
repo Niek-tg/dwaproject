@@ -312,17 +312,20 @@ function setStackHeapHeight(){
 }
 
 function addNewMemoryModel(){
+    var user = prompt("Please enter your name", "Memory model owner");
+    var memorymodelName = prompt("Please enter memorymodel name");
+    highestID ++;
     var newMemoryModel = {
-            'language': 'Javascript',
-            'owner': 'Dick Curtis',
-            'mmid': 6666,
-            'modelName': 'New MemoryModel',
-            'version': 0,
+        'language': 'Javascript',
+        'owner': user,
+        'mmid': 6666,
+        'modelName': memorymodelName,
+        'version': 0,
         "memoryModel": {
             "stacks": [
                 [
                     {
-                        "id": 1,
+                        "id": highestID,
                         "name": "Global",
                         "vars": []
                     }
@@ -331,22 +334,19 @@ function addNewMemoryModel(){
             "heaps": [
                 [
                     {
-                        "id": 6,
+                        "id": highestID,
                         "name": "Global",
                         "vars": []
                     }
-
                 ]
             ]
         }
     };
-
     percolatorSend({
         msgType: 'makeNewModel',
         data: newMemoryModel
     });
 }
-
 /**
  * Attaches all the eventlisteners to their corresponding divs or attributes
  */
