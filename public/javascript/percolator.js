@@ -51,21 +51,14 @@ function chooseMemoryModel(id, prevVersion, undo) {
  */
 function getMemoryModelById(memoryModel) {
 
-    currentMemoryModel = memoryModel;
-    frameIdEndPositions = [];
-    if (firstTime) highestVersion = currentMemoryModel.version;
+    if (firstTime) highestVersion = memoryModel.version;
 
     firstTime = false;
 
+    console.log(memoryModel)
+    drawMemoryModel(memoryModel);
     getVersionList(false, false);
     setModelInfo();
-
-    //console.log(currentMemoryModel.modelName + " ID = " + currentMemoryModel.id);
-    //console.log("CURRENTMEMORYMODEL= ");
-    //console.log(currentMemoryModel);
-    // SET MEMORY MODEL ON SCREEN
-
-    drawMemoryModel(currentMemoryModel);
     percolatorSend({msgType: "subscribeToChanges", data: {id: currentMemoryModel.id}});
 
 }
@@ -86,10 +79,9 @@ function setModelInfo() {
 function getVersionList(undo, addNewVersion) {
 
     if(addNewVersion){highestVersion ++;}
-
     if(undo){highestVersion --;}
 
-
+    console.log(currentMemoryModel)
     if(currentMemoryModel.version === highestVersion) $("#undoButton").css("display", "block");
     else $("#undoButton").css("display", "none");
 
