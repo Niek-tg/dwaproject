@@ -183,6 +183,23 @@ queries.subscribeToChanges = function (id, cb) {
 };
 
 /**
+ * Query to check if a model has changed
+ * @param cb Callback of this function
+ */
+
+queries.subscribeToAllModels = function (cb) {
+    getConnection(function (err, conn) {
+        if (err) return cb(err, null);
+        r.db('percolatordb')
+            .table('History')
+            .changes()
+            .run(conn, function (err, cursor) {
+                cb(err, cursor);
+            })
+    });
+};
+
+/**
  * Query to delete latest version of the memorymodel
  * @param mmid Memorymodel ID
  * @param version Memorymodel version
@@ -208,7 +225,7 @@ queries.deleteLatestversion = function (mmid, version, cb) {
  * @param version Memorymodel version
  * @param cb Callback of this function
  */
-queries.updateFramePositions = function (positions, mmid, version, cb) {
+queries.updateFrameLocations = function (positions, mmid, version, cb) {
     getConnection(function (err, conn) {
         if (err) return cb(err, null);
         r.db('percolatordb').table("History")

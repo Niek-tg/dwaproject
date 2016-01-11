@@ -5,11 +5,27 @@
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 
+#editWrapper{
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 75px;
+    display: none;
+    z-index: 9999;
+    background-color:#fff;
+    border-top: 2px solid #000;
+}
+#editWrapper div {
+    float:left;
+
+}
+
 .Stack {
     position: relative;
     display: table;
     width: calc(30% - 2px);
-    /*border: 1px solid gray;*/
+    border: 1px solid gray;
     float: left;
 }
 .Stack:hover{
@@ -21,7 +37,7 @@
     float:left;
     width: calc(70% - 2px);
     display: table;
-    /*border: 1px solid gray;*/
+    border: 1px solid gray;
 }
 .Heap:hover{
     border-color: #752921;
@@ -38,6 +54,10 @@
     max-width: 900px;
     width: calc(94% - 20px);
     border: 5px solid gray;
+    background: #fff;
+}
+.frame:hover{
+    z-index:10;
 }
 
 .frame:hover {
@@ -48,6 +68,23 @@
     left: 50%;
     text-align: center;
 }
+
+.frame:hover > .deleteFrame{
+    display: block;
+}
+.deleteFrame{
+    height: 15px;
+    width: 15px;
+    margin: 1px;
+    background-image: url("../images/deleteFrame.png");
+    background-size: 15px 15px;
+    background-repeat: no-repeat;
+    top: -1px;
+    right: -1px;
+    position: absolute;
+}
+
+
 .variable {
     position: relative;
     float: left;
@@ -88,4 +125,68 @@
 
 .variableValue p {
     font-size: 1.5vw;
+}
+.frame:hover > .addVarToFrame,
+.variable:hover > .deleteVariable {
+    display:block;
+}
+.expandDiv{
+    bottom: -15px;
+    right: 50%;
+    position: absolute;
+    background: #752921;
+    border: 1px solid #000;
+    height: 14px;
+    line-height: 14px;
+    /*color: #4B1D15;*/
+    font-size: 14px;
+    color: white;
+    width: 8px;
+    padding: 0 1px;
+    display:block;
+}
+.addVarToFrame {
+    bottom: -13px;
+    right: 15px;
+    position: absolute;
+    background: #FFF;
+    border: 1px solid #000;
+    height: 14px;
+    line-height: 14px;
+    color: #4B1D15;
+    font-size: 14px;
+    width: 8px;
+    padding: 0 1px;
+    display:none;
+}
+    .addVarToFrame a{
+        line-height:12px;
+    }
+
+
+.deleteVariable{
+    height: 15px;
+    width: 15px;
+    margin: 1px;
+    background-image: url("../images/deleteFrame.png");
+    background-size: 15px 15px;
+    background-repeat: no-repeat;
+    top: 5px;
+    right: 0px;
+    position: absolute;
+    display: block;
+}
+
+.deleteVar{
+    height: 15px;
+    width: 15px;
+    margin: 1px;
+    top: 5px;
+    right: 0px;
+    position: absolute;
+    display: block;
+}
+
+svg {
+    z-index:50;
 }

@@ -16,13 +16,17 @@ function messageHandlerClient(message){
     var data = JSON.parse(message.data);
     switch(data.msgType){
         case "newData":
+            console.log(data);
             updateMemoryModel(data);
+            break;
+        case "newAllModelsData":
+            percolatorSend({msgType: "getAllModels"});
             break;
         case "getAllModels":
             getMemoryModels(data.data);
             break;
         case "getModelById":
-            getMemmoryModelById(data.data);
+            getMemoryModelById(data.data);
             break;
         case "positionsUpdated":
             console.log(data.data);
@@ -37,6 +41,10 @@ function messageHandlerClient(message){
         case "removeLatestVersion":
             getVersionList(true, false);
             console.log('remove latest version');
+            break;
+        case "newMemoryModel":
+            console.log("ja hallooooooo");
+            //getMemoryModels(data.data);
             break;
         case "errorMsg":
             console.log(data.data);
