@@ -54,6 +54,7 @@ messageHandler.identifyMessage = function (message, websocket, webSocketServer) 
             break;
 
         case "updateMemoryModel":
+            console.log(message)
             messageHandler.updateMemoryModel(message, websocket, webSocketServer);
             break;
 
