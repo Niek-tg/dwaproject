@@ -209,17 +209,14 @@ function drawMemoryModel(memoryModel) {
 
 function addNewMemoryModel(){
 
-    //var user = prompt("Please enter your name", "Memory model owner");
-    //if (person != null) {
-    //    document.getElementById("demo").innerHTML =
-    //        "Hello " + person + "! How are you today?";
-    //}
+    var user = prompt("Please enter your name", "Memory model owner");
+    var memorymodelName = prompt("Please enter memorymodel name");
 
     var newMemoryModel = {
             'language': 'Javascript',
-            'owner': 'Dick Curtis',
+            'owner': user,
             'mmid': 6666,
-            'modelName': 'New MemoryModel',
+            'modelName': memorymodelName,
             'version': 0,
         "memoryModel": {
             "stacks": [
