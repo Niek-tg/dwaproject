@@ -68,7 +68,7 @@ var messageChanges = {
     'StackOrHeap': null,
     'indexStackOrHeap': null,
     'frameIndex': null,
-    'idComponent': null,
+    'indexComponent': null,
     'label': null,
     'value': null,
     'type': null
@@ -85,7 +85,7 @@ function emptyMessage() {
         'StackOrHeap': null,
         'indexStackOrHeap': null,
         'frameIndex': null,
-        'idComponent': null,
+        'indexComponent': null,
         'label': null,
         'value': null,
         'type': null
@@ -132,7 +132,7 @@ function addVarToFrame(frame) {
             frameOrHeap: null,
             indexStackOrHeap: null,
             frameIndex: null,
-            idComponent: highestID,
+            indexComponent: highestID,
             'label': newVariableName,
             'value': newVariableValue,
             'type': newVariableType
@@ -210,7 +210,7 @@ var updateValue = function () {
         messageChanges = {
             change: 'updateValue',
             idCurrentMemoryModel: currentMemoryModel.mmid,
-            idComponent: indexList.elementIndex,
+            indexComponent: indexList.elementIndex,
             'label': newName,
             'value': newValue,
             'type': newType
@@ -695,7 +695,7 @@ function addNewFrame(frameName, frameType) {
         change: 'addFrame',
         idCurrentMemoryModel: currentMemoryModel.mmid,
         frameOrHeap: frameType,
-        idComponent: highestID,
+        indexComponent: highestID,
         'label': frameName,
     };
 
@@ -758,7 +758,7 @@ function deleteFrameOrVar(id, isFrame) {
             messageChanges.frameOrHeap = 'heap';
             messageChanges.indexStackOrHeap = indexList.heapIndex;
             messageChanges.frameIndex = indexList.frameIndex;
-            messageChanges.idComponent = indexList.elementIndex;
+            messageChanges.indexComponent = indexList.elementIndex;
         }
         else {
             if (currentMemoryModel.memoryModel.stacks[indexList.stackIndex][indexList.frameIndex].vars.length != 0 && isFrame) return null;
@@ -769,7 +769,7 @@ function deleteFrameOrVar(id, isFrame) {
             messageChanges.frameOrHeap = 'stack';
             messageChanges.indexStackOrHeap = indexList.stackIndex;
             messageChanges.frameIndex = indexList.frameIndex;
-            messageChanges.idComponent = indexList.elementIndex;
+            messageChanges.indexComponent = indexList.elementIndex;
         }
     });
     percolatorSend({
