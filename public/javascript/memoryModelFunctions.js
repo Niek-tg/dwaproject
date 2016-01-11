@@ -632,7 +632,7 @@ function newReference(source, target) {
     }
 
 /**
- * Draws the connections between the frames and variables where needed.
+ * Draws the connections between the frames and variables where needed..
  */
 function redrawPlumbing() {
     
