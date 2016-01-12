@@ -510,6 +510,7 @@ function drawFramesOnLocation(location, model, frameLocations) {
     var identifier = 1;
     model.forEach(function (frames) {
         var html = "<div id='" + location + identifier + "' class='" + location + "'>" +
+            "<div><a onclick='deleteHeapOrStack($(this))' class='deleteHeapStacks'></a></div>" +
             "<div class='frameLabel'>" + location + "</div>" +
             "<div class='expandDiv'>" +
             "<a onclick='expandDiv($(this).parent().parent())'>+</a>" +
@@ -712,7 +713,7 @@ function deleteFrameOrVar(id, isFrame) {
     else {
         id = $(id).parent()[0];
     }
-    id = $(id)[0].id;
+    id = $(id)[0].id;x
 
     console.log($("#" + id));
 

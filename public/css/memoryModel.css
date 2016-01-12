@@ -83,7 +83,17 @@
     right: -1px;
     position: absolute;
 }
-
+.deleteHeapStack{
+    height: 15px;
+    width: 15px;
+    margin: 1px;
+    background-image: url("../images/deleteFrame.png");
+    background-size: 15px 15px;
+    background-repeat: no-repeat;
+    top: -1px;
+    right: -1px;
+    position: absolute;
+}
 
 .variable {
     position: relative;
@@ -167,6 +177,26 @@
     width:100px;
     display: block;
 }
+#heapDropDown{
+    border:1px solid red;
+}
+.select.heapDropDown{
+    border:1px solid red;
+
+}
+.deleteHeapStacks{
+    height: 15px;
+    width: 15px;
+    margin: 1px;
+    background-image: url("../images/deleteFrame.png");
+    background-size: 15px 15px;
+    background-repeat: no-repeat;
+    top: 2px;
+    right: 0px;
+    position: absolute;
+    display: block;
+}
+
 .deleteVariable{
     height: 15px;
     width: 15px;
@@ -174,7 +204,7 @@
     background-image: url("../images/deleteFrame.png");
     background-size: 15px 15px;
     background-repeat: no-repeat;
-    top: 5px;
+    top: 12px;
     right: 0px;
     position: absolute;
     display: block;
