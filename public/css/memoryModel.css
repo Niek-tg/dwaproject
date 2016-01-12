@@ -173,10 +173,15 @@
         line-height:12px;
     }
 
-#stackDropDown{
-    width:100px;
+.stackDropDown{
+    width:100%;
     display: block;
 }
+
+.heapDropDown{
+    width:100%;
+}
+
 .deleteVariable{
     height: 15px;
     width: 15px;

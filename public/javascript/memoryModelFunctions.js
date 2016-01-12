@@ -579,16 +579,7 @@ function drawVars(location, vars) {
         appendHtmlToLocation(location, html);
 
     });
-}
-            var html = "<div class='variable'>" +
-                "<div class='variableLabel'><p>" + variable.name + "</p></div>" +
-                "<div id='" + variable.id + "' class='variableValue'><p>" + value + "</p></div>" +
-                "<div class='deleteVar'><a onclick='deleteFrameOrVar($(this))' class='deleteVariable'></a></div>" +
-                "</div>"
-            appendHtmlToLocation(location, html);
-
-        });
-    }
+};
 
 /**
  * Looks of the variable is a pointer or a variable
