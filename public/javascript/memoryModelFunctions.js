@@ -265,8 +265,11 @@ function drawMemoryModel(memoryModel) {
 
     //var options = $("#stackDropDown");
     var options = [];
-    memoryModel.memoryModel.stacks.forEach(function(item){
-        options.push('stack' + 1);
+    var x = 0;
+    memoryModel.memoryModel.stacks.forEach(function(){
+        console.log('hoi hoi');
+        x ++;
+        options.push('stack' + x);
     })
     $("#stackDropDown").append(options);
 
