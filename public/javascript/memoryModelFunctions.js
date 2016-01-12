@@ -262,7 +262,17 @@ function drawMemoryModel(memoryModel) {
     if(memoryModel.memoryModel.stacks || memoryModel.memoryModel.heaps)setClassStyle(memoryModel.memoryModel.stacks.length, memoryModel.memoryModel.heaps.length);
 
     setClassStyle(memoryModel.memoryModel.stacks.length, memoryModel.memoryModel.heaps.length);
-    
+
+    //var options = $("#stackDropDown");
+    var options = [];
+    var x = 0;
+    memoryModel.memoryModel.stacks.forEach(function(){
+        console.log('hoi hoi');
+        x ++;
+        options.push('stack' + x);
+    })
+    $("#stackDropDown").append(options);
+
     memoryModelLoaded = true;
     redrawPlumbing();
     attachEventListeners();
@@ -312,17 +322,20 @@ function setStackHeapHeight(){
 }
 
 function addNewMemoryModel(){
+    var user = prompt("Please enter your name", "Memory model owner");
+    var memorymodelName = prompt("Please enter memorymodel name");
+    highestID ++;
     var newMemoryModel = {
-            'language': 'Javascript',
-            'owner': 'Dick Curtis',
-            'mmid': 6666,
-            'modelName': 'New MemoryModel',
-            'version': 0,
+        'language': 'Javascript',
+        'owner': user,
+        'mmid': 6666,
+        'modelName': memorymodelName,
+        'version': 0,
         "memoryModel": {
             "stacks": [
                 [
                     {
-                        "id": 1,
+                        "id": highestID,
                         "name": "Global",
                         "vars": []
                     }
@@ -331,19 +344,39 @@ function addNewMemoryModel(){
             "heaps": [
                 [
                     {
-                        "id": 6,
+                        "id": highestID,
                         "name": "Global",
                         "vars": []
                     }
-
                 ]
             ]
         }
     };
-
     percolatorSend({
         msgType: 'makeNewModel',
         data: newMemoryModel
+    });
+}
+
+
+/**
+ * create new stack or heap
+ */
+
+function addStackOrHeap(type){
+    var oldMem = currentMemoryModel;
+
+    if(type == "stack"){
+        currentMemoryModel.memoryModel.stacks.push([])
+        console.log('dit is een test met stacks' , currentMemoryModel.memoryModel.stacks)
+    }else{
+        currentMemoryModel.memoryModel.heaps.push([])
+        console.log('dit is een test met stacks' , currentMemoryModel.memoryModel.heaps)
+    }
+
+    percolatorSend({
+        msgType: 'updateMemoryModel',
+        data: {newMemoryModel: currentMemoryModel, oldMemoryModel: oldMem}
     });
 }
 
@@ -392,11 +425,13 @@ function attachEventListeners() {
     $("#addNewStack").unbind('click');
     $('#addNewStack').click(function () {
         console.log("Komt in addNewStack");
+        addStackOrHeap('stack');
     });
 
     $("#addNewHeap").unbind('click');
     $('#addNewHeap').click(function () {
         console.log("Komt in addNewHeap");
+        addStackOrHeap('heap');
     });
 
     $("#addNewMemoryModel").unbind('click');

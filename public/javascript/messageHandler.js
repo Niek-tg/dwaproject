@@ -43,7 +43,7 @@ function messageHandlerClient(message){
             console.log('remove latest version');
             break;
         case "newMemoryModel":
-            console.log("ja hallooooooo");
+            //console.log("ja hallooooooo");
             //getMemoryModels(data.data);
             break;
         case "errorMsg":
