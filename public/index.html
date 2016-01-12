@@ -24,20 +24,8 @@
         <div id="logo" class="col-md-3 col-sm-3">
             <img src="./images/lg_percolator.png" class="img-responsive" alt="Responsive image">
         </div>
-        <!-- Buttons to edit the memory model -->
-        <!--<div class="col-md-2 viewButtons">-->
-        <!--<div id="newFrameButtons" class="newFrameButtons">-->
-
-            <!--&lt;!&ndash;<button id="addNewMemoryModel">New MemoryModel</button>&ndash;&gt;-->
-            <!--<button id="addNewStack">add Stack</button>-->
-            <!--<button id="addNewHeap">add Heap</button>-->
-        <!--</div>-->
-
 
         <div class="col-md-offset-10 col-md-2 viewButtons">
-            <!--<button id="addReference">toggle references</button>-->
-
-            <!-- Both diagram end json editor states are toggled so the server know if one is in use-->
             <button onclick="enableCodeView(); changeDiagramState(); activeJsonEditorState()" title="Code view"><img
                     src="./images/code_icon.png">Code view
             </button>
@@ -47,13 +35,14 @@
             <button id="addReference">toggle references</button>
             <button id="addNewMemoryModel">New MemoryModel</button>
         </div>
-        <div class="col-md-2 viewButtons">
-        </div>
+
         <div class="col-md-2 viewButtons">
             <div>
                 <button id="addNewHeap">Add Heap</button>
                 <button id="addNewHeapFrame">add heapframe</button>
+
                 <input type="text" id='heapLabel' value="heap name">
+
                 <select class="heapDropDown">
                     <option id="heapDropDown"></option>
                 </select>
@@ -63,9 +52,10 @@
         <div class="col-md-2 viewButtons">
             <div>
                 <button id="addNewStack">Add Stack</button>
-
                 <button id="addNewStackFrame">add stackframe</button>
+
                 <input type="text" id='frameLabel' value="frame name">
+
                 <select class="stackDropDown">
                     <option id="stackDropDown"></option>
                 </select>
@@ -87,14 +77,12 @@
     <!--List of all memorymodels-->
     <div id="allMemoryModels" class="col-md-2 col-sm-2">
         <div class="togglable">
-            <button onclick="toggleActive(this)" class="toggleButton right"><img src="./images/close-icon.png"
-                                                                                 alt="close"/></button>
+            <button onclick="toggleActive(this)" class="toggleButton right">
+                <img src="./images/close-icon.png" alt="close"/></button>
         </div>
 
         <div class="rotate270 rotatedTextPositioning all">All memory models</div>
-
         <ul class="list-group" id="memoryModelsList"></ul>
-
     </div>
 
     <!--List of the memory versions-->
@@ -115,10 +103,7 @@
 
     <!-- Memorymodel-->
     <div id="memoryModel" class="col-md-8 col-sm-8">
-        <div id="diagramContainer">
-
-
-        </div>
+        <div id="diagramContainer"></div>
     </div>
 
 
