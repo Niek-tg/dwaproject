@@ -250,6 +250,8 @@ function drawMemoryModel(memoryModel) {
 
     $(diagramContainer).children().remove(); //remove old frames, if they exist
     relations = [];
+    console.log(memoryModel);
+    console.log(currentMemoryModel);
     if (currentMemoryModel) {
         var owner = currentMemoryModel.owner;
         var language = currentMemoryModel.language;
@@ -615,16 +617,29 @@ function determineVar(variable) {
  * Updates the memory model. Redraws the entire memory model and the relations
  * @param data Data containing the memory model that has to be drawn
  */
+
+
 function updateMemoryModel(data) {
     if (data.data.new_val) {
         if (data.data.new_val.version > currentMemoryModel.version) {
-            drawMemoryModel(data.data.new_val);
+
+            var changes = [];
+            console.log("updaten memoryModel");
+            DeepDiff.observableDiff(currentMemoryModel, data.data.new_val, function (d) {
+                if (d.path.join('.') !== 'language' && d.path.join('.') !== 'owner') {
+                    changes.push(d);
+                    DeepDiff.applyChange(currentMemoryModel, data.data.new_val, d);
+                }
+            });
+
+            console.log("changes are", changes);
+            drawMemoryModel(currentMemoryModel);
             getVersionList(false, true);
             setModelInfo();
             updateJSONEditor();
 
         }
-        else drawMemoryModel(data.data.new_val);
+        else drawMemoryModel(currentMemoryModel);
     }
 }
 
@@ -660,6 +675,11 @@ var updatePositionFrames = function (frameId) {
     });
 };
 
+
+function copyObject(model){
+    return JSON.parse(JSON.stringify(model));
+}
+
 /**
  * When a memort model is selected en a new frame is added (heap or stack), a message wil be send to the server by websocket.
  * @param frameName is the Name of the frame
@@ -669,6 +689,8 @@ function addNewFrame(frameName, frameType) {
     highestID++;
     var selectedStack = $(".stackDropDown option:selected").val();
     var selectedHeap = $(".heapDropDown option:selected").val();
+
+    var oldMemoryModel = copyObject(currentMemoryModel);
 
     var newFrame = {
         "id": highestID,
@@ -699,7 +721,7 @@ function addNewFrame(frameName, frameType) {
 
         percolatorSend({
             msgType: 'updateMemoryModel',
-            data: {newMemoryModel: currentMemoryModel, oldMemoryModel: currentMemoryModel}
+            data: {newMemoryModel: currentMemoryModel, oldMemoryModel: oldMemoryModel}
         });
     }
     else {
@@ -711,7 +733,7 @@ function addNewFrame(frameName, frameType) {
 //TODO delete connections or variables
 
 function deleteFrameOrVar(id, isFrame) {
-    var obj = currentMemoryModel;
+    var obj = copyObject(currentMemoryModel);
     if (!isFrame) {
         id = $(id).parent().parent().children()[1];
     }
