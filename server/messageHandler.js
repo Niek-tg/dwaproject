@@ -98,7 +98,6 @@ messageHandler.subscribeToChanges = function (message, websocket) {
                 delete row.old_val.version;
 
                 var changes = changeHandler.checkForChanges(row.new_val, row.old_val);
-                console.log("changes ", changes);
                 websocket.send(JSON.stringify({msgType: "newData", data: changes}))
             }
         );
@@ -138,7 +137,6 @@ messageHandler.unsubscribeToChanges = function (websocket) {
  * @param websocket
  */
 messageHandler.getAllMemoryModels = function (message, websocket) {
-    console.log("Hij komt in getAllMemoryModels");
 
     queries.getAll(function (err, result) {
         if (err) return websocket.send(JSON.stringify({msgType: "errorMsg", data: err}));

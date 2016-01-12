@@ -17,6 +17,7 @@ function checkForChanges(newModel, oldModel){
     pendingChangeList = [];
 
     var diffs = diff(oldModel, newModel);
+    console.log('changes zijn' , diffs);
     if(diffs) diffs.forEach(function(diff){
         pendingChangeList.push(diff);
     });

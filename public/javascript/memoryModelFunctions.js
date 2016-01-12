@@ -93,6 +93,11 @@ function addVarToFrame(frame) {
         else currentMemoryModel.memoryModel.stacks[indexList.stackIndex][indexList.frameIndex].vars.push(newVariable);
     });
 
+    console.log({
+        newMemoryModel: currentMemoryModel.memoryModel.stacks,
+        oldMemoryModel: oldMmModel.memoryModel.stacks
+    });
+
     percolatorSend({
         msgType: 'updateMemoryModel',
         data: {newMemoryModel: currentMemoryModel, oldMemoryModel: oldMmModel}
@@ -592,7 +597,6 @@ function updateMemoryModel(data) {
                     vars = true;
                 }
 
-                //if(location == "frameLocations") currentMemoryModel.frameLocations[placeInModel][frameIndex] = newVal
                 if(modelLocation != "frameLocations" && vars) currentMemoryModel[modelLocation][location][placeInModel][frameIndex].vars[elementIndex][attribute] = newVal;
                 else currentMemoryModel.frameLocations[frameIndex][elementIndex] = newVal;
 
@@ -602,7 +606,37 @@ function updateMemoryModel(data) {
                 else currentMemoryModel.memoryModel[location][placeInModel].splice(frameIndex, 1);
             break;
             case "A": // Change in array
+                modelLocation = change.path[0];
+                if(modelLocation == "frameLocations") {
+                    currentMemoryModel.frameLocations.push(change.item.rhs);
+                } else {
+                    console.log(change.item.kind);
+                    switch (change.item.kind) {
+                        case "N":
+                            modelLocation = change.path[0];
+                            location = change.path[1];
+                            placeInModel = change.path[2];
+                            frameIndex = change.path[3];
+                            vars = change.path[4];
 
+                            currentMemoryModel[modelLocation][location][placeInModel][frameIndex][vars].push(change.kind.rhs);
+                         break;
+                        case "D":
+                            console.log(change.item);
+                            modelLocation = change.path[0];
+                            location = change.path[1];
+                            placeInModel = change.path[2];
+                            frameIndex = change.path[3];
+                            vars = change.path[4];
+                            if(placeInModel) vars = true;
+
+                            if(vars) currentMemoryModel[modelLocation][location][placeInModel][frameIndex][vars].splice(change.index, 1);
+                            else currentMemoryModel[modelLocation][location][placeInModel].splice(change.index, 1);
+                            break;
+
+                    }
+
+                }
             break;
             case "N": // New
                 newVal = change.rhs;
