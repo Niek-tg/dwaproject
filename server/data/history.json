@@ -2,7 +2,7 @@
   {
     "mmid": "92524038-f0e2-4db2-ad01-321a9040df02",
     "modelName": "Mijn geheugenmodel",
-    "version": 1,
+    "version": 2,
     "frameLocations": [],
     "memoryModel": {
       "stacks": [
@@ -12,28 +12,29 @@
             "name": "Global",
             "vars": [
               {
-                "id": 2,
+
                 "name": "Family",
                 "value": 7,
-                "type": "reference"
+                "type": "reference",
+                "id": 2
               },
               {
-                "id": 3,
                 "name": "nullVar",
                 "value": null,
-                "type": "null"
+                "type": "null",
+                "id": 3
               },
               {
-                "id": 4,
                 "name": "undefinedVar",
                 "value": "undefined",
-                "type": "undefined"
+                "type": "undefined",
+                "id": 4
               },
               {
-                "id": 5,
                 "name": "Person",
                 "value": 16,
-                "type": "reference"
+                "type": "reference",
+                "id": 5
               }
             ]
           },
@@ -42,16 +43,16 @@
             "name": "setAge",
             "vars": [
               {
-                "id": 33,
                 "name": "age",
                 "value": "25",
-                "type": "number"
+                "type": "number",
+                "id": 33
               },
               {
-                "id": 34,
                 "name": "this",
                 "value": 27,
-                "type": "reference"
+                "type": "reference",
+                "id": 34
               }
             ]
           }
@@ -64,22 +65,22 @@
             "name": null,
             "vars": [
               {
-                "id": 7,
                 "name": "0",
                 "value": 8,
-                "type": "reference"
+                "type": "reference",
+                "id": 7
               },
               {
-                "id": 200,
                 "name": "1",
                 "value": 23,
-                "type": "reference"
+                "type": "reference",
+                "id": 200
               },
               {
-                "id": 120,
                 "name": "2",
                 "value": 27,
-                "type": "reference"
+                "type": "reference",
+                "id": 120
               }
             ]
           },
@@ -88,22 +89,22 @@
             "name": null,
             "vars": [
               {
-                "id": 9,
                 "name": "Name",
                 "value": "Harry",
-                "type": "string"
+                "type": "string",
+                "id": 9
               },
               {
-                "id": 10,
                 "name": "age",
                 "value": "96",
-                "type": "number"
+                "type": "number",
+                "id": 10
               },
               {
-                "id": 11,
                 "name": "__proto__",
                 "value": "[Object]",
-                "type": "string"
+                "type": "string",
+                "id": 11
               }
             ]
           },
@@ -112,10 +113,10 @@
             "name": null,
             "vars": [
               {
-                "id": 13,
                 "name": "__proto__",
                 "value": "[Function]",
-                "type": "string"
+                "type": "string",
+                "id": 13
               }
             ]
           },
@@ -124,10 +125,10 @@
             "name": null,
             "vars": [
               {
-                "id": 15,
                 "name": "__proto__",
                 "value": "[Function]",
-                "type": "string"
+                "type": "string",
+                "id": 15
               }
             ]
           },
@@ -136,40 +137,40 @@
             "name": null,
             "vars": [
               {
-                "id": 17,
                 "name": "Name",
                 "value": "undefined",
-                "type": "undefined"
+                "type": "undefined",
+                "id": 17
               },
               {
-                "id": 18,
                 "name": "Age",
                 "value": "undefined",
-                "type": "undefined"
+                "type": "undefined",
+                "id": 18
               },
               {
-                "id": 19,
                 "name": "__proto__",
                 "value": "[Function]",
-                "type": "string"
+                "type": "string",
+                "id": 19
               },
               {
-                "id": 20,
                 "name": "prototype",
                 "value": 31,
-                "type": "reference"
+                "type": "reference",
+                "id": 20
               },
               {
-                "id": 21,
                 "name": "setName",
                 "value": 12,
-                "type": "reference"
+                "type": "reference",
+                "id": 21
               },
               {
-                "id": 22,
                 "name": "setAge",
                 "value": 14,
-                "type": "reference"
+                "type": "reference",
+                "id": 22
               }
             ]
           },
@@ -178,22 +179,22 @@
             "name": null,
             "vars": [
               {
-                "id": 24,
                 "name": "Name",
                 "value": "Jane",
-                "type": "string"
+                "type": "string",
+                "id": 24
               },
               {
-                "id": 25,
                 "name": "Age",
                 "value": "50",
-                "type": "number"
+                "type": "number",
+                "id": 25
               },
               {
-                "id": 26,
                 "name": "__proto__",
                 "value": 31,
-                "type": "reference"
+                "type": "reference",
+                "id": 26
               }
             ]
           },
@@ -202,22 +203,22 @@
             "name": null,
             "vars": [
               {
-                "id": 28,
                 "name": "Name",
                 "value": "Shaun",
-                "type": "string"
+                "type": "string",
+                "id": 28
               },
               {
-                "id": 29,
                 "name": "Age",
                 "value": "undefined",
-                "type": "undefined"
+                "type": "undefined",
+                "id": 29
               },
               {
-                "id": 30,
                 "name": "__proto__",
                 "value": 31,
-                "type": "reference"
+                "type": "reference",
+                "id": 30
               }
             ]
           },
@@ -226,10 +227,10 @@
             "name": null,
             "vars": [
               {
-                "id": 32,
                 "name": "__proto__",
                 "value": "[Object]",
-                "type": "string"
+                "type": "string",
+                "id": 32
               }
             ]
           }
@@ -240,7 +241,7 @@
   {
     "mmid": "92524038-f0e2-4db2-ad01-321a9040df02",
     "modelName": "Mijn tweede geheugenmodel",
-    "version": 2,
+    "version": 1,
     "frameLocations": [],
     "memoryModel": {
       "stacks": [

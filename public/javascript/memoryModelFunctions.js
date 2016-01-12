@@ -69,6 +69,7 @@ function addVarToFrame(frame) {
     var newVariableValue = "myValue";
     var newVariableType = "string";
     var oldMmModel = copyObject(currentMemoryModel);
+    var tempMM = copyObject(currentMemoryModel);
 
     $(frame).append(
         "<div class='variable'>" +
@@ -89,18 +90,18 @@ function addVarToFrame(frame) {
 
     lookForFrameOrVar(frame[0].id, function (indexList) {
         if (indexList.location == "heap")
-            currentMemoryModel.memoryModel.heaps[indexList.heapIndex][indexList.frameIndex].vars.push(newVariable);
-        else currentMemoryModel.memoryModel.stacks[indexList.stackIndex][indexList.frameIndex].vars.push(newVariable);
+            tempMM.memoryModel.heaps[indexList.heapIndex][indexList.frameIndex].vars.push(newVariable);
+        else tempMM.memoryModel.stacks[indexList.stackIndex][indexList.frameIndex].vars.push(newVariable);
     });
 
     console.log({
-        newMemoryModel: currentMemoryModel.memoryModel.stacks,
+        newMemoryModel: tempMM.memoryModel.stacks,
         oldMemoryModel: oldMmModel.memoryModel.stacks
     });
 
     percolatorSend({
         msgType: 'updateMemoryModel',
-        data: {newMemoryModel: currentMemoryModel, oldMemoryModel: oldMmModel}
+        data: {newMemoryModel: tempMM, oldMemoryModel: oldMmModel}
     });
 
 
@@ -150,8 +151,9 @@ function assignValuesToEditFields(origin) {
 var updateValue = function () {
 
     var oldMmModel = copyObject(currentMemoryModel);
+    var tempMM = copyObject(currentMemoryModel);
 
-    console.log(currentMemoryModel);
+    console.log(tempMM);
     var newValue = $("#selectedInputField")[0].value;
     var newName = $("#selectedNameField")[0].value;
     var newType = $("input:radio[name='type']:checked")[0].value;
@@ -163,21 +165,21 @@ var updateValue = function () {
     var idToFind = $(lastEditedDiv).children()[1].id;
     lookForFrameOrVar(idToFind, function (indexList) {
         if (indexList.location == "heap") {
-            currentMemoryModel.memoryModel.heaps[indexList.heapIndex][indexList.frameIndex].vars[indexList.elementIndex].value = newValue;
-            currentMemoryModel.memoryModel.heaps[indexList.heapIndex][indexList.frameIndex].vars[indexList.elementIndex].type = newType;
-            currentMemoryModel.memoryModel.heaps[indexList.heapIndex][indexList.frameIndex].vars[indexList.elementIndex].name = newName;
+            tempMM.memoryModel.heaps[indexList.heapIndex][indexList.frameIndex].vars[indexList.elementIndex].value = newValue;
+            tempMM.memoryModel.heaps[indexList.heapIndex][indexList.frameIndex].vars[indexList.elementIndex].type = newType;
+            tempMM.memoryModel.heaps[indexList.heapIndex][indexList.frameIndex].vars[indexList.elementIndex].name = newName;
         } else {
-            currentMemoryModel.memoryModel.stacks[indexList.stackIndex][indexList.frameIndex].vars[indexList.elementIndex].value = newValue;
-            currentMemoryModel.memoryModel.stacks[indexList.stackIndex][indexList.frameIndex].vars[indexList.elementIndex].type = newType;
-            currentMemoryModel.memoryModel.stacks[indexList.stackIndex][indexList.frameIndex].vars[indexList.elementIndex].name = newName;
+            tempMM.memoryModel.stacks[indexList.stackIndex][indexList.frameIndex].vars[indexList.elementIndex].value = newValue;
+            tempMM.memoryModel.stacks[indexList.stackIndex][indexList.frameIndex].vars[indexList.elementIndex].type = newType;
+            tempMM.memoryModel.stacks[indexList.stackIndex][indexList.frameIndex].vars[indexList.elementIndex].name = newName;
         }
     });
 
     if (!$.isEmptyObject(location)) {
-        console.log(currentMemoryModel);
+        console.log(tempMM);
         percolatorSend({
             msgType: 'updateMemoryModel',
-            data: {newMemoryModel: currentMemoryModel, oldMemoryModel: oldMmModel}
+            data: {newMemoryModel: tempMM, oldMemoryModel: oldMmModel}
         });
     } else {
         alert("NO RESULTS");
@@ -481,6 +483,7 @@ function drawFramesOnLocation(location, model, frameLocations) {
         appendHtmlToLocation(diagramContainer, html);
 
         frames.forEach(function (item) {
+
             var top = 0;
             var left = 0;
             var name = (item.name) ? item.name : "";
@@ -544,27 +547,30 @@ function drawVars(location, vars) {
  * @returns {String|Number} value to be drawn inside the variable or function
  */
 function determineVar(variable) {
+    if (variable){
 
-    if (highestID < variable.id) highestID = variable.id;
+        if(highestID < variable.id) highestID = variable.id;
 
-    switch (variable.type) {
-        case "reference":
-            relations.push({source: variable.id, target: variable.value});
-            return "";
-            break;
-        case "undefined":
-            return "undefined";
-            break;
-        case "string":
-            return '"' + variable.value + '"';
-            break;
-        case "number":
-            return variable.value;
-            break;
-        default:
-            return "null";
-            break;
+        switch (variable.type) {
+            case "reference":
+                relations.push({source: variable.id, target: variable.value});
+                return "";
+                break;
+            case "undefined":
+                return "undefined";
+                break;
+            case "string":
+                return '"' + variable.value + '"';
+                break;
+            case "number":
+                return variable.value;
+                break;
+            default:
+                return "null";
+                break;
     }
+    }
+
 }
 
 /**
@@ -585,21 +591,43 @@ function updateMemoryModel(data) {
                 newVal = change.rhs;
                 modelLocation = change.path[0];
                 location = change.path[1];
-                if(modelLocation == "frameLocations"){
-                    frameIndex = change.path[1];
-                    elementIndex = change.path[2];
+                if(change.path[4] !== "id") {
+                    if (modelLocation == "frameLocations") {
+                        frameIndex = change.path[1];
+                        elementIndex = change.path[2];
 
-                } else{
-                    placeInModel = change.path[2];
-                    frameIndex = change.path[3];
-                    elementIndex = change.path[5];
-                    attribute = change.path[6];
-                    vars = true;
+                    } else {
+                        placeInModel = change.path[2];
+                        frameIndex = change.path[3];
+                        //elementIndex = change.index;
+                        console.log("CHECK THIS FOR LOGGING");
+                        console.log(modelLocation);
+                        console.log(location);
+                        console.log(placeInModel);
+                        console.log(frameIndex);
+                        console.log(elementIndex);
+                        //if(change.path[4] === "id"){
+                        //    console.log('IS A ID !!!!!');
+                        //    break;
+                        //    //elementIndex = currentMemoryModel[modelLocation][location][placeInModel].indexOf(change.lhs);
+                        //    //console.log( currentMemoryModel[modelLocation][location][placeInModel]);
+                        //    //console.log(elementIndex);
+                        //    //currentMemoryModel[modelLocation][location][placeInModel].splice(elementIndex, 1);
+                        //}
+
+                        elementIndex = change.path[5];
+                        attribute = change.path[6];
+                        vars = true;
+
+                    }
+
+                    if (modelLocation != "frameLocations" && vars) currentMemoryModel[modelLocation][location][placeInModel][frameIndex].vars[elementIndex][attribute] = newVal;
+                    else currentMemoryModel.frameLocations[frameIndex][elementIndex] = newVal;
+
                 }
-
-                if(modelLocation != "frameLocations" && vars) currentMemoryModel[modelLocation][location][placeInModel][frameIndex].vars[elementIndex][attribute] = newVal;
-                else currentMemoryModel.frameLocations[frameIndex][elementIndex] = newVal;
-
+                else{
+                    console.log('IS A ID !!!!!');
+                }
                 break;
             case "D": // Deleted
                 if(vars) currentMemoryModel.memoryModel[location][placeInModel][frameIndex].vars.splice(elementIndex, 1);
@@ -718,6 +746,7 @@ function addNewFrame(frameName, frameType) {
     highestID++;
 
     var oldMemoryModel = copyObject(currentMemoryModel);
+    var tempMM = copyObject(currentMemoryModel);
 
     var newFrame = {
         "id": highestID,
@@ -727,24 +756,24 @@ function addNewFrame(frameName, frameType) {
 
     if (memoryModelLoaded) {
         if (frameType == 'stack') {
-            var postitionStackFrame = currentMemoryModel.memoryModel.stacks[0].length;
-            currentMemoryModel.memoryModel.stacks[0][postitionStackFrame] = newFrame;
+            var postitionStackFrame = tempMM.memoryModel.stacks[0].length;
+            tempMM.memoryModel.stacks[0][postitionStackFrame] = newFrame;
         }
 
         if (frameType == 'heap') {
-            var postitionHeapsFrame = currentMemoryModel.memoryModel.heaps[0].length;
-            currentMemoryModel.memoryModel.heaps[0][postitionHeapsFrame] = newFrame;
+            var postitionHeapsFrame = tempMM.memoryModel.heaps[0].length;
+            tempMM.memoryModel.heaps[0][postitionHeapsFrame] = newFrame;
         }
 
 
         console.log({
             msgType: 'updateMemoryModel',
-            data: {newMemoryModel: currentMemoryModel, oldMemoryModel: oldMemoryModel}
+            data: {newMemoryModel: tempMM, oldMemoryModel: oldMemoryModel}
         });
 
         percolatorSend({
             msgType: 'updateMemoryModel',
-            data: {newMemoryModel: currentMemoryModel, oldMemoryModel: oldMemoryModel}
+            data: {newMemoryModel: tempMM, oldMemoryModel: oldMemoryModel}
         });
     }
     else {
@@ -757,6 +786,7 @@ function addNewFrame(frameName, frameType) {
 
 function deleteFrameOrVar(id, isFrame) {
     var obj = copyObject(currentMemoryModel);
+    var tempMM = copyObject(currentMemoryModel);
     if (!isFrame) {
         id = $(id).parent().parent().children()[1];
     }
@@ -768,22 +798,22 @@ function deleteFrameOrVar(id, isFrame) {
     lookForFrameOrVar(id, function (indexList) {
 
         if (indexList.location == "heap") {
-            if (currentMemoryModel.memoryModel.heaps[indexList.heapIndex][indexList.frameIndex].vars.length != 0 && isFrame) return null;
+            if (tempMM.memoryModel.heaps[indexList.heapIndex][indexList.frameIndex].vars.length != 0 && isFrame) return null;
 
-            if (!isFrame) currentMemoryModel.memoryModel.heaps[indexList.heapIndex][indexList.frameIndex].vars.splice(indexList.elementIndex, 1);
-            else currentMemoryModel.memoryModel.heaps[indexList.heapIndex].splice(indexList.frameIndex, 1);
+            if (!isFrame) tempMM.memoryModel.heaps[indexList.heapIndex][indexList.frameIndex].vars.splice(indexList.elementIndex, 1);
+            else tempMM.memoryModel.heaps[indexList.heapIndex].splice(indexList.frameIndex, 1);
         }
         else {
-            if (currentMemoryModel.memoryModel.stacks[indexList.stackIndex][indexList.frameIndex].vars.length != 0 && isFrame) return null;
+            if (tempMM.memoryModel.stacks[indexList.stackIndex][indexList.frameIndex].vars.length != 0 && isFrame) return null;
 
-            if (!isFrame) currentMemoryModel.memoryModel.stacks[indexList.stackIndex][indexList.frameIndex].vars.splice(indexList.elementIndex, 1);
-            else currentMemoryModel.memoryModel.stacks[indexList.stackIndex].splice(indexList.frameIndex, 1);
+            if (!isFrame) tempMM.memoryModel.stacks[indexList.stackIndex][indexList.frameIndex].vars.splice(indexList.elementIndex, 1);
+            else tempMM.memoryModel.stacks[indexList.stackIndex].splice(indexList.frameIndex, 1);
         }
     });
 
     percolatorSend({
         msgType: 'updateMemoryModel',
-        data: {newMemoryModel: currentMemoryModel, oldMemoryModel: obj}
+        data: {newMemoryModel: tempMM, oldMemoryModel: obj}
     });
 }
 
