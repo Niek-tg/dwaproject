@@ -21,6 +21,15 @@
 
 }
 
+#diagramContainer:after,
+.Stack:after,
+.Heap:after
+{
+    content:'';
+    display:block;
+    clear: both;
+}
+
 .Stack {
     position: relative;
     display: table;
@@ -55,6 +64,7 @@
     width: calc(94% - 20px);
     border: 5px solid gray;
     background: #fff;
+    margin-top: 30px;
 }
 .frame:hover{
     z-index:10;
@@ -73,17 +83,6 @@
     display: block;
 }
 .deleteFrame{
-    height: 15px;
-    width: 15px;
-    margin: 1px;
-    background-image: url("../images/deleteFrame.png");
-    background-size: 15px 15px;
-    background-repeat: no-repeat;
-    top: -1px;
-    right: -1px;
-    position: absolute;
-}
-.deleteHeapStack{
     height: 15px;
     width: 15px;
     margin: 1px;
@@ -173,28 +172,13 @@
         line-height:12px;
     }
 
-#stackDropDown{
-    width:100px;
+.stackDropDown{
+    width:100%;
     display: block;
 }
-#heapDropDown{
-    border:1px solid red;
-}
-.select.heapDropDown{
-    border:1px solid red;
 
-}
-.deleteHeapStacks{
-    height: 15px;
-    width: 15px;
-    margin: 1px;
-    background-image: url("../images/deleteFrame.png");
-    background-size: 15px 15px;
-    background-repeat: no-repeat;
-    top: 2px;
-    right: 0px;
-    position: absolute;
-    display: block;
+.heapDropDown{
+    width:100%;
 }
 
 .deleteVariable{
@@ -204,7 +188,7 @@
     background-image: url("../images/deleteFrame.png");
     background-size: 15px 15px;
     background-repeat: no-repeat;
-    top: 12px;
+    top: 5px;
     right: 0px;
     position: absolute;
     display: block;

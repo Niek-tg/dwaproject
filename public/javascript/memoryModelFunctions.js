@@ -181,7 +181,6 @@ function lookForFrameOrVar(idToFind, actionWhenFound) {
     var placeInModel;
 
     var indexList = {};
-
     function declareIndexList() {
         if (placeInModel == "heap") indexList.heapIndex = heapIndex;
         else indexList.stackIndex = stackIndex;
@@ -342,10 +341,16 @@ function setStackHeapHeight() {
     }
 }
 
-function addNewMemoryModel() {
-    var user = prompt("Please enter your name", "Memory model owner");
+function addNewMemoryModel(){
+
+    var user = prompt("Please enter your name");
     var memorymodelName = prompt("Please enter memorymodel name");
-    highestID++;
+
+    if(!user || !memorymodelName){
+        return console.log("Geannuleerd");
+    }
+
+    highestID ++;
     var newMemoryModel = {
         'language': 'Javascript',
         'owner': user,
@@ -575,7 +580,7 @@ function drawVars(location, vars) {
         appendHtmlToLocation(location, html);
 
     });
-}
+};
 
 /**
  * Looks of the variable is a pointer or a variable
@@ -713,7 +718,7 @@ function deleteFrameOrVar(id, isFrame) {
     else {
         id = $(id).parent()[0];
     }
-    id = $(id)[0].id;x
+    id = $(id)[0].id;
 
     console.log($("#" + id));
 
