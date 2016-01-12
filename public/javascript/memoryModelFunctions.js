@@ -613,25 +613,42 @@ function updateMemoryModel(data) {
                     console.log(change.item.kind);
                     switch (change.item.kind) {
                         case "N":
+                            console.log("PATHHHHHH");
+                            console.log(change.path);
                             modelLocation = change.path[0];
                             location = change.path[1];
                             placeInModel = change.path[2];
                             frameIndex = change.path[3];
                             vars = change.path[4];
 
-                            currentMemoryModel[modelLocation][location][placeInModel][frameIndex][vars].push(change.kind.rhs);
+                            if(frameIndex != undefined) vars = true;
+                            else vars = false;
+
+                            if(vars) currentMemoryModel[modelLocation][location][placeInModel][frameIndex].vars.push(change.kind.rhs);
+                            else currentMemoryModel[modelLocation][location][placeInModel].push(change.kind.rhs);
+
                          break;
                         case "D":
                             console.log(change.item);
+                            console.log("PATHHHHHH");
+                            console.log(change.path);
                             modelLocation = change.path[0];
                             location = change.path[1];
                             placeInModel = change.path[2];
                             frameIndex = change.path[3];
-                            vars = change.path[4];
-                            if(placeInModel) vars = true;
-
-                            if(vars) currentMemoryModel[modelLocation][location][placeInModel][frameIndex][vars].splice(change.index, 1);
-                            else currentMemoryModel[modelLocation][location][placeInModel].splice(change.index, 1);
+                            elementIndex = change.index;
+                            if(frameIndex != undefined) vars = true;
+                            else vars = false;
+                            console.log("LOGGGGGGGGGGGGGGGGGGGGGG");
+                            console.log(modelLocation);
+                            console.log(location);
+                            console.log(placeInModel);
+                            console.log(frameIndex);
+                            //console.log(varsIndex);
+                            console.log(vars);
+                            console.log(currentMemoryModel[modelLocation][location][placeInModel]);
+                            if(vars) currentMemoryModel[modelLocation][location][placeInModel][frameIndex].vars.splice(elementIndex, 1);
+                            else currentMemoryModel[modelLocation][location][placeInModel].splice(elementIndex, 1);
                             break;
 
                     }
@@ -652,7 +669,7 @@ function updateMemoryModel(data) {
             break;
         }
     });
-
+    currentMemoryModel.version++;
     drawMemoryModel(currentMemoryModel);
     // BEPALEN WANNEER VERSIE OPGEHOOGD MOET WORDEN
     getVersionList(false, true);
