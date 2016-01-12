@@ -73,6 +73,13 @@
         display: inline-block;
     }
 
+    #heapLabel{
+        width: 120px;
+    }
+
+    #stackLabel{
+        width: 120px;
+    }
 
     .newFrameButtons {
          float:right;

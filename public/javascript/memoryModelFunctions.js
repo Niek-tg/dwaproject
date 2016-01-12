@@ -267,7 +267,6 @@ function drawMemoryModel(memoryModel) {
     var options = [];
     var x = 0;
     memoryModel.memoryModel.stacks.forEach(function(){
-        console.log('hoi hoi');
         x ++;
         options.push('stack' + x);
     })
@@ -322,8 +321,14 @@ function setStackHeapHeight(){
 }
 
 function addNewMemoryModel(){
-    var user = prompt("Please enter your name", "Memory model owner");
+
+    var user = prompt("Please enter your name");
     var memorymodelName = prompt("Please enter memorymodel name");
+
+    if(!user || !memorymodelName){
+        return console.log("Geannuleerd");
+    }
+
     highestID ++;
     var newMemoryModel = {
         'language': 'Javascript',
@@ -489,7 +494,7 @@ function attachEventListeners() {
         var identifier = 1;
         model.forEach(function (frames) {
             var html = "<div id='" + location + identifier + "' class='" + location + "'>" +
-                "<div class='frameLabel'>" + location + "</div>" +
+                "<div class='frameLabel'><p>" + location + "</p></div>" +
                 "<div class='expandDiv'>" +
                 "<a onclick='expandDiv($(this).parent().parent())'>+</a>" +
                 "</div>" +
@@ -546,8 +551,8 @@ function attachEventListeners() {
             var value = determineVar(variable);
 
             var html = "<div class='variable'>" +
-                "<div class='variableLabel'>" + variable.name + "</div>" +
-                "<div id='" + variable.id + "' class='variableValue'>" + value + "</div>" +
+                "<div class='variableLabel'><p>" + variable.name + "</p></div>" +
+                "<div id='" + variable.id + "' class='variableValue'><p>" + value + "</p></div>" +
                 "<div class='deleteVar'><a onclick='deleteFrameOrVar($(this))' class='deleteVariable'></a></div>" +
                 "</div>"
             appendHtmlToLocation(location, html);
