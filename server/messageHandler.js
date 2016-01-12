@@ -3,6 +3,8 @@
  * @type {queries|exports|module.exports}
  */
 var queries = require('./queries/queries.js');
+var changeHandler = require('./changeHandler.js');
+
 
 /**
  * Exportable object that stores all methods of the messageHandler
@@ -23,7 +25,9 @@ var cursorArray = [];
  */
 
 messageHandler.identifyMessage = function (message, websocket, webSocketServer) {
+
     message = JSON.parse(message);
+    console.log("message received", message.msgType);
     switch (message.msgType) {
 
         case "subscribeToChanges":
@@ -87,8 +91,15 @@ messageHandler.subscribeToChanges = function (message, websocket) {
 
         cursorArray[socketID].each(
             function (err, row) {
+                console.log("nieuwe data!");
                 if (err) throw err;
-                websocket.send(JSON.stringify({msgType: "newData", data: row}))
+
+                delete row.new_val.version;
+                delete row.old_val.version;
+
+                var changes = changeHandler.checkForChanges(row.new_val, row.old_val);
+                console.log("changes ", changes);
+                websocket.send(JSON.stringify({msgType: "newData", data: changes}))
             }
         );
     });
@@ -99,7 +110,6 @@ messageHandler.subscribeToChanges = function (message, websocket) {
  * @param websocket
  */
 messageHandler.subscribeToAllModels = function (message, websocket) {
-    console.log("subscribed to all models");
 
     queries.subscribeToAllModels(function (err, curs) {
         curs.each(
@@ -108,7 +118,6 @@ messageHandler.subscribeToAllModels = function (message, websocket) {
                 websocket.send(JSON.stringify({msgType: "newAllModelsData", data: row}))
             }
         );
-
     });
 };
 
@@ -129,6 +138,8 @@ messageHandler.unsubscribeToChanges = function (websocket) {
  * @param websocket
  */
 messageHandler.getAllMemoryModels = function (message, websocket) {
+    console.log("Hij komt in getAllMemoryModels");
+
     queries.getAll(function (err, result) {
         if (err) return websocket.send(JSON.stringify({msgType: "errorMsg", data: err}));
 
@@ -158,7 +169,6 @@ messageHandler.getAllMemoryModels = function (message, websocket) {
         });
         websocket.send(JSON.stringify({msgType: "getAllModels", data: resultsArray}));
     });
-    console.log("Hij komt in getAllMemoryModels")
 };
 
 /**

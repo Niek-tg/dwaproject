@@ -16,13 +16,13 @@ function messageHandlerClient(message){
     var data = JSON.parse(message.data);
     switch(data.msgType){
         case "newData":
-            console.log(data);
             updateMemoryModel(data);
             break;
         case "newAllModelsData":
             percolatorSend({msgType: "getAllModels"});
             break;
         case "getAllModels":
+            console.log('setting data to list');
             getMemoryModels(data.data);
             break;
         case "getModelById":

@@ -191,7 +191,7 @@ queries.subscribeToAllModels = function (cb) {
     getConnection(function (err, conn) {
         if (err) return cb(err, null);
         r.db('percolatordb')
-            .table('History')
+            .table('ModelInfo')
             .changes()
             .run(conn, function (err, cursor) {
                 cb(err, cursor);
