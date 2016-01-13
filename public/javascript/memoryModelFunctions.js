@@ -385,7 +385,6 @@ function addNewMemoryModel() {
     });
 }
 
-
 /**
  * create new stack or heap
  */
@@ -393,15 +392,8 @@ function addNewMemoryModel() {
 function addStackOrHeap(type) {
     var oldMem = currentMemoryModel;
 
-    if (type == "stack") {
-        currentMemoryModel.memoryModel.stacks.push([])
-        collectStacksHeaps(currentMemoryModel);
-        console.log('dit is een test met stacks', currentMemoryModel.memoryModel.stacks)
-    } else {
-        currentMemoryModel.memoryModel.heaps.push([])
-        collectStacksHeaps(currentMemoryModel);
-        console.log('dit is een test met stacks', currentMemoryModel.memoryModel.heaps)
-    }
+    currentMemoryModel.memoryModel[type].push([]);
+    collectStacksHeaps(currentMemoryModel);
 
     percolatorSend({
         msgType: 'updateMemoryModel',
@@ -454,13 +446,13 @@ function attachEventListeners() {
     $("#addNewStack").unbind('click');
     $('#addNewStack').click(function () {
         console.log("Komt in addNewStack");
-        addStackOrHeap('stack');
+        addStackOrHeap('stacks');
     });
 
     $("#addNewHeap").unbind('click');
     $('#addNewHeap').click(function () {
         console.log("Komt in addNewHeap");
-        addStackOrHeap('heap');
+        addStackOrHeap('heaps');
     });
 
     $("#addNewMemoryModel").unbind('click');
