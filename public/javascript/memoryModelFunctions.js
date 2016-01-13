@@ -621,12 +621,11 @@ function updateMemoryModel(data) {
     if (data.data.new_val) {
         if (data.data.new_val.version > currentMemoryModel.version) {
 
-            DeepDiff.observableDiff(currentMemoryModel, data.data.new_val, function (d) {
-                if (d.path.join('.') !== 'language' && d.path.join('.') !== 'owner') {
-                    console.log(d);
-                    DeepDiff.applyChange(currentMemoryModel, data.data.new_val, d);
-                }
-            });
+            var owner = currentMemoryModel.owner;
+            var language = currentMemoryModel.language;
+            currentMemoryModel = data.data.new_val;
+            currentMemoryModel.owner = owner;
+            currentMemoryModel.language = language;
 
             drawMemoryModel(currentMemoryModel);
             getVersionList(false, true);
@@ -670,9 +669,12 @@ var updatePositionFrames = function (frameId) {
     });
 };
 
-
-function copyObject(model){
-    return JSON.parse(JSON.stringify(model));
+/**
+ * returns another instance of the object. Used for copying an object.
+ * @param object
+ */
+function copyObject(object){
+    return JSON.parse(JSON.stringify(object));
 }
 
 /**
