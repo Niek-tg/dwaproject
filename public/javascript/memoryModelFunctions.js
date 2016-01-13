@@ -250,8 +250,6 @@ function drawMemoryModel(memoryModel) {
 
     $(diagramContainer).children().remove(); //remove old frames, if they exist
     relations = [];
-    console.log(memoryModel);
-    console.log(currentMemoryModel);
     if (currentMemoryModel) {
         var owner = currentMemoryModel.owner;
         var language = currentMemoryModel.language;
@@ -623,16 +621,13 @@ function updateMemoryModel(data) {
     if (data.data.new_val) {
         if (data.data.new_val.version > currentMemoryModel.version) {
 
-            var changes = [];
-            console.log("updaten memoryModel");
             DeepDiff.observableDiff(currentMemoryModel, data.data.new_val, function (d) {
                 if (d.path.join('.') !== 'language' && d.path.join('.') !== 'owner') {
-                    changes.push(d);
+                    console.log(d);
                     DeepDiff.applyChange(currentMemoryModel, data.data.new_val, d);
                 }
             });
 
-            console.log("changes are", changes);
             drawMemoryModel(currentMemoryModel);
             getVersionList(false, true);
             setModelInfo();
@@ -832,7 +827,6 @@ function redrawPlumbing() {
 
     jsPlumb.deleteEveryEndpoint();
     jsPlumb.removeAllEndpoints();
-    console.log(common);
     jsPlumb.addEndpoint($('.Heap .frame'), common);
     jsPlumb.addEndpoint($('.variableValue'), common);
     relations.forEach(function (relation) {
