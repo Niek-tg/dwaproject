@@ -686,6 +686,7 @@ function copyObject(object){
  * @param frameType is the type of the container it needs to be put in (heap, stack)
  */
 function addNewFrame(frameName, frameType) {
+    var obj = copyObject(currentMemoryModel);
     highestID++;
     var selectedStack = $(".stackDropDown option:selected").val();
     var selectedHeap = $(".heapDropDown option:selected").val();
@@ -719,7 +720,7 @@ function addNewFrame(frameName, frameType) {
 
         percolatorSend({
             msgType: 'updateMemoryModel',
-            data: {newMemoryModel: currentMemoryModel, oldMemoryModel: oldMemoryModel}
+            data: {newMemoryModel: currentMemoryModel, oldMemoryModel: obj}
         });
     }
     else {
@@ -763,17 +764,15 @@ function deleteFrameOrVar(id, isFrame) {
     });
 }
 
+//TODO usefull comment
+
 function deleteHeapStack(id) {
-    var oldMM = currentMemoryModel;
+    var obj = copyObject(currentMemoryModel);
     var id = $(id).parent().parent()[0].id;
-    //var regex = /(\d+)/g;
-    //id = parseInt((id.match(regex))) - 1;
 
     id = id.split('');
     var location = id[0];
     id = id[id.length - 1];
-    console.log(id);
-    console.log(location);
 
     if (location == 'H') {
         location = 'heaps';
@@ -783,13 +782,12 @@ function deleteHeapStack(id) {
 
     if ($.isEmptyObject(currentMemoryModel.memoryModel[location][id - 1])) {
         currentMemoryModel.memoryModel[location].splice(id - 1);
-
         percolatorSend({
             msgType: 'updateMemoryModel',
-            data: {newMemoryModel: currentMemoryModel, oldMemoryModel: oldMM}
+            data: {newMemoryModel: currentMemoryModel, oldMemoryModel: obj}
         });
     } else {
-        console.log('remove frames first');
+        alert('remove frames first');
     }
 }
 
