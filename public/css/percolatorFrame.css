@@ -88,7 +88,6 @@
 
     #addNewMemoryModel{
     display: block;
-    color: #2e6da4;
     }
 
 /*
@@ -243,4 +242,8 @@
         height: calc(100vh - 119px);
         max-width: calc(100% - (8% + 302px));
         width: 100%;
+    }
+
+    #addReference:active{
+        border:1px solid red;
     }

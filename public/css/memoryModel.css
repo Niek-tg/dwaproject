@@ -223,6 +223,11 @@
     display: block;
 }
 
+#addNewMemoryModel{
+    color:black;
+}
+
+
 svg {
     z-index:50;
 }
