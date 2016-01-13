@@ -74,9 +74,15 @@
     border-color: #752921;
 }
 
-.frameLabel {
-    left: 50%;
+#frameLabel {
+    width:277px;
     text-align: center;
+}
+
+#allButtons{
+    width: 300px;
+    display: block;
+    float: left;
 }
 
 .frame:hover > .deleteFrame{
@@ -179,6 +185,19 @@
 
 .heapDropDown{
     width:100%;
+}
+
+.deleteHeapStacks{
+    height: 15px;
+    width: 15px;
+    margin: 1px;
+    background-image: url("../images/deleteFrame.png");
+    background-size: 15px 15px;
+    background-repeat: no-repeat;
+    top: 2px;
+    right: 0px;
+    position: absolute;
+    display: block;
 }
 
 .deleteVariable{

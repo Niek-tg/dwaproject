@@ -181,6 +181,7 @@ function lookForFrameOrVar(idToFind, actionWhenFound) {
     var placeInModel;
 
     var indexList = {};
+
     function declareIndexList() {
         if (placeInModel == "heap") indexList.heapIndex = heapIndex;
         else indexList.stackIndex = stackIndex;
@@ -341,16 +342,16 @@ function setStackHeapHeight() {
     }
 }
 
-function addNewMemoryModel(){
+function addNewMemoryModel() {
 
     var user = prompt("Please enter your name");
     var memorymodelName = prompt("Please enter memorymodel name");
 
-    if(!user || !memorymodelName){
+    if (!user || !memorymodelName) {
         return console.log("Geannuleerd");
     }
 
-    highestID ++;
+    highestID++;
     var newMemoryModel = {
         'language': 'Javascript',
         'owner': user,
@@ -394,9 +395,11 @@ function addStackOrHeap(type) {
 
     if (type == "stack") {
         currentMemoryModel.memoryModel.stacks.push([])
+        collectStacksHeaps(currentMemoryModel);
         console.log('dit is een test met stacks', currentMemoryModel.memoryModel.stacks)
     } else {
         currentMemoryModel.memoryModel.heaps.push([])
+        collectStacksHeaps(currentMemoryModel);
         console.log('dit is een test met stacks', currentMemoryModel.memoryModel.heaps)
     }
 
@@ -515,7 +518,7 @@ function drawFramesOnLocation(location, model, frameLocations) {
     var identifier = 1;
     model.forEach(function (frames) {
         var html = "<div id='" + location + identifier + "' class='" + location + "'>" +
-            "<div><a onclick='deleteHeapOrStack($(this))' class='deleteHeapStacks'></a></div>" +
+            "<div><a onclick='deleteHeapStack($(this))' class='deleteHeapStacks'></a></div>" +
             "<div class='frameLabel'>" + location + "</div>" +
             "<div class='expandDiv'>" +
             "<a onclick='expandDiv($(this).parent().parent())'>+</a>" +
@@ -669,7 +672,7 @@ function addNewFrame(frameName, frameType) {
     highestID++;
     var selectedStack = $(".stackDropDown option:selected").val();
     var selectedHeap = $(".heapDropDown option:selected").val();
-
+    console.log(frameName);
     var newFrame = {
         "id": highestID,
         "name": frameName,
@@ -678,7 +681,7 @@ function addNewFrame(frameName, frameType) {
 
     if (memoryModelLoaded) {
         if (frameType == 'stack') {
-            var postitionStackFrame = currentMemoryModel.memoryModel.stacks[0].length;
+            var postitionStackFrame = currentMemoryModel.memoryModel.stacks[selectedStack].length;
             if (selectedStack != null) {
                 currentMemoryModel.memoryModel.stacks[selectedStack][postitionStackFrame] = newFrame;
             } else {
@@ -687,7 +690,7 @@ function addNewFrame(frameName, frameType) {
         }
 
         if (frameType == 'heap') {
-            var postitionHeapsFrame = currentMemoryModel.memoryModel.heaps[0].length;
+            var postitionHeapsFrame = currentMemoryModel.memoryModel.heaps[selectedHeap].length;
             if (selectedHeap != null) {
                 currentMemoryModel.memoryModel.heaps[selectedHeap][postitionHeapsFrame] = newFrame;
             } else {
@@ -720,9 +723,6 @@ function deleteFrameOrVar(id, isFrame) {
     }
     id = $(id)[0].id;
 
-    console.log($("#" + id));
-
-
     lookForFrameOrVar(id, function (indexList) {
 
         if (indexList.location == "heap") {
@@ -744,6 +744,36 @@ function deleteFrameOrVar(id, isFrame) {
         msgType: 'updateMemoryModel',
         data: {newMemoryModel: currentMemoryModel, oldMemoryModel: obj}
     });
+}
+
+function deleteHeapStack(id) {
+    var oldMM = currentMemoryModel;
+    var id = $(id).parent().parent()[0].id;
+    //var regex = /(\d+)/g;
+    //id = parseInt((id.match(regex))) - 1;
+
+    id = id.split('');
+    var location = id[0];
+    id = id[id.length - 1];
+    console.log(id);
+    console.log(location);
+
+    if (location == 'H') {
+        location = 'heaps';
+    } else {
+        location = 'stacks';
+    }
+
+    if ($.isEmptyObject(currentMemoryModel.memoryModel[location][id - 1])) {
+        currentMemoryModel.memoryModel[location].splice(id - 1);
+
+        percolatorSend({
+            msgType: 'updateMemoryModel',
+            data: {newMemoryModel: currentMemoryModel, oldMemoryModel: oldMM}
+        });
+    } else {
+        console.log('remove frames first');
+    }
 }
 
 //TODO usefull comment
