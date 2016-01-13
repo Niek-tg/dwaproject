@@ -811,7 +811,7 @@ function deleteHeapStack(id) {
             data: {newMemoryModel: currentMemoryModel, oldMemoryModel: obj}
         });
     } else {
-        alert('remove frames first');
+        alert('Remove all frames first');
     }
 }
 
