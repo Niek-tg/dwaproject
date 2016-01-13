@@ -313,9 +313,9 @@ function setStackHeapHeight() {
     var maxHeap;
     var maxStack;
 
-    for (i = 0; i < stack.length; i++) {
+    for (var i = 0; i < stack.length; i++) {
         var stackNodes = stack[i].childNodes;
-        for (j = 0; j < stackNodes.length; j++) {
+        for (var j = 0; j < stackNodes.length; j++) {
             var stackNodesTop = stackNodes[j].offsetTop;
             var stackNodesHeight = stackNodes[j].offsetHeight;
             var stackNodesBottom = stackNodesTop + stackNodesHeight;
@@ -324,9 +324,9 @@ function setStackHeapHeight() {
         }
     }
 
-    for (i = 0; i < heap.length; i++) {
+    for (var i = 0; i < heap.length; i++) {
         var heapNodes = heap[i].childNodes;
-        for (j = 0; j < heapNodes.length; j++) {
+        for (var j = 0; j < heapNodes.length; j++) {
             var heapNodesTop = heapNodes[j].offsetTop;
             var heapNodesHeight = heapNodes[j].offsetHeight;
             var heapNodesBottom = heapNodesTop + heapNodesHeight;
@@ -376,11 +376,6 @@ function addNewMemoryModel(){
             ],
             "heaps": [
                 [
-                    {
-                        "id": highestID,
-                        "name": "Global",
-                        "vars": []
-                    }
                 ]
             ]
         }
@@ -590,7 +585,7 @@ function drawVars(location, vars) {
         appendHtmlToLocation(location, html);
 
     });
-};
+}
 
 /**
  * Looks of the variable is a pointer or a variable
