@@ -81,7 +81,7 @@
 
 #allButtons{
     width: 300px;
-    display: block;
+    display: none;
     float: left;
 }
 
