@@ -230,127 +230,10 @@ function lookForFrameOrVar(idToFind, actionWhenFound) {
     return indexList;
 }
 
-
-/**
- * Draws the memory model
- *
- * @param memoryModel contains the data of the memory model
- */
-function drawMemoryModel(memoryModel) {
-
-    jsPlumb.reset();
-    jsPlumb.Defaults.Container = $("#diagramContainer");
-
-    if (!plumbInitialized) {
-        jsPlumb.ready(function () {
-            jsPlumb.Defaults.MaxConnections = 5;
-        });
-        plumbInitialized = true;
-    }
-
-    $(diagramContainer).children().remove(); //remove old frames, if they exist
-    relations = [];
-
-    if (firstTime) {
-        var owner = currentMemoryModel.owner;
-        var language = currentMemoryModel.language;
-    }
-    firstTime = true;
-    currentMemoryModel = memoryModel;
-    currentMemoryModel.language = (language) ? language : currentMemoryModel.language;
-    currentMemoryModel.owner = (owner) ? owner : currentMemoryModel.owner;
-
-    if (memoryModel.memoryModel.stacks) drawFramesOnLocation("Stack", memoryModel.memoryModel.stacks, memoryModel.frameLocations);
-    if (memoryModel.memoryModel.heaps) drawFramesOnLocation("Heap", memoryModel.memoryModel.heaps, memoryModel.frameLocations);
-    if (memoryModel.memoryModel.stacks || memoryModel.memoryModel.heaps)setClassStyle(memoryModel.memoryModel.stacks.length, memoryModel.memoryModel.heaps.length);
-
-    setClassStyle(memoryModel.memoryModel.stacks.length, memoryModel.memoryModel.heaps.length);
-    memoryModelLoaded = true;
-    redrawPlumbing();
-    attachEventListeners();
-    setStackHeapHeight();
-}
-
-/**
- * Writes all the stacks and heaps to dropdown fields. Used for adding frames to any stack of heap you want
- * @param current current memory model
- */
-function collectStacksHeaps(current) {
-
-    //var options = $("#stackDropDown");
-    $(".stackDropDown").empty();
-    $(".heapDropDown").empty();
-    var options = [];
-    var i = 0;
-    current.memoryModel.stacks.forEach(function () {
-        i++;
-        options[i] = 'stack' + i;
-        $(".stackDropDown").append($('<option>', {
-            value: i - 1,
-            text: options[i]
-        }));
-    });
-    i = 0;
-    options = [];
-
-    current.memoryModel.heaps.forEach(function () {
-        i++;
-        options[i] = 'heap' + i;
-        $(".heapDropDown").append($('<option>', {
-            value: i - 1,
-            text: options[i]
-        }));
-    });
-    i = 0;
-    options = [];
-}
-
-/**
- * Set the stack or heap as high as the highest
- */
-function setStackHeapHeight() {
-
-    var stack = $(".Stack");
-    var heap = $(".Heap");
-    var maxHeap;
-    var maxStack;
-
-    for (var i = 0; i < stack.length; i++) {
-        var stackNodes = stack[i].childNodes;
-        for (var j = 0; j < stackNodes.length; j++) {
-            var stackNodesTop = stackNodes[j].offsetTop;
-            var stackNodesHeight = stackNodes[j].offsetHeight;
-            var stackNodesBottom = stackNodesTop + stackNodesHeight;
-
-            if (j === 0 && i === 0 || stackNodesBottom > maxStack) maxStack = stackNodesBottom;
-        }
-    }
-
-    for (var i = 0; i < heap.length; i++) {
-        var heapNodes = heap[i].childNodes;
-        for (var j = 0; j < heapNodes.length; j++) {
-            var heapNodesTop = heapNodes[j].offsetTop;
-            var heapNodesHeight = heapNodes[j].offsetHeight;
-            var heapNodesBottom = heapNodesTop + heapNodesHeight;
-
-            if (j === 0 && i === 0 || heapNodesBottom > maxHeap) maxHeap = heapNodesBottom;
-        }
-    }
-
-    if (maxHeap > maxStack) {
-        $(".Stack").css("height", maxHeap + "px");
-        $(".Heap").css("height", maxHeap + "px");
-    }
-    else if (maxStack > maxHeap) {
-        $(".Stack").css("height", maxStack + "px");
-        $(".Heap").css("height", maxStack + "px");
-    }
-}
-
 /**
  * adds a new memorymodel and sends it to the server
  */
-function addNewMemoryModel(){
+function addNewMemoryModel() {
 
     var user = prompt("Please enter your name");
     var memorymodelName = prompt("Please enter memorymodel name");
@@ -395,7 +278,6 @@ function addNewMemoryModel(){
 /**
  * create new stack or heap
  */
-
 function addStackOrHeap(type) {
     var oldMem = currentMemoryModel;
 
@@ -407,84 +289,6 @@ function addStackOrHeap(type) {
         data: {newMemoryModel: currentMemoryModel, oldMemoryModel: oldMem}
     });
 }
-
-/**
- * Attaches all the eventlisteners to their corresponding divs or attributes
- */
-function attachEventListeners() {
-
-    var div = "#addReference";
-    $(div).unbind('click');
-    $(div).click(function (e) {
-        toggleEditingMode = !toggleEditingMode;
-        redrawPlumbing();
-    });
-
-    div = "#updateButton";
-    $(div).unbind('click');
-    $(div).click(function () {
-        // TODO save the values into the memory model and send to the server
-        updateValue();
-        closeWrapper();
-    });
-
-    div = "#closeButton";
-    $(div).unbind('click');
-    $(div).click(function () {
-        closeWrapper();
-    });
-
-    div = ".variable";
-    $(div).unbind('dblclick');
-    $(div).dblclick(function () {
-        openEditField(this);
-    });
-
-    div = "#addNewStackFrame";
-    $(div).unbind('click');
-    $(div).click(function () {
-        addNewFrame($("#frameLabel").val(), 'stack');
-    });
-
-    div = "#addNewHeapFram";
-    $("#addNewHeapFrame").unbind('click');
-    $('#addNewHeapFrame').click(function () {
-        addNewFrame($("#frameLabel").val(), 'heap');
-    });
-
-
-    //New memorymodel, stack & heap
-    $("#addNewStack").unbind('click');
-    $('#addNewStack').click(function () {
-        console.log("Komt in addNewStack");
-        addStackOrHeap('stacks');
-    });
-
-    $("#addNewHeap").unbind('click');
-    $('#addNewHeap').click(function () {
-        console.log("Komt in addNewHeap");
-        addStackOrHeap('heaps');
-    });
-
-    div = "#addNewMemoryModel";
-    $(div).unbind('click');
-    $(div).click(function () {
-        addNewMemoryModel();
-    });
-
-    div = ".deleteFrame";
-    $(div).unbind('click');
-    $(div).click(function () {
-        deleteFrameOrVar(this, true);
-    });
-
-    function closeWrapper() {
-        var div = "#editWrapper";
-        // TODO fix this one to prevent opening when already closed!
-        if (!$(div).is(':hidden')) $(div).slideToggle();
-    }
-}
-
 
 /**
  * Sets width of the stack and heap class by the number of stack and heaps
@@ -510,59 +314,6 @@ function setClassStyle(numberOfStacks, numberOfHeaps) {
 }
 
 /**
- * Draws the frames of the memory model.
- *
- * @param location Decides where the frames are drawn. Stack or Heap
- * @param model the data of the memory model
- * @param frameLocations contains the locations of the frames
- * @returns {Promise} Promise to call actions when the drawing is done
- */
-function drawFramesOnLocation(location, model, frameLocations) {
-
-    var identifier = 1;
-    model.forEach(function (frames) {
-        var html = "<div id='" + location + identifier + "' class='" + location + "'>" +
-            "<div><a onclick='deleteHeapStack($(this))' class='deleteHeapStacks'></a></div>" +
-            "<div class='frameLabel'>" + location + "</div>" +
-            "<div class='expandDiv'>" +
-            "<a onclick='expandDiv($(this).parent().parent())'>+</a>" +
-            "</div>" +
-            "</div>";
-
-        appendHtmlToLocation(diagramContainer, html);
-
-        frames.forEach(function (item) {
-            var top = 0;
-            var left = 0;
-            var name = (item.name) ? item.name : "";
-            var style;
-
-            frameLocations.forEach(function (frameLocation) {
-                if (item.id === parseInt(frameLocation.id)) {
-                    if (frameLocation.top) top = frameLocation.top;
-                    if (frameLocation.left) left = frameLocation.left;
-                }
-            });
-
-            if (!top && !left) style = "position:relative";
-            else style = 'position: absolute; top: ' + top + "px; left: " + left + "%;";
-
-            var html = "<div id='" + item.id + "' class='frame' style='" + style + "'> " +
-                "<div class='deleteFrame'></div>" +
-                "<div class='frameLabel'>" + name + "</div>" +
-                "<div class='addVarToFrame'>" +
-                "<a onclick='addVarToFrame($(this).parent().parent())'>+</a>" +
-                "</div>" +
-                "</div>";
-            appendHtmlToLocation('#' + location + identifier, html);
-
-            if (item.vars) drawVars('#' + item.id, item.vars);
-        });
-        identifier++;
-    });
-}
-
-/**
  * Increases the size of the div where the memory model can be dragged
  * @param stackOrHeap
  */
@@ -572,54 +323,6 @@ function expandDiv(stackOrHeap) {
     var newHeight = oldHeight + 100;
     $('#' + stackOrHeap).css("height", newHeight + "px");
     setStackHeapHeight();
-}
-
-/**
- * Draws the variables of the memory model.
- * @param location Location where the vars to be drawn in
- * @param vars Data containing the vars to be drawn
- */
-function drawVars(location, vars) {
-    vars.forEach(function (variable) {
-        var value = determineVar(variable);
-
-        var html = "<div class='variable'>" +
-            "<div class='variableLabel'>" + variable.name + "</div>" +
-            "<div id='" + variable.id + "' class='variableValue'>" + value + "</div>" +
-            "<div class='deleteVar'><a onclick='deleteFrameOrVar($(this))' class='deleteVariable'></a></div>" +
-            "</div>"
-        appendHtmlToLocation(location, html);
-
-    });
-}
-
-/**
- * Looks of the variable is a pointer or a variable
- * @param variable Value to be converted to a variable, usable to draw with
- * @returns {String|Number} value to be drawn inside the variable or function
- */
-function determineVar(variable) {
-
-    if (highestID < variable.id) highestID = variable.id;
-
-    switch (variable.type) {
-        case "reference":
-            relations.push({source: variable.id, target: variable.value});
-            return "";
-            break;
-        case "undefined":
-            return "undefined";
-            break;
-        case "string":
-            return '"' + variable.value + '"';
-            break;
-        case "number":
-            return variable.value;
-            break;
-        default:
-            return "null";
-            break;
-    }
 }
 
 /**
@@ -677,23 +380,6 @@ var updatePositionFrames = function (frameId) {
         }
     });
 };
-
-/**
- * returns another instance of the object. Used for copying an object.
- * @param object
- */
-function copyObject(object){
-    return JSON.parse(JSON.stringify(object));
-}
-
-/**
- * Appends the given HTML to the location
- * @param location Location where the HTML should be appended to
- * @param html Desired HTML to be added to the location
- */
-function appendHtmlToLocation(location, html) {
-    $(location).append(html);
-}
 
 /**
  * When a memort model is selected en a new frame is added (heap or stack), a message wil be send to the server by websocket.
@@ -761,7 +447,7 @@ function deleteFrameOrVar(id, isFrame) {
     lookForFrameOrVar(id, function (indexList) {
 
         if (indexList.location == "heap") {
-            if (currentMemoryModel.memoryModel.heaps[indexList.heapIndex][indexList.frameIndex].vars.length != 0 && isFrame){
+            if (currentMemoryModel.memoryModel.heaps[indexList.heapIndex][indexList.frameIndex].vars.length != 0 && isFrame) {
                 console.log("IN FRAME!!!!");
                 alert("Remove first all variables in the frame");
                 return null;
@@ -772,7 +458,7 @@ function deleteFrameOrVar(id, isFrame) {
             else currentMemoryModel.memoryModel.heaps[indexList.heapIndex].splice(indexList.frameIndex, 1);
         }
         else {
-            if (currentMemoryModel.memoryModel.stacks[indexList.stackIndex][indexList.frameIndex].vars.length != 0 && isFrame){
+            if (currentMemoryModel.memoryModel.stacks[indexList.stackIndex][indexList.frameIndex].vars.length != 0 && isFrame) {
                 alert("Remove first all variables in the frame");
                 return null;
             }
@@ -788,8 +474,11 @@ function deleteFrameOrVar(id, isFrame) {
     });
 }
 
-//TODO usefull comment
-
+/**
+ * deletes a heap or stack
+ * @param id of the heap or stack that needs to be deleted
+ * @param
+ */
 function deleteHeapStack(id) {
     var obj = copyObject(currentMemoryModel);
     var id = $(id).parent().parent()[0].id;
@@ -813,76 +502,4 @@ function deleteHeapStack(id) {
     } else {
         alert('Remove all frames first');
     }
-}
-
-/**
- * Adds a new reference to the memory model
- * TODO SAVE TO THE SERVER
- * @param source
- * @param target
- */
-function newReference(source, target) {
-    if (toggleEditingMode === true) {
-        relations.push({source: source, target: target});
-        redrawPlumbing();
-    }
-}
-
-/**
- * Draws the connections between the frames and variables where needed.
- */
-function redrawPlumbing() {
-    $(".frame").draggable({
-        drag: function (e) {
-            jsPlumb.repaintEverything();
-        },
-        containment: "parent",
-        stop: function (event) {
-            if ($(event.target).find('select').length == 0) {
-                updatePositionFrames(event.target.id);
-                setStackHeapHeight();
-            }
-        }
-    });
-    jsPlumb.bind("connection", function (info) {
-        var exists = false;
-        relations.forEach(function (relation) {
-            if (info.sourceId == relation.source && info.targetId == relation.target) {
-                exists = true;
-                return null;
-            }
-        });
-        if (!exists)newReference(info.sourceId, info.targetId)
-    });
-
-    var common = {
-        anchor: ["Left", "Right"],
-        overlays: [["Arrow", {width: 40, length: 20, location: 1}]],
-        paintStyle: {strokeStyle: 'grey', lineWidth: 5},
-        connectorStyle: {strokeStyle: 'grey', lineWidth: 5},
-        hoverPaintStyle: {strokeStyle: "#752921"},
-        isSource: true,
-        isTarget: true
-    };
-
-    if (toggleEditingMode) common.endpoint = "Dot";
-    else common.endpoint = "Blank";
-
-    jsPlumb.deleteEveryEndpoint();
-    jsPlumb.removeAllEndpoints();
-    jsPlumb.addEndpoint($('.Heap .frame'), common);
-    jsPlumb.addEndpoint($('.variableValue'), common);
-    relations.forEach(function (relation) {
-
-        var source = $("#" + relation.source);
-        var target = $("#" + relation.target);
-
-        if (source.length && target.length) {
-            var sourceTarget = {
-                source: relation.source.toString(),
-                target: relation.target.toString()
-            };
-            jsPlumb.connect(sourceTarget, common);
-        }
-    });
 }
