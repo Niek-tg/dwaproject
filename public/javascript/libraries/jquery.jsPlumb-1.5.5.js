@@ -421,37 +421,7 @@
 	};
 })();
 
-/**
- * jsPlumbGeom v0.1
- *
- * Various geometry functions written as part of jsPlumb and perhaps useful for others.
- *
- * Copyright (c) 2013 Simon Porritt
- *
- * Permission is hereby granted, free of charge, to any person
- * obtaining a copy of this software and associated documentation
- * files (the "Software"), to deal in the Software without
- * restriction, including without limitation the rights to use,
- * copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the
- * Software is furnished to do so, subject to the following
- * conditions:
- *
- * The above copyright notice and this permission notice shall be
- * included in all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
- * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
- * OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
- * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
- * HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
- * WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
- * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
- * OTHER DEALINGS IN THE SOFTWARE.
- */
-;(function() {
-
-	
+(function () {
 	"use strict";
 
 	// Establish the root object, `window` in the browser, or `global` on the server.
@@ -625,9 +595,10 @@
  * Dual licensed under the MIT and GPL2 licenses.
  */
 
-;(function() {
-
-    var _isa = function(a) { return Object.prototype.toString.call(a) === "[object Array]"; },
+(function () {
+	var _isa = function (a) {
+			return Object.prototype.toString.call(a) === "[object Array]";
+		},
         _isnum = function(n) { return Object.prototype.toString.call(n) === "[object Number]"; },
         _iss = function(s) { return typeof s === "string"; },
         _isb = function(s) { return typeof s === "boolean"; },
@@ -1064,9 +1035,8 @@
  * 
  * Dual licensed under the MIT and GPL2 licenses.
  */
-;(function() {
-    
-		var canvasAvailable = !!document.createElement('canvas').getContext,
+(function () {
+	var canvasAvailable = !!document.createElement('canvas').getContext,
 		svgAvailable = !!window.SVGAngle || document.implementation.hasFeature("http://www.w3.org/TR/SVG11/feature#BasicStructure", "1.1"),
 		// http://stackoverflow.com/questions/654112/how-do-you-detect-support-for-vml-or-svg-in-a-browser
 		vmlAvailable = function() {		    
@@ -1347,21 +1317,8 @@
 */
 
 })();
-/**
- * @module jsPlumb
- * @description Provides a way to visually connect elements on an HTML page, using either SVG, Canvas
- * elements, or VML.   
- * 
- * - [Demo Site](http://jsplumb.org)
- * - [GitHub](http://github.com/sporritt/jsplumb)
- * 
- * Dual licensed under the MIT and GPL2 licenses.
- *
- * Copyright (c) 2010 - 2013 Simon Porritt (simon.porritt@gmail.com)
- */
-;(function() {
-			
-    var _ju = jsPlumbUtil,
+(function () {
+	var _ju = jsPlumbUtil,
     	_addClass = function(el, clazz) { jsPlumb.CurrentLibrary.addClass(_gel(el), clazz); },
 		_hasClass = function(el, clazz) { return jsPlumb.CurrentLibrary.hasClass(_gel(el), clazz); },
 		_removeClass = function(el, clazz) { jsPlumb.CurrentLibrary.removeClass(_gel(el), clazz); },
@@ -3198,8 +3155,8 @@
 							var noMatchSource = (sourceMatchExact && sources.length > 0 && !_ep.isSource),
 								noMatchTarget = (targetMatchExact && targets.length > 0 && !_ep.isTarget);
 						
-							if (noMatchSource || noMatchTarget)								  
-								  continue inner; 
+							if (noMatchSource || noMatchTarget)
+								continue;
 							 							
 							ep.push(_ep);		
 						}
@@ -4346,9 +4303,9 @@
 })();
 
 
-;(function() {
-        
-    // create the drag handler for a connection
+(function () {
+
+	// create the drag handler for a connection
     var _makeConnectionDragHandler = function(placeholder, _jsPlumb) {
         var stopped = false;
         return {
@@ -5342,9 +5299,8 @@
         }
     });
 })();
-;(function() {
-
-    var makeConnector = function(_jsPlumb, renderMode, connectorName, connectorArgs) {
+(function () {
+	var makeConnector = function (_jsPlumb, renderMode, connectorName, connectorArgs) {
             if (!_jsPlumb.Defaults.DoNotThrowErrors && jsPlumb.Connectors[renderMode][connectorName] == null)
                     throw { msg:"jsPlumb: unknown connector type '" + connectorName + "'" };
 
@@ -5864,9 +5820,9 @@
  * 
  * Dual licensed under the MIT and GPL2 licenses.
  */
-;(function() {	
-    
-    //
+(function () {
+
+	//
 	// manages anchors for all elements.
 	//
 	jsPlumb.AnchorManager = function(params) {
@@ -6938,8 +6894,7 @@
  * Dual licensed under the MIT and GPL2 licenses.
  */
 
-;(function() {	
-				
+(function () {
 	/**
 	 * 
 	 * Helper class to consume unused mouse events by components that are DOM elements and
@@ -8446,9 +8401,8 @@
  * 
  * Dual licensed under the MIT and GPL2 licenses.
  */
-;(function() {
-   
-    /**
+(function () {
+	/**
      * Function: Constructor
      * 
      * Parameters:
@@ -8811,8 +8765,7 @@
  * Dual licensed under the MIT and GPL2 licenses.
  */
 
-;(function() {
-
+(function () {
 	var Line = function(x1, y1, x2, y2) {
 
 		this.m = (y2 - y1) / (x2 - x1);
@@ -9059,8 +9012,7 @@
               //}
     */
 
-;(function() {
-
+(function () {
 	var Bezier = function(params) {
         params = params || {};
 
@@ -9146,9 +9098,9 @@
  * Dual licensed under the MIT and GPL2 licenses.
  */
 
-;(function() {
+(function () {
 
-	
+
 // ********************************* CANVAS RENDERERS FOR CONNECTORS AND ENDPOINTS *******************************************************************
 		
 	// TODO refactor to renderer common script.  put a ref to jsPlumb.sizeCanvas in there too.
@@ -9679,21 +9631,8 @@
  * Dual licensed under the MIT and GPL2 licenses.
  */
 
-/**
- * SVG support for jsPlumb.
- * 
- * things to investigate:
- * 
- * gradients:  https://developer.mozilla.org/en/svg_in_html_introduction
- * css:http://tutorials.jenkov.com/svg/svg-and-css.html
- * text on a path: http://www.w3.org/TR/SVG/text.html#TextOnAPath
- * pointer events: https://developer.mozilla.org/en/css/pointer-events
- *
- * IE9 hover jquery: http://forum.jquery.com/topic/1-6-2-broke-svg-hover-events
- *
- */
-;(function() {
-	
+(function () {
+
 // ************************** SVG utility methods ********************************************	
 	
 	var svgAttributeMap = {
@@ -10307,8 +10246,8 @@
  * Dual licensed under the MIT and GPL2 licenses.
  */
 
-;(function() {
-	
+(function () {
+
 	// http://ajaxian.com/archives/the-vml-changes-in-ie-8
 	// http://www.nczonline.net/blog/2010/01/19/internet-explorer-8-document-and-browser-modes/
 	// http://www.louisremi.com/2009/03/30/changes-in-vml-for-ie8-or-what-feature-can-the-ie-dev-team-break-for-you-today/
