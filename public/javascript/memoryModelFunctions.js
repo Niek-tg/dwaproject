@@ -618,16 +618,25 @@ function determineVar(variable) {
  * Updates the memory model. Redraws the entire memory model and the relations
  * @param data Data containing the memory model that has to be drawn
  */
+
+
 function updateMemoryModel(data) {
     if (data.data.new_val) {
         if (data.data.new_val.version > currentMemoryModel.version) {
-            drawMemoryModel(data.data.new_val);
+
+            var owner = currentMemoryModel.owner;
+            var language = currentMemoryModel.language;
+            currentMemoryModel = data.data.new_val;
+            currentMemoryModel.owner = owner;
+            currentMemoryModel.language = language;
+
+            drawMemoryModel(currentMemoryModel);
             getVersionList(false, true);
             setModelInfo();
             updateJSONEditor();
 
         }
-        else drawMemoryModel(data.data.new_val);
+        else drawMemoryModel(currentMemoryModel);
     }
 }
 
@@ -664,6 +673,14 @@ var updatePositionFrames = function (frameId) {
 };
 
 /**
+ * returns another instance of the object. Used for copying an object.
+ * @param object
+ */
+function copyObject(object){
+    return JSON.parse(JSON.stringify(object));
+}
+
+/**
  * When a memort model is selected en a new frame is added (heap or stack), a message wil be send to the server by websocket.
  * @param frameName is the Name of the frame
  * @param frameType is the type of the container it needs to be put in (heap, stack)
@@ -672,7 +689,7 @@ function addNewFrame(frameName, frameType) {
     highestID++;
     var selectedStack = $(".stackDropDown option:selected").val();
     var selectedHeap = $(".heapDropDown option:selected").val();
-    console.log(frameName);
+
     var newFrame = {
         "id": highestID,
         "name": frameName,
@@ -702,7 +719,7 @@ function addNewFrame(frameName, frameType) {
 
         percolatorSend({
             msgType: 'updateMemoryModel',
-            data: {newMemoryModel: currentMemoryModel, oldMemoryModel: currentMemoryModel}
+            data: {newMemoryModel: currentMemoryModel, oldMemoryModel: oldMemoryModel}
         });
     }
     else {
@@ -714,7 +731,7 @@ function addNewFrame(frameName, frameType) {
 //TODO delete connections or variables
 
 function deleteFrameOrVar(id, isFrame) {
-    var obj = currentMemoryModel;
+    var obj = copyObject(currentMemoryModel);
     if (!isFrame) {
         id = $(id).parent().parent().children()[1];
     }
@@ -840,7 +857,6 @@ function redrawPlumbing() {
 
     jsPlumb.deleteEveryEndpoint();
     jsPlumb.removeAllEndpoints();
-    console.log(common);
     jsPlumb.addEndpoint($('.Heap .frame'), common);
     jsPlumb.addEndpoint($('.variableValue'), common);
     relations.forEach(function (relation) {
