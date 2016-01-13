@@ -11,7 +11,6 @@ function sendMessage(socket, data){
  * MessageListener for the client, runs when a new message is received.
  * @param message Contains the received message
  */
-
 function messageHandlerClient(message){
     var data = JSON.parse(message.data);
     switch(data.msgType){

@@ -1,5 +1,7 @@
-var diagramContainer = $("#diagramContainer");
-
+/**
+ * Toggle function for the divs that hold the information about all the memory models and the versions of the current memory model
+ * @param me
+ */
 function toggleActive(me){
 
     var isActive = ($(me).hasClass("active")) ? true : false;
@@ -26,9 +28,12 @@ function toggleActive(me){
     calculateDiagramContainerSize()
 }
 
+/**
+ * Calculates the size of the DiagramContainer
+ */
 function calculateDiagramContainerSize(){
     var size = $(window).width();
-    var count = $("#diagramContainer").children().length;
+    var count = $(diagramContainer).children().length;
     size -= $("#allMemoryModels").outerWidth();
     size -= $("#memoryModelVersions").outerWidth();
     $("#memoryModel").css(
@@ -36,7 +41,7 @@ function calculateDiagramContainerSize(){
             maxWidth : size - 23 + "px",
             "width": "100%"
         });
-    $("#diagramContainer").css(
+    $(diagramContainer).css(
         {
             maxWidth : size - 3 + "px",
             "width": "100%"

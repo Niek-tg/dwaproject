@@ -64,11 +64,11 @@
     width: calc(94% - 20px);
     border: 5px solid gray;
     background: #fff;
-    margin-top: 30px;
 }
-.frame:hover{
-    z-index:10;
-}
+
+    .frame:hover{
+        z-index:10;
+    }
 
 .frame:hover {
     border-color: #752921;

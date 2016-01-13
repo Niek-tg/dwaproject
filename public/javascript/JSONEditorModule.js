@@ -91,7 +91,7 @@ function initJSONEditor() {
 }
 
 /**
- * TODO ADD USEFUL COMMENT
+ *  When the view is changed from diagramview to codeview, the JSON Editor is reinitialized with the latest data.
  */
 function updateJSONEditor(){
     if(currentView === "codeView") {
