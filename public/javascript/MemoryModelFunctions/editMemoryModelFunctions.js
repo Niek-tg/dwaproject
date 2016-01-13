@@ -494,7 +494,8 @@ function deleteHeapStack(id) {
     }
 
     if ($.isEmptyObject(currentMemoryModel.memoryModel[location][id - 1])) {
-        currentMemoryModel.memoryModel[location].splice(id - 1);
+
+        currentMemoryModel.memoryModel[location].splice((id - 1),1);
         percolatorSend({
             msgType: 'updateMemoryModel',
             data: {newMemoryModel: currentMemoryModel, oldMemoryModel: obj}
