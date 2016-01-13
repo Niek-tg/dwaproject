@@ -16,6 +16,12 @@ var highestVersion;
 var firstTime = false;
 
 /**
+ * Contains a boolean with a check if its the first time the version list is loaded
+ * @type {boolean}
+ */
+var firstVersionListTime = false;
+
+/**
  * Contains all the relations to be drawn on the screen. Gets emptied after done drawing the relations on the screen.
  * @type {Array}
  */

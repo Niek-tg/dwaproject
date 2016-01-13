@@ -37,7 +37,7 @@ function chooseMemoryModel(id, prevVersion, undo) {
         }
     } else {
         if (typeof id !== "string") id = $(id).attr('data-value');
-        firstTime = true;
+        firstVersionListTime = true;
     }
     percolatorSend({msgType: 'getModelById', id: id, version: version});
 }
@@ -49,9 +49,9 @@ function chooseMemoryModel(id, prevVersion, undo) {
  */
 function getMemoryModelById(memoryModel) {
 
-    if (firstTime) highestVersion = memoryModel.version;
+    if (firstVersionListTime) highestVersion = memoryModel.version;
 
-    firstTime = false;
+    firstVersionListTime = false;
     collectStacksHeaps(memoryModel);
     drawMemoryModel(memoryModel);
     getVersionList(false, false);
