@@ -250,10 +250,12 @@ function drawMemoryModel(memoryModel) {
 
     $(diagramContainer).children().remove(); //remove old frames, if they exist
     relations = [];
-    if (currentMemoryModel) {
+
+    if (firstTime) {
         var owner = currentMemoryModel.owner;
         var language = currentMemoryModel.language;
     }
+    firstTime = true;
     currentMemoryModel = memoryModel;
     currentMemoryModel.language = (language) ? language : currentMemoryModel.language;
     currentMemoryModel.owner = (owner) ? owner : currentMemoryModel.owner;
@@ -361,14 +363,13 @@ function addNewMemoryModel(){
     var newMemoryModel = {
         'language': 'Javascript',
         'owner': user,
-        'mmid': 6666,
         'modelName': memorymodelName,
         'version': 0,
         "memoryModel": {
             "stacks": [
                 [
                     {
-                        "id": highestID,
+                        "id": 1,
                         "name": "Global",
                         "vars": []
                     }
@@ -377,8 +378,8 @@ function addNewMemoryModel(){
             "heaps": [
                 [
                     {
-                        "id": highestID,
-                        "name": "Global",
+                        "id": 2,
+                        "name": "",
                         "vars": []
                     }
                 ]

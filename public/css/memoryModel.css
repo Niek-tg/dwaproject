@@ -99,6 +99,7 @@
     right: -1px;
     position: absolute;
     display: none;
+    cursor: pointer;
 }
 
 .variable {
@@ -174,6 +175,7 @@
     width: 8px;
     padding: 0 1px;
     display:none;
+    cursor: pointer;
 }
     .addVarToFrame a{
         line-height:12px;
@@ -198,6 +200,12 @@
     top: 2px;
     right: 0px;
     position: absolute;
+    display: none;
+    cursor: pointer;
+}
+
+.Stack:hover > div .deleteHeapStacks,
+.Heap:hover > div .deleteHeapStacks{
     display: block;
 }
 
@@ -221,6 +229,11 @@
     top: 5px;
     right: 0px;
     position: absolute;
+    display: none;
+    cursor: pointer;
+}
+
+.variable:hover > .deleteVar{
     display: block;
 }
 
