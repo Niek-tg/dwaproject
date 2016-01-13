@@ -81,7 +81,7 @@
 
 #allButtons{
     width: 300px;
-    display: block;
+    display: none;
     float: left;
 }
 
@@ -98,6 +98,7 @@
     top: -1px;
     right: -1px;
     position: absolute;
+    display: none;
 }
 
 .variable {

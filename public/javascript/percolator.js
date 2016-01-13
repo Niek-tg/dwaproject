@@ -21,7 +21,7 @@ function getMemoryModels(memoryModels) {
  * @param undo boolean determining whether the undo button has been pressed
  */
 function chooseMemoryModel(id, prevVersion, undo) {
-    $(".viewButtons").css("display", "block");
+    $("#allButtons").css("display", "block");
     enableDiagramView();
     var version = null;
 
@@ -82,11 +82,11 @@ function getVersionList(undo, addNewVersion) {
 
     if(currentMemoryModel.version === highestVersion){
         $("#undoButton").css("display", "block");
-        $(".newFrameButtons").css("display", "block");
+        $("#allButtons").css("display", "block");
     }
     else {
-        $(".newFrameButtons").css("display", "none");
         $("#undoButton").css("display", "none");
+        $("#allButtons").css("display", "none");
     }
 
     $("#labelVersionList").css("display", "block");
