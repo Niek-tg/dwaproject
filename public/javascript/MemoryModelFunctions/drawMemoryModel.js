@@ -141,14 +141,27 @@ function determineVar(variable) {
 
 /**
  * Adds a new reference to the memory model
- * TODO SAVE TO THE SERVER
  * @param source
  * @param target
  */
 function newReference(source, target) {
+    var oldMem = copyObject(currentMemoryModel);
     if (toggleEditingMode === true) {
         relations.push({source: source, target: target});
-        redrawPlumbing();
+        var indexList = lookForFrameOrVar(source);
+
+        if(indexList.location === "stack") {
+            currentMemoryModel.memoryModel.stacks[indexList.stackIndex][indexList.frameIndex].vars[indexList.elementIndex].value = target;
+            currentMemoryModel.memoryModel.stacks[indexList.stackIndex][indexList.frameIndex].vars[indexList.elementIndex].type = "reference";
+        }
+        else{
+            currentMemoryModel.memoryModel.heaps[indexList.heapIndex][indexList.frameIndex].vars[indexList.elementIndex].value = target;
+            currentMemoryModel.memoryModel.heaps[indexList.heapIndex][indexList.frameIndex].vars[indexList.elementIndex].type = "reference";
+        }
+        percolatorSend({
+            msgType: 'updateMemoryModel',
+            data: {newMemoryModel: currentMemoryModel, oldMemoryModel: oldMem}
+        });
     }
 }
 
@@ -171,6 +184,7 @@ function redrawPlumbing() {
     jsPlumb.bind("connection", function (info) {
         var exists = false;
         relations.forEach(function (relation) {
+            //console.log(relation);
             if (info.sourceId == relation.source && info.targetId == relation.target) {
                 exists = true;
                 return null;

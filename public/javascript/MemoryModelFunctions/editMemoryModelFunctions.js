@@ -286,7 +286,7 @@ function addNewMemoryModel() {
  * create new stack or heap
  */
 function addStackOrHeap(type) {
-    var oldMem = currentMemoryModel;
+    var oldMem = copyObject(currentMemoryModel);
 
     currentMemoryModel.memoryModel[type].push([]);
     collectStacksHeaps(currentMemoryModel);
