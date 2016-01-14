@@ -242,7 +242,3 @@
         max-width: calc(100% - (8% + 302px));
         width: 100%;
     }
-
-    #addReference:active{
-        border:1px solid red;
-    }
