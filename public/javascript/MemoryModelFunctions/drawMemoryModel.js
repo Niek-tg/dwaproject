@@ -19,11 +19,11 @@ function drawMemoryModel(memoryModel) {
     $(diagramContainer).children().remove(); //remove old frames, if they exist
     relations = [];
 
-    if (firstTime) {
+    if (!firstTime) {
         var owner = currentMemoryModel.owner;
         var language = currentMemoryModel.language;
     }
-    firstTime = true;
+    firstTime = false;
     currentMemoryModel = memoryModel;
     currentMemoryModel.language = (language) ? language : currentMemoryModel.language;
     currentMemoryModel.owner = (owner) ? owner : currentMemoryModel.owner;
