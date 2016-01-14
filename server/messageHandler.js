@@ -16,6 +16,12 @@ var messageHandler = {};
 var cursorArray = [];
 
 /**
+ * TODO
+ * They are identified by using the ID given to the websocket on connection
+ */
+var allModelsCursorArray = [];
+
+/**
  * Handles all incoming messages from clients and calls the corresponding methods
  * @param message Message that has been received from client
  * @param websocket Connection to the websocket so a new message can be sent to client later
@@ -77,8 +83,6 @@ messageHandler.identifyMessage = function (message, websocket, webSocketServer) 
  * @param websocket Connection to the websocket so a new message can be sent to client
  */
 messageHandler.subscribeToChanges = function (message, websocket) {
-    console.log("subscribed to changes");
-
     websocket.currentID = message.data.id;
 
     queries.subscribeToChanges(message.data.id, function (err, curs) {
@@ -99,16 +103,17 @@ messageHandler.subscribeToChanges = function (message, websocket) {
  * @param websocket
  */
 messageHandler.subscribeToAllModels = function (message, websocket) {
-    console.log("subscribed to all models");
 
     queries.subscribeToAllModels(function (err, curs) {
-        curs.each(
+        var socketID = websocket.connectionInfo.id;
+        allModelsCursorArray[socketID] = curs;
+
+        allModelsCursorArray[socketID].each(
             function(err, row) {
                 if (err) throw err;
                 websocket.send(JSON.stringify({msgType: "newAllModelsData", data: row}))
             }
         );
-
     });
 };
 
@@ -119,8 +124,8 @@ messageHandler.unsubscribeToChanges = function (websocket) {
     var id = websocket.connectionInfo.id;
     var cursor = (cursorArray[id]) ? cursorArray[id] : null;
     if (cursor) cursor.close();
-    var cursor = (cursorArray[id])? cursorArray[id] : null;
-    if(cursor) cursor.close();
+    var allModelsCursor = (allModelsCursorArray[id])? allModelsCursorArray[id] : null;
+    if(allModelsCursor) allModelsCursor.close();
 };
 
 /**
@@ -158,7 +163,6 @@ messageHandler.getAllMemoryModels = function (message, websocket) {
         });
         websocket.send(JSON.stringify({msgType: "getAllModels", data: resultsArray}));
     });
-    console.log("Hij komt in getAllMemoryModels")
 };
 
 /**
@@ -215,7 +219,6 @@ messageHandler.makeNewModel = function (message, websocket) {
             data: "Something went wrong in query create NewMemorymodel " + err
         }));
         else messageHandler.getAllMemoryModels(message, websocket);
-        console.log(JSON.stringify(result));
     });
     websocket.send(JSON.stringify({msgType: "newMemoryModel", data: message}));
 };

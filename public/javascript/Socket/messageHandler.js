@@ -27,23 +27,14 @@ function messageHandlerClient(message) {
         case "getModelById":
             getMemoryModelById(data.data);
             break;
-        case "positionsUpdated":
-            console.log(data.data);
-            break;
         case "updateMemoryModel":
             getMemoryModels(data.data);
             break;
         case "updateVersionList":
             getVersionList(false, true);
-            console.log('update new version');
             break;
         case "removeLatestVersion":
             getVersionList(true, false);
-            console.log('remove latest version');
-            break;
-        case "newMemoryModel":
-            //console.log("ja hallooooooo");
-            //getMemoryModels(data.data);
             break;
         case "errorMsg":
             console.log(data.data);
