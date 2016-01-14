@@ -83,7 +83,6 @@ messageHandler.identifyMessage = function (message, websocket, webSocketServer) 
  * @param websocket Connection to the websocket so a new message can be sent to client
  */
 messageHandler.subscribeToChanges = function (message, websocket) {
-    websocket.currentID = message.data.id;
 
     queries.subscribeToChanges(message.data.id, function (err, curs) {
         var socketID = websocket.connectionInfo.id;
