@@ -83,13 +83,8 @@ function getVersionList(undo, addNewVersion) {
         highestVersion--;
     }
 
-    if (currentMemoryModel.version === highestVersion) {
-        $("#undoButton").css("display", "block");
-        $("#allButtons").css("display", "block");
-    }
-    else {
-        $("#undoButton").css("display", "none");
-        $("#allButtons").css("display", "none");
+    if (currentMemoryModel.version != highestVersion) {
+        setCSSDisplay("none")
     }
 
     $("#labelVersionList").css("display", "block");
@@ -101,6 +96,15 @@ function getVersionList(undo, addNewVersion) {
         $(sel).append("<li class='list-group-item'><a id='versionListItem" + i + "'  onclick='chooseMemoryModel(this , true, false)' data-value='" +
             currentMemoryModel.mmid + "' data-version='" + i + "'  href='#'>  Version: " + i + "</a></li>")
     }
+}
+
+function setCSSDisplay(display) {
+    $(".addVarToFrame").css("display", display);
+    $(".deleteFrame").css("display", display);
+    $(".deleteVar").css("display",display);
+    $(".deleteHeapStacks").css("display", display);
+    $("#undoButton").css("display", display);
+    $("#allButtons").css("display", display);
 }
 
 /**
