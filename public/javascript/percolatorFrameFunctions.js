@@ -86,6 +86,9 @@ function getVersionList(undo, addNewVersion) {
     if (currentMemoryModel.version != highestVersion) {
         setCSSDisplay("none")
     }
+    else{
+        $("#undoButton").css("display", "block");
+    }
 
     $("#labelVersionList").css("display", "block");
 
