@@ -275,6 +275,7 @@ function addNewMemoryModel() {
             ]
         }
     };
+    highestID++;
     percolatorSend({
         msgType: 'makeNewModel',
         data: newMemoryModel
@@ -338,20 +339,21 @@ function expandDiv(stackOrHeap) {
 function updateMemoryModel(data) {
     if (data.data.new_val) {
         if (data.data.new_val.version > currentMemoryModel.version) {
-
             var owner = currentMemoryModel.owner;
             var language = currentMemoryModel.language;
             currentMemoryModel = data.data.new_val;
             currentMemoryModel.owner = owner;
             currentMemoryModel.language = language;
-
             drawMemoryModel(currentMemoryModel);
             getVersionList(false, true);
             setModelInfo();
             updateJSONEditor();
 
         }
-        else drawMemoryModel(currentMemoryModel);
+        else {
+            currentMemoryModel.frameLocations = data.data.new_val.frameLocations;
+            drawMemoryModel(currentMemoryModel);
+        }
     }
 }
 
