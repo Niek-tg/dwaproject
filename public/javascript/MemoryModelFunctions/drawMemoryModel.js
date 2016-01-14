@@ -197,6 +197,7 @@ function redrawPlumbing() {
         anchor: ["Left", "Right"],
         overlays: [["Arrow", {width: 40, length: 20, location: 1}]],
         paintStyle: {strokeStyle: 'grey', lineWidth: 5},
+        endpointStyle:{ fillStyle:"none"},
         connectorStyle: {strokeStyle: 'grey', lineWidth: 5},
         hoverPaintStyle: {strokeStyle: "#752921"},
         isSource: true,
