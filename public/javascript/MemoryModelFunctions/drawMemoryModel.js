@@ -53,7 +53,7 @@ function drawFramesOnLocation(location, model, frameLocations) {
     model.forEach(function (frames) {
         var html = "<div id='" + location + identifier + "' class='" + location + "'>" +
             "<div><a onclick='deleteHeapStack($(this))' class='deleteHeapStacks'></a></div>" +
-            "<div class='frameLabel'>" + location + "</div>" +
+            "<div class='frameLabel'><p>" + location + "</p></div>" +
             "<div class='expandDiv'>" +
             "<a onclick='expandDiv($(this).parent().parent())'>+</a>" +
             "</div>" +
@@ -79,7 +79,7 @@ function drawFramesOnLocation(location, model, frameLocations) {
 
             var html = "<div id='" + item.id + "' class='frame' style='" + style + "'> " +
                 "<div class='deleteFrame'></div>" +
-                "<div class='frameLabel'>" + name + "</div>" +
+                "<div class='frameLabel'><p>" + name + "</p></div>" +
                 "<div class='addVarToFrame'>" +
                 "<a onclick='addVarToFrame($(this).parent().parent())'>+</a>" +
                 "</div>" +
@@ -102,8 +102,8 @@ function drawVars(location, vars) {
         var value = determineVar(variable);
 
         var html = "<div class='variable'>" +
-            "<div class='variableLabel'>" + variable.name + "</div>" +
-            "<div id='" + variable.id + "' class='variableValue'>" + value + "</div>" +
+            "<div class='variableLabel'><p>" + variable.name + "</p></div>" +
+            "<div id='" + variable.id + "' class='variableValue'><p>" + value + "</p></div>" +
             "<div class='deleteVar'><a onclick='deleteFrameOrVar($(this))' class='deleteVariable'></a></div>" +
             "</div>";
         appendHtmlToLocation(location, html);
