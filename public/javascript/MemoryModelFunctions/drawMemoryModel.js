@@ -7,6 +7,7 @@ function drawMemoryModel(memoryModel) {
 
     jsPlumb.reset();
     jsPlumb.Defaults.Container = $("#diagramContainer");
+    closeEditBar();
 
     if (!plumbInitialized) {
         jsPlumb.ready(function () {

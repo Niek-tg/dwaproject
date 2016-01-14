@@ -14,13 +14,13 @@ function attachEventListeners() {
     $(div).unbind('click');
     $(div).click(function () {
         updateValue();
-        closeWrapper();
+        closeEditBar();
     });
 
     div = "#closeButton";
     $(div).unbind('click');
     $(div).click(function () {
-        closeWrapper();
+        closeEditBar();
     });
 
     div = ".variable";
@@ -28,6 +28,8 @@ function attachEventListeners() {
     $(div).dblclick(function () {
         openEditField(this);
     });
+
+
 
     div = "#addNewStackFrame";
     $(div).unbind('click');
@@ -67,9 +69,9 @@ function attachEventListeners() {
     $(div).click(function () {
         deleteFrameOrVar(this, true);
     });
+}
 
-    function closeWrapper() {
-        var div = "#editWrapper";
-        if (!$(div).is(':hidden')) $(div).slideToggle();
-    }
+function closeEditBar() {
+    var div = "#editWrapper";
+    if (!$(div).is(':hidden')) $(div).slideToggle();
 }

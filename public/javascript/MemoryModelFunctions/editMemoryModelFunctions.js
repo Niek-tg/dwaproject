@@ -110,11 +110,13 @@ function addVarToFrame(frame) {
  * @param me the frame where the information will be extracted from
  */
 function openEditField(me) {
-    assignValuesToEditFields(me);
+    if(highestVersion == currentMemoryModel.version) {
+        assignValuesToEditFields(me);
 
-    var divName = "#editWrapper";
-    if ($(divName).css("display", "none")) $(divName).slideToggle();
-    lastEditedDiv = $(me);
+        var divName = "#editWrapper";
+        if ($(divName).css("display", "none")) $(divName).slideToggle();
+        lastEditedDiv = $(me);
+    }
 }
 
 /**
@@ -353,6 +355,7 @@ function updateMemoryModel(data) {
         else {
             currentMemoryModel.frameLocations = data.data.new_val.frameLocations;
             drawMemoryModel(currentMemoryModel);
+            getVersionList(false, false);
         }
     }
 }
