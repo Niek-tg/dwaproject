@@ -32,7 +32,7 @@
     "rethinkdb": "^2.2.0",
     "selenium": "^2.20.0",
     "thinky": "^2.2.0",
-    "webdriverio": "^3.3.0",
+    "webdriverio": "^5.16.8",
     "ws": "^0.8.0"
   },
   "devDependencies": {
