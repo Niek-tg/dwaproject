@@ -27,7 +27,7 @@
     "deep-diff": "^0.3.3",
     "express": "^4.13.3",
     "jsdoc": "^3.4.0",
-    "jsoneditor": "^4.2.1",
+    "jsoneditor": "^7.5.0",
     "mocha": "^2.3.4",
     "rethinkdb": "^2.2.0",
     "selenium": "^2.20.0",
