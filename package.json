@@ -28,7 +28,7 @@
     "express": "^4.13.3",
     "jsdoc": "^3.4.0",
     "jsoneditor": "^4.2.1",
-    "mocha": "^2.3.4",
+    "mocha": "^8.0.1",
     "rethinkdb": "^2.2.0",
     "selenium": "^2.20.0",
     "thinky": "^2.2.0",
